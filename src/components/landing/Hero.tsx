@@ -1,22 +1,75 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Brain, Play, Star, Users, TrendingUp } from "lucide-react";
+import { ArrowRight, Star, Zap } from "lucide-react";
 
 export default function Hero() {
     return (
-        <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
-            {/* Background gradient orbs */}
+        <section className="relative min-h-screen flex items-center overflow-hidden pt-20"
+            style={{ background: "#080d14" }}>
+
+            {/* Aurora blobs — Option D (drift + pulse + orbit combined) */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-indigo-400/20 blur-3xl animate-orb" />
-                <div className="absolute top-1/2 -left-40 w-80 h-80 rounded-full bg-cyan-400/20 blur-3xl animate-orb delay-300" />
-                <div className="absolute bottom-20 right-1/3 w-72 h-72 rounded-full bg-purple-400/15 blur-3xl animate-orb delay-500" />
-                {/* Grid pattern */}
-                <div
-                    className="absolute inset-0 opacity-[0.03]"
+
+                {/* Blob 1 — cyan, top left, drifts + pulses */}
+                <div className="absolute w-[220px] h-[220px] rounded-full"
                     style={{
-                        backgroundImage:
-                            "linear-gradient(#4F46E5 1px, transparent 1px), linear-gradient(90deg, #4F46E5 1px, transparent 1px)",
+                        background: "#22d3ee",
+                        filter: "blur(70px)",
+                        opacity: 0.2,
+                        top: "-40px",
+                        left: "-40px",
+                        animation: "driftA1 8s ease-in-out infinite, pulseBlob1 4s ease-in-out infinite"
+                    }} />
+
+                {/* Blob 2 — emerald, bottom right, drifts + pulses */}
+                <div className="absolute w-[200px] h-[200px] rounded-full"
+                    style={{
+                        background: "#059669",
+                        filter: "blur(60px)",
+                        opacity: 0.2,
+                        bottom: "-40px",
+                        right: "-40px",
+                        animation: "driftA2 10s ease-in-out infinite, pulseBlob2 5s ease-in-out infinite"
+                    }} />
+
+                {/* Blob 3 — violet, center, drifts + pulses */}
+                <div className="absolute w-[150px] h-[150px] rounded-full"
+                    style={{
+                        background: "#818cf8",
+                        filter: "blur(50px)",
+                        opacity: 0.15,
+                        top: "30%",
+                        left: "30%",
+                        animation: "driftA3 12s ease-in-out infinite, pulseBlob3 6s ease-in-out infinite"
+                    }} />
+
+                {/* Orbiting ring */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="relative w-[500px] h-[500px] animate-orbit-spin">
+                        <div className="absolute rounded-full"
+                            style={{
+                                top: "-30px", left: "50%", transform: "translateX(-50%)",
+                                width: "60px", height: "60px",
+                                background: "#22d3ee",
+                                filter: "blur(20px)",
+                                opacity: 0.3
+                            }} />
+                        <div className="absolute rounded-full"
+                            style={{
+                                bottom: "-30px", left: "50%", transform: "translateX(-50%)",
+                                width: "50px", height: "50px",
+                                background: "#818cf8",
+                                filter: "blur(18px)",
+                                opacity: 0.3
+                            }} />
+                    </div>
+                </div>
+
+                {/* Subtle grid */}
+                <div className="absolute inset-0 opacity-[0.03]"
+                    style={{
+                        backgroundImage: "linear-gradient(#22d3ee 1px, transparent 1px), linear-gradient(90deg, #22d3ee 1px, transparent 1px)",
                         backgroundSize: "60px 60px",
                     }}
                 />
@@ -24,150 +77,162 @@ export default function Hero() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
                     {/* Left content */}
-                    <div className="animate-fade-in-up">
+                    <div>
                         {/* Badge */}
-                        <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-200 rounded-full px-4 py-1.5 mb-6">
-                            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-                            <span className="text-indigo-700 text-xs font-semibold tracking-wide uppercase">
-                                AI-Powered Academic Assistant
+                        <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 border"
+                            style={{
+                                background: "rgba(34,211,238,0.08)",
+                                borderColor: "rgba(34,211,238,0.2)"
+                            }}>
+                            <span className="w-2 h-2 rounded-full animate-pulse"
+                                style={{ background: "#22d3ee" }} />
+                            <span className="text-xs font-bold tracking-widest uppercase"
+                                style={{ color: "#22d3ee" }}>
+                                AI-Powered Readiness Engine
                             </span>
                         </div>
 
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight mb-6">
+                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.02] tracking-tight mb-6">
                             Study Smarter,{" "}
-                            <span className="gradient-text">Ace Every</span>{" "}
+                            <span style={{
+                                background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent"
+                            }}>
+                                Ace Every
+                            </span>{" "}
                             Assessment
                         </h1>
 
-                        <p className="text-lg text-slate-500 leading-relaxed mb-8 max-w-xl">
-                            EduMate combines intelligent readiness prediction, personalized study plans,
-                            and powerful productivity tools — so you always know exactly where to focus.
+                        <p className="text-lg leading-relaxed mb-8 max-w-xl" style={{ color: "#94a3b8" }}>
+                            EduMate uses machine learning to predict your exam readiness from your
+                            study habits and quiz performance — so you never walk in underprepared again.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 mb-10">
                             <Link
                                 href="/register"
-                                className="gradient-bg text-white px-8 py-4 rounded-2xl font-semibold text-base shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 transition-all flex items-center justify-center gap-2"
+                                className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all hover:scale-105"
+                                style={{
+                                    background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                    color: "#080d14",
+                                    boxShadow: "0 8px 32px rgba(34,211,238,0.25)"
+                                }}
                             >
                                 Start for Free
                                 <ArrowRight className="w-5 h-5" />
                             </Link>
-                            {/* <button className="flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-700 px-8 py-4 rounded-2xl font-semibold text-base hover:border-indigo-300 hover:bg-indigo-50 transition-all group">
-                                <div className="w-8 h-8 rounded-full gradient-bg flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                                    <Play className="w-3.5 h-3.5 text-white fill-white" />
-                                </div>
-                                Watch Demo
-                            </button> */}
+                            <Link
+                                href="/dashboard"
+                                className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all border"
+                                style={{
+                                    background: "rgba(255,255,255,0.05)",
+                                    borderColor: "rgba(255,255,255,0.1)",
+                                    color: "#f1f5f9"
+                                }}
+                            >
+                                View Demo
+                            </Link>
                         </div>
 
-                        {/* Social proof */}
-                        <div className="flex items-center gap-6">
-                            <div className="flex -space-x-3">
-                                {["A", "B", "C", "D"].map((l, i) => (
-                                    <div
-                                        key={i}
-                                        className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center text-xs font-bold text-white shadow-md"
-                                        style={{
-                                            background: ["#4F46E5", "#06B6D4", "#8B5CF6", "#22C55E"][i],
-                                        }}
-                                    >
-                                        {l}
-                                    </div>
+                        {/* Honest tagline */}
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-1">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                                 ))}
                             </div>
-                            <div>
-                                <div className="flex items-center gap-1 mb-0.5">
-                                    {[...Array(5)].map((_, i) => (
-                                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                            <p className="text-sm font-semibold" style={{ color: "#94a3b8" }}>
+                                Built for students, by a student
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Right – Option D: Dashboard split */}
+                    <div className="relative">
+                        <div className="rounded-2xl p-6 border backdrop-blur-xl"
+                            style={{
+                                background: "rgba(255,255,255,0.04)",
+                                borderColor: "rgba(34,211,238,0.15)",
+                                boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)"
+                            }}>
+
+                            {/* Card header */}
+                            <div className="flex items-center justify-between mb-5">
+                                <div className="text-sm font-bold text-white">Data Structures Final</div>
+                                <div className="px-3 py-1 rounded-lg text-xs font-bold"
+                                    style={{ background: "rgba(5,150,105,0.15)", color: "#34d399" }}>
+                                    Ready ✓
+                                </div>
+                            </div>
+
+                            {/* Score left + topics right */}
+                            <div className="flex gap-4 mb-5">
+
+                                {/* Left score column */}
+                                <div className="flex flex-col items-center justify-center rounded-xl px-5 py-4 border shrink-0"
+                                    style={{
+                                        background: "rgba(34,211,238,0.05)",
+                                        borderColor: "rgba(34,211,238,0.12)"
+                                    }}>
+                                    <div className="text-5xl font-black leading-none mb-1"
+                                        style={{
+                                            background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                            WebkitBackgroundClip: "text",
+                                            WebkitTextFillColor: "transparent"
+                                        }}>
+                                        80%
+                                    </div>
+                                    <div className="text-[9px] font-black uppercase tracking-widest"
+                                        style={{ color: "#64748b" }}>
+                                        Readiness
+                                    </div>
+                                </div>
+
+                                {/* Right topics column */}
+                                <div className="flex-1 flex flex-col gap-2.5">
+                                    {[
+                                        { label: "Quiz Score", value: "9/10", pct: 90, color: "#22d3ee" },
+                                        { label: "Avg Time", value: "28s", pct: 75, color: "#059669" },
+                                        { label: "Confidence", value: "High", pct: 85, color: "#818cf8" },
+                                    ].map((item) => (
+                                        <div key={item.label}
+                                            className="rounded-xl px-3 py-2.5 border"
+                                            style={{
+                                                background: "rgba(255,255,255,0.03)",
+                                                borderColor: "rgba(255,255,255,0.06)"
+                                            }}>
+                                            <div className="flex items-center justify-between mb-1.5">
+                                                <span className="text-xs font-bold text-white">{item.label}</span>
+                                                <span className="text-xs font-black"
+                                                    style={{ color: item.color }}>{item.value}</span>
+                                            </div>
+                                            <div className="h-1.5 rounded-full overflow-hidden"
+                                                style={{ background: "rgba(255,255,255,0.06)" }}>
+                                                <div className="h-full rounded-full transition-all"
+                                                    style={{ width: `${item.pct}%`, background: item.color }} />
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
-                                <p className="text-xs text-slate-500">
-                                    <span className="font-semibold text-slate-700">12,000+</span> students trust StudyAI
+                            </div>
+
+                            {/* AI Tip */}
+                            <div className="rounded-xl p-3 text-xs flex items-start gap-2"
+                                style={{
+                                    background: "rgba(129,140,248,0.08)",
+                                    borderLeft: "2px solid #818cf8"
+                                }}>
+                                <Zap className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "#818cf8" }} />
+                                <p style={{ color: "#c7d2fe" }}>
+                                    <strong>AI Tip:</strong> Your quiz performance confirms your baseline prediction. You are ready — go ace that exam!
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    {/* Right – floating dashboard card */}
-                    <div className="relative animate-fade-in-up delay-300">
-                        <div className="relative animate-float">
-                            {/* Main card */}
-                            <div className="bg-white rounded-3xl shadow-2xl shadow-indigo-500/10 p-6 border border-slate-100">
-                                <div className="flex items-center gap-3 mb-5">
-                                    <div className="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
-                                        <Brain className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div>
-                                        <p className="font-semibold text-slate-800 text-sm">Readiness Score</p>
-                                        <p className="text-xs text-slate-400">Data Structures Final</p>
-                                    </div>
-                                    <div className="ml-auto bg-green-50 text-green-700 text-xs font-bold px-2.5 py-1 rounded-lg">
-                                        Ready ✓
-                                    </div>
-                                </div>
-
-                                {/* Circular progress */}
-                                <div className="flex items-center gap-5 mb-5">
-                                    <div className="relative w-24 h-24">
-                                        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#EEF2FF" strokeWidth="10" />
-                                            <circle
-                                                cx="50" cy="50" r="40" fill="none"
-                                                stroke="url(#gradient)" strokeWidth="10"
-                                                strokeLinecap="round"
-                                                strokeDasharray="251.3"
-                                                strokeDashoffset="50"
-                                            />
-                                            <defs>
-                                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                                    <stop offset="0%" stopColor="#4F46E5" />
-                                                    <stop offset="100%" stopColor="#06B6D4" />
-                                                </linearGradient>
-                                            </defs>
-                                        </svg>
-                                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                            <span className="text-2xl font-black text-slate-800">80%</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex-1 space-y-2">
-                                        {[
-                                            { label: "Graphs", pct: 92, color: "bg-indigo-500" },
-                                            { label: "Trees", pct: 78, color: "bg-cyan-500" },
-                                            { label: "Sorting", pct: 65, color: "bg-amber-500" },
-                                        ].map((item) => (
-                                            <div key={item.label}>
-                                                <div className="flex justify-between text-xs mb-1">
-                                                    <span className="text-slate-600">{item.label}</span>
-                                                    <span className="font-semibold text-slate-700">{item.pct}%</span>
-                                                </div>
-                                                <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                                    <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.pct}%` }} />
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="bg-indigo-50 rounded-2xl p-3 text-xs text-indigo-700 flex items-start gap-2">
-                                    <span className="text-base">🤖</span>
-                                    <p><strong>AI Tip:</strong> Focus 20 more minutes on Sorting algorithms to reach 85% readiness.</p>
-                                </div>
-                            </div>
-
-                            {/* Floating badge */}
-                            <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl px-4 py-3 border border-slate-100 flex items-center gap-2">
-                                <TrendingUp className="w-4 h-4 text-green-500" />
-                                <span className="text-sm font-bold text-slate-700">+12% this week</span>
-                            </div>
-
-                            {/* Floating users badge */}
-                            <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl px-4 py-3 border border-slate-100 flex items-center gap-2">
-                                <Users className="w-4 h-4 text-indigo-500" />
-                                <span className="text-sm font-bold text-slate-700">12k+ Students</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>

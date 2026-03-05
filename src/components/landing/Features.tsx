@@ -3,80 +3,64 @@
 import { useEffect, useRef, useState } from "react";
 import {
     Brain, Wrench, Lock, BarChart3, FileQuestion,
-    Calendar, Target, Zap, Shield, BookOpen
+    Calendar, Target, Zap, BookOpen
 } from "lucide-react";
 
 const features = [
     {
         icon: Brain,
         title: "Readiness Prediction",
-        description:
-            "Our AI analyzes your study patterns, quiz performance, and topic mastery to give you a precise readiness score before any exam.",
-        color: "from-indigo-500 to-indigo-600",
-        bg: "bg-indigo-50",
+        description: "Our ML model analyzes your study patterns and quiz performance to give you a precise readiness score before any exam.",
+        color: "#22d3ee",
         badge: "Core Feature",
     },
     {
         icon: Wrench,
         title: "Productivity Tools",
-        description:
-            "Built-in Pomodoro timer, task tracker, and focus modes to keep you in the zone and make every study session count.",
-        color: "from-cyan-500 to-cyan-600",
-        bg: "bg-cyan-50",
+        description: "Built-in Pomodoro timer, task tracker, and focus modes to keep you in the zone every study session.",
+        color: "#059669",
         badge: "Core Feature",
     },
     {
         icon: Lock,
         title: "Digital Locker",
-        description:
-            "Securely store, organize, and access all your notes, past papers, and study materials — end-to-end encrypted and always available.",
-        color: "from-purple-500 to-purple-600",
-        bg: "bg-purple-50",
+        description: "Securely store, organize, and access all your notes, past papers, and study materials — all on your device.",
+        color: "#818cf8",
         badge: "Core Feature",
     },
     {
         icon: BarChart3,
         title: "Smart Analytics",
-        description:
-            "Deep visual insights into your study patterns, strengths, and weak areas so you can make data-driven study decisions.",
-        color: "from-green-500 to-green-600",
-        bg: "bg-green-50",
+        description: "Deep visual insights into your study patterns, strengths, and weak areas for data-driven decisions.",
+        color: "#22d3ee",
         badge: "Analytics",
     },
     {
         icon: FileQuestion,
         title: "AI Quiz Generator",
-        description:
-            "Upload your notes and StudyAI instantly generates custom quizzes, flashcards, and practice questions tailored to your material.",
-        color: "from-amber-500 to-amber-600",
-        bg: "bg-amber-50",
+        description: "Upload your notes and EduMate instantly generates custom quizzes tailored to your actual material.",
+        color: "#059669",
         badge: "AI Powered",
     },
     {
         icon: Calendar,
         title: "Smart Study Planner",
-        description:
-            "AI-driven personalized timetables that adapt to your deadlines, pace, and performance — so you never fall behind.",
-        color: "from-rose-500 to-rose-600",
-        bg: "bg-rose-50",
+        description: "AI-driven timetables that adapt to your deadlines, pace, and performance — so you never fall behind.",
+        color: "#818cf8",
         badge: "AI Powered",
     },
     {
         icon: Target,
         title: "Goal Tracker",
-        description:
-            "Set academic goals, break them into milestones, and celebrate achievements. Stay motivated with visual progress tracking.",
-        color: "from-sky-500 to-sky-600",
-        bg: "bg-sky-50",
+        description: "Set academic goals, break them into milestones, and stay motivated with visual progress tracking.",
+        color: "#22d3ee",
         badge: "Productivity",
     },
     {
         icon: Zap,
         title: "Focus Mode",
-        description:
-            "Distraction-free study environment with ambient soundscapes, website blocking, and real-time focus score monitoring.",
-        color: "from-violet-500 to-violet-600",
-        bg: "bg-violet-50",
+        description: "Distraction-free study environment with ambient soundscapes and real-time focus score monitoring.",
+        color: "#059669",
         badge: "Productivity",
     },
 ];
@@ -99,38 +83,124 @@ function FeatureCard({ feature, index }: { feature: typeof features[0]; index: n
     return (
         <div
             ref={ref}
-            className={`bg-white rounded-2xl p-6 border border-slate-100 card-hover shadow-sm transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-            style={{ transitionDelay: `${index * 80}ms` }}
+            className="rounded-2xl p-6 border transition-all duration-700 cursor-default"
+            style={{
+                background: "rgba(255,255,255,0.03)",
+                borderColor: "rgba(255,255,255,0.07)",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.2)",
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(32px)",
+                transitionDelay: `${index * 80}ms`,
+            }}
+            onMouseEnter={e => {
+                (e.currentTarget as HTMLDivElement).style.borderColor = `${feature.color}40`;
+                (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 32px rgba(0,0,0,0.3)`;
+            }}
+            onMouseLeave={e => {
+                (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.07)";
+                (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 24px rgba(0,0,0,0.2)";
+            }}
         >
             <div className="flex items-start justify-between mb-4">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg`}>
-                    <Icon className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    style={{
+                        background: `${feature.color}18`,
+                        border: `1px solid ${feature.color}30`
+                    }}>
+                    <Icon className="w-6 h-6" style={{ color: feature.color }} />
                 </div>
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${feature.bg} text-slate-600`}>
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide"
+                    style={{
+                        background: `${feature.color}12`,
+                        color: feature.color,
+                        border: `1px solid ${feature.color}25`
+                    }}>
                     {feature.badge}
                 </span>
             </div>
-            <h3 className="text-base font-bold text-slate-800 mb-2">{feature.title}</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">{feature.description}</p>
+            <h3 className="text-base font-bold text-white mb-2">{feature.title}</h3>
+            <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>{feature.description}</p>
         </div>
     );
 }
 
 export default function Features() {
+    const headerRef = useRef<HTMLDivElement>(null);
+    const [headerVisible, setHeaderVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) setHeaderVisible(true); },
+            { threshold: 0.1 }
+        );
+        if (headerRef.current) observer.observe(headerRef.current);
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <section id="features" className="py-20 lg:py-28">
+        <section id="features" className="py-20 lg:py-28 relative"
+            style={{ background: "#080d14" }}>
+
+            {/* Background blobs */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] opacity-30"
+                    style={{ background: "linear-gradient(90deg, transparent, #22d3ee, transparent)" }} />
+                <div className="absolute w-[300px] h-[300px] rounded-full"
+                    style={{
+                        background: "#22d3ee",
+                        filter: "blur(100px)",
+                        opacity: 0.06,
+                        top: "10%",
+                        right: "-100px",
+                        animation: "driftA1 10s ease-in-out infinite, pulseBlob1 5s ease-in-out infinite"
+                    }} />
+                <div className="absolute w-[250px] h-[250px] rounded-full"
+                    style={{
+                        background: "#818cf8",
+                        filter: "blur(90px)",
+                        opacity: 0.06,
+                        bottom: "10%",
+                        left: "-80px",
+                        animation: "driftA2 12s ease-in-out infinite, pulseBlob2 6s ease-in-out infinite"
+                    }} />
+            </div>
+
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-200 rounded-full px-4 py-1.5 mb-4">
-                        <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
-                        <span className="text-indigo-700 text-xs font-semibold tracking-wide uppercase">Everything You Need</span>
+
+                {/* Header */}
+                <div
+                    ref={headerRef}
+                    className="text-center mb-16 transition-all duration-700"
+                    style={{
+                        opacity: headerVisible ? 1 : 0,
+                        transform: headerVisible ? "translateY(0)" : "translateY(24px)"
+                    }}
+                >
+                    <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-4 border"
+                        style={{
+                            background: "rgba(34,211,238,0.08)",
+                            borderColor: "rgba(34,211,238,0.2)"
+                        }}>
+                        <BookOpen className="w-3.5 h-3.5" style={{ color: "#22d3ee" }} />
+                        <span className="text-xs font-bold tracking-widest uppercase"
+                            style={{ color: "#22d3ee" }}>
+                            Everything You Need
+                        </span>
                     </div>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 mb-4">
-                        Powerful Features for <span className="gradient-text">Serious Students</span>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight">
+                        Powerful Features for{" "}
+                        <span style={{
+                            background: "linear-gradient(135deg, #22d3ee, #059669)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent"
+                        }}>
+                            Serious Students
+                        </span>
                     </h2>
-                    <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-                        From AI-powered readiness checks to secure file storage — StudyAI has every tool you need to excel academically.
+                    <p className="text-lg max-w-2xl mx-auto" style={{ color: "#94a3b8" }}>
+                        From AI-powered readiness checks to secure file storage — EduMate has every tool you need to excel academically.
                     </p>
                 </div>
 

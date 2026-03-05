@@ -20,6 +20,7 @@ export interface Material {
     type: string;
     size: string;
     data: any; // Could be base64 or blob
+    extractedText?: string;
     timestamp: number;
 }
 

@@ -1,6 +1,6 @@
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
-import StatsBar from "@/components/landing/StatsBar";
+// import StatsBar from "@/components/landing/StatsBar";
 import Features from "@/components/landing/Features";
 import HowItWorks from "@/components/landing/HowItWorks";
 import Privacy from "@/components/landing/Privacy";
@@ -13,7 +13,7 @@ export default function LandingPage() {
     <main className="min-h-screen bg-[#F8FAFC]">
       <Navbar />
       <Hero />
-      <StatsBar />
+      {/* <StatsBar /> */}
       <Features />
       <HowItWorks />
       <Privacy />
