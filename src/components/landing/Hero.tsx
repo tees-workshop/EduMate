@@ -6,7 +6,7 @@ import { ArrowRight, Star, Zap } from "lucide-react";
 export default function Hero() {
     return (
         <section className="relative min-h-screen flex items-center overflow-hidden pt-20"
-            style={{ background: "#080d14" }}>
+            >
 
             {/* Aurora blobs — Option D (drift + pulse + orbit combined) */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -67,12 +67,12 @@ export default function Hero() {
                 </div>
 
                 {/* Subtle grid */}
-                <div className="absolute inset-0 opacity-[0.03]"
+                {/* <div className="absolute inset-0 opacity-[0.03]"
                     style={{
                         backgroundImage: "linear-gradient(#22d3ee 1px, transparent 1px), linear-gradient(90deg, #22d3ee 1px, transparent 1px)",
                         backgroundSize: "60px 60px",
                     }}
-                />
+                /> */}
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 relative z-10">

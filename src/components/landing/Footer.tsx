@@ -1,66 +1,62 @@
-import Link from "next/link";
-import { BookOpen, Twitter, Github, Linkedin, Mail } from "lucide-react";
+"use client";
 
-const links = {
-    Product: ["Features", "How It Works", "Pricing", "Changelog"],
-    Resources: ["Documentation", "Blog", "Community", "Support"],
-    Legal: ["Privacy Policy", "Terms of Service", "Cookie Policy"],
-};
+import Link from "next/link";
+
+function EduMateLogo() {
+    return (
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="footerGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#22d3ee" />
+                    <stop offset="100%" stopColor="#059669" />
+                </linearGradient>
+                <linearGradient id="footerGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#059669" />
+                    <stop offset="100%" stopColor="#818cf8" />
+                </linearGradient>
+            </defs>
+            <path d="M18 2L32 10V26L18 34L4 26V10L18 2Z" stroke="url(#footerGrad1)" strokeWidth="1.5" fill="none" opacity="0.6" />
+            <rect x="11" y="11" width="14" height="14" rx="3" transform="rotate(15 18 18)" fill="url(#footerGrad1)" opacity="0.15" />
+            <path d="M18 10L24 18L18 26L12 18Z" fill="url(#footerGrad2)" opacity="0.9" />
+            <circle cx="18" cy="18" r="3" fill="url(#footerGrad1)" />
+            <circle cx="18" cy="5" r="1.5" fill="#22d3ee" opacity="0.8" />
+            <circle cx="30" cy="12" r="1.5" fill="#059669" opacity="0.8" />
+            <circle cx="30" cy="24" r="1.5" fill="#818cf8" opacity="0.8" />
+        </svg>
+    );
+}
 
 export default function Footer() {
     return (
-        <footer className="bg-slate-900 text-slate-300">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
-                    {/* Brand */}
-                    <div className="lg:col-span-2">
-                        <Link href="/" className="flex items-center gap-2 mb-4">
-                            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
-                                <BookOpen className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="text-xl font-black text-white">
-                                Edu<span className="gradient-text">Mate</span>
+        <footer className="relative border-t" 
+        style={{
+            background: "#080d14",
+            borderColor: "rgba(255,255,255,0.06)" 
+        }}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+                    {/* Logo + note */}
+                    <div className="flex items-center gap-3">
+                        <EduMateLogo />
+                        <div>
+                            <span className="text-base font-black text-white">
+                                Edu<span style={{
+                                    background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                    WebkitBackgroundClip: "text",
+                                    WebkitTextFillColor: "transparent"
+                                }}>Mate</span>
                             </span>
-                        </Link>
-                        <p className="text-slate-400 text-sm leading-relaxed max-w-xs mb-6">
-                            The intelligent academic companion helping students study smarter, predict readiness, and achieve their best results.
-                        </p>
-                        <div className="flex items-center gap-3">
-                            {[Twitter, Github, Linkedin, Mail].map((Icon, i) => (
-                                <a
-                                    key={i}
-                                    href="#"
-                                    className="w-9 h-9 rounded-xl bg-slate-800 hover:bg-indigo-600 flex items-center justify-center transition-colors"
-                                >
-                                    <Icon className="w-4 h-4" />
-                                </a>
-                            ))}
+                            <p className="text-xs" style={{ color: "#475569" }}>
+                                Built for students, by a student.
+                            </p>
                         </div>
                     </div>
 
-                    {/* Links */}
-                    {Object.entries(links).map(([section, items]) => (
-                        <div key={section}>
-                            <h4 className="text-white font-semibold text-sm mb-4">{section}</h4>
-                            <ul className="space-y-3">
-                                {items.map((item) => (
-                                    <li key={item}>
-                                        <a href="#" className="text-slate-400 hover:text-white text-sm transition-colors">
-                                            {item}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
 
-                <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <p className="text-slate-500 text-sm">
-                        © 2026 StudyAI. All rights reserved.
-                    </p>
-                    <p className="text-slate-500 text-sm">
-                        Built with ❤️ for students everywhere.
+                    {/* Copyright */}
+                    <p className="text-xs" style={{ color: "#334155" }}>
+                        © 2026 EduMate. <br/> All rights reserved.
                     </p>
                 </div>
             </div>

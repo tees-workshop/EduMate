@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   description:
     "Predict your assessment readiness, supercharge productivity, and study smarter with AI-powered insights.",
   keywords: ["study", "AI", "productivity", "academic", "readiness", "learning"],
+    icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

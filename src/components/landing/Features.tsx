@@ -140,32 +140,10 @@ export default function Features() {
     }, []);
 
     return (
-        <section id="features" className="py-20 lg:py-28 relative"
-            style={{ background: "#080d14" }}>
+        <section id="features" className="py-20 lg:py-28 relative">
 
             {/* Background blobs */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] opacity-30"
-                    style={{ background: "linear-gradient(90deg, transparent, #22d3ee, transparent)" }} />
-                <div className="absolute w-[300px] h-[300px] rounded-full"
-                    style={{
-                        background: "#22d3ee",
-                        filter: "blur(100px)",
-                        opacity: 0.06,
-                        top: "10%",
-                        right: "-100px",
-                        animation: "driftA1 10s ease-in-out infinite, pulseBlob1 5s ease-in-out infinite"
-                    }} />
-                <div className="absolute w-[250px] h-[250px] rounded-full"
-                    style={{
-                        background: "#818cf8",
-                        filter: "blur(90px)",
-                        opacity: 0.06,
-                        bottom: "10%",
-                        left: "-80px",
-                        animation: "driftA2 12s ease-in-out infinite, pulseBlob2 6s ease-in-out infinite"
-                    }} />
-            </div>
+
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 

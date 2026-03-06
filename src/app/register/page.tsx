@@ -3,8 +3,67 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, User, Mail, Lock, ArrowRight, Sparkles, GraduationCap } from "lucide-react";
+import { User, Mail, Lock, ArrowRight, Sparkles, GraduationCap } from "lucide-react";
 import { db } from "@/lib/db";
+
+function AuroraBackground() {
+    return (
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+            <div className="absolute w-[500px] h-[500px] rounded-full"
+                style={{
+                    background: "#22d3ee", filter: "blur(120px)", opacity: 0.12,
+                    top: "-100px", left: "-100px",
+                    animation: "driftA1 8s ease-in-out infinite, pulseBlob1 4s ease-in-out infinite"
+                }} />
+            <div className="absolute w-[400px] h-[400px] rounded-full"
+                style={{
+                    background: "#059669", filter: "blur(100px)", opacity: 0.1,
+                    bottom: "-80px", right: "-80px",
+                    animation: "driftA2 10s ease-in-out infinite, pulseBlob2 5s ease-in-out infinite"
+                }} />
+            <div className="absolute w-[350px] h-[350px] rounded-full"
+                style={{
+                    background: "#818cf8", filter: "blur(100px)", opacity: 0.08,
+                    top: "40%", left: "40%",
+                    animation: "driftA3 12s ease-in-out infinite, pulseBlob3 6s ease-in-out infinite"
+                }} />
+            <div className="absolute inset-0 opacity-[0.02]"
+                style={{
+                    backgroundImage: "linear-gradient(#22d3ee 1px, transparent 1px), linear-gradient(90deg, #22d3ee 1px, transparent 1px)",
+                    backgroundSize: "60px 60px",
+                }} />
+        </div>
+    );
+}
+
+function EduMateLogo() {
+    return (
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="regGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#22d3ee" />
+                    <stop offset="100%" stopColor="#059669" />
+                </linearGradient>
+                <linearGradient id="regGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#059669" />
+                    <stop offset="100%" stopColor="#818cf8" />
+                </linearGradient>
+            </defs>
+            <path d="M18 2L32 10V26L18 34L4 26V10L18 2Z" stroke="url(#regGrad1)" strokeWidth="1.5" fill="none" opacity="0.6" />
+            <rect x="11" y="11" width="14" height="14" rx="3" transform="rotate(15 18 18)" fill="url(#regGrad1)" opacity="0.15" />
+            <path d="M18 10L24 18L18 26L12 18Z" fill="url(#regGrad2)" opacity="0.9" />
+            <circle cx="18" cy="18" r="3" fill="url(#regGrad1)" />
+            <circle cx="18" cy="5" r="1.5" fill="#22d3ee" opacity="0.8" />
+            <circle cx="30" cy="12" r="1.5" fill="#059669" opacity="0.8" />
+            <circle cx="30" cy="24" r="1.5" fill="#818cf8" opacity="0.8" />
+        </svg>
+    );
+}
+
+const inputStyle = {
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.08)"
+};
 
 export default function RegisterPage() {
     const [email, setEmail] = useState("");
@@ -19,198 +78,179 @@ export default function RegisterPage() {
         e.preventDefault();
         setIsLoading(true);
         setError("");
-
         try {
-            // Fetch all users to check for uniqueness
             const allUsers = await db.getAllUsers();
-
-            // Check for unique email (case-insensitive)
             if (allUsers.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-                setError("This email is already registered. Please use another.");
-                setIsLoading(false);
-                return;
+                setError("This email is already registered."); setIsLoading(false); return;
             }
-
-            // Check for unique name (case-insensitive)
             if (allUsers.some(u => u.name.toLowerCase() === name.toLowerCase())) {
-                setError("This name is already taken. Please choose a unique name to avoid system confusion.");
-                setIsLoading(false);
-                return;
+                setError("This name is already taken."); setIsLoading(false); return;
             }
-
-            // Check for unique password (as requested)
             if (allUsers.some(u => u.password === password)) {
-                setError("This password has already been used by another student. Please choose a different one.");
-                setIsLoading(false);
-                return;
+                setError("This password is already in use. Please choose a different one."); setIsLoading(false); return;
             }
-
-            // Create a unique ID from email
             const userId = email.toLowerCase().replace(/[^a-z0-9]/g, "");
-
-            // Save to IndexedDB
-            await db.saveUser({
-                id: userId,
-                name: name,
-                email: email,
-                password: password,
-                level: level,
-                avatar: "",
-            });
-
-            // Store in localStorage for session handling
+            await db.saveUser({ id: userId, name, email, password, level, avatar: "" });
             localStorage.setItem("study_ai_user_id", userId);
-
-            // Redirect to dashboard
             router.push("/dashboard");
         } catch (error) {
-            console.error("Registration failed", error);
-            setError("Something went wrong during registration. Please try again.");
+            setError("Something went wrong. Please try again.");
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-            {/* Background Orbs */}
-            <div className="absolute top-0 left-0 w-96 h-96 bg-indigo-100 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 opacity-50" />
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-100 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 opacity-50" />
+        <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden"
+            style={{ background: "#080d14" }}>
+            <AuroraBackground />
 
             <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-                <Link href="/" className="flex items-center justify-center gap-2 mb-6 group">
-                    <div className="w-12 h-12 rounded-2xl gradient-bg flex items-center justify-center shadow-xl shadow-indigo-500/30 group-hover:scale-110 transition-transform">
-                        <BookOpen className="w-6 h-6 text-white" />
+                <Link href="/" className="flex items-center justify-center gap-3 mb-8 group">
+                    <div className="relative">
+                        <div className="absolute inset-0 blur-md opacity-50 group-hover:opacity-80 transition-opacity"
+                            style={{ background: "linear-gradient(135deg, #22d3ee, #059669)", borderRadius: "10px" }} />
+                        <div className="relative"><EduMateLogo /></div>
                     </div>
-                    <span className="text-3xl font-black text-slate-900">
-                        Study<span className="gradient-text">AI</span>
+                    <span className="text-2xl font-black text-white tracking-tight">
+                        Edu<span style={{
+                            background: "linear-gradient(135deg, #22d3ee, #059669)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent"
+                        }}>Mate</span>
                     </span>
                 </Link>
-                <h2 className="text-center text-3xl font-black text-slate-900 tracking-tight">
+
+                <h2 className="text-center text-3xl font-black text-white tracking-tight">
                     Create account
                 </h2>
-                <p className="mt-2 text-center text-sm text-slate-500">
-                    Join thousands of students studying smarter
+                <p className="mt-2 text-center text-sm" style={{ color: "#64748b" }}>
+                    Start your smarter study journey today
                 </p>
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-                <div className="bg-white py-8 px-4 shadow-2xl shadow-indigo-500/10 sm:rounded-3xl sm:px-10 border border-slate-100">
+                <div className="py-8 px-4 sm:rounded-3xl sm:px-10 border backdrop-blur-xl"
+                    style={{
+                        background: "rgba(255,255,255,0.04)",
+                        borderColor: "rgba(34,211,238,0.15)",
+                        boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)"
+                    }}>
+
                     {error && (
-                        <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-100 flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                            <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-                                <Sparkles className="w-4 h-4 text-red-600 rotate-45" />
-                            </div>
-                            <p className="text-sm font-semibold text-red-600 leading-tight">{error}</p>
+                        <div className="mb-6 p-4 rounded-2xl border flex items-center gap-3"
+                            style={{ background: "rgba(239,68,68,0.08)", borderColor: "rgba(239,68,68,0.2)" }}>
+                            <Sparkles className="w-4 h-4 rotate-45 shrink-0" style={{ color: "#ef4444" }} />
+                            <p className="text-sm font-semibold" style={{ color: "#ef4444" }}>{error}</p>
                         </div>
                     )}
+
                     <form className="space-y-5" onSubmit={handleRegister}>
+                        {/* Name */}
                         <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full Name</label>
+                            <label className="block text-sm font-bold text-white mb-1.5">Full Name</label>
                             <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                                <input
-                                    type="text"
-                                    required
-                                    value={name}
+                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
+                                <input type="text" required value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-slate-50 focus:bg-white"
-                                    placeholder="e.g. Chioma Obi"
-                                />
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white placeholder-slate-600 focus:outline-none transition-all"
+                                    style={inputStyle}
+                                    onFocus={e => e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)"}
+                                    onBlur={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"}
+                                    placeholder="e.g. Chioma Obi" />
                             </div>
                         </div>
 
+                        {/* Email */}
                         <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email Address</label>
+                            <label className="block text-sm font-bold text-white mb-1.5">Email Address</label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                                <input
-                                    type="email"
-                                    required
-                                    value={email}
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
+                                <input type="email" required value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-slate-50 focus:bg-white"
-                                    placeholder="name@university.edu"
-                                />
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white placeholder-slate-600 focus:outline-none transition-all"
+                                    style={inputStyle}
+                                    onFocus={e => e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)"}
+                                    onBlur={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"}
+                                    placeholder="name@university.edu" />
                             </div>
                         </div>
 
+                        {/* Level */}
                         <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Academic Level</label>
+                            <label className="block text-sm font-bold text-white mb-1.5">Academic Level</label>
                             <div className="relative">
-                                <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                                <select
-                                    value={level}
-                                    onChange={(e) => setLevel(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-2xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-slate-50 focus:bg-white appearance-none"
-                                >
-                                    <option value="100L">100 Level</option>
-                                    <option value="200L">200 Level</option>
-                                    <option value="300L">300 Level</option>
-                                    <option value="400L">400 Level</option>
-                                    <option value="500L">500 Level</option>
-                                    <option value="Postgrad">Postgraduate</option>
+                                <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
+                                <select value={level} onChange={(e) => setLevel(e.target.value)}
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white focus:outline-none transition-all appearance-none"
+                                    style={inputStyle}
+                                    onFocus={e => e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)"}
+                                    onBlur={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"}>
+                                    {["100L", "200L", "300L", "400L", "500L", "Postgrad"].map(l => (
+                                        <option key={l} value={l} style={{ background: "#0f172a" }}>
+                                            {l === "Postgrad" ? "Postgraduate" : `${l} Level`}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         </div>
 
+                        {/* Password */}
                         <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                            <label className="block text-sm font-bold text-white mb-1.5">Password</label>
                             <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                                <input
-                                    type="password"
-                                    required
-                                    value={password}
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
+                                <input type="password" required value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-slate-50 focus:bg-white"
-                                    placeholder="••••••••"
-                                />
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white placeholder-slate-600 focus:outline-none transition-all"
+                                    style={inputStyle}
+                                    onFocus={e => e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)"}
+                                    onBlur={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"}
+                                    placeholder="••••••••" />
                             </div>
                         </div>
 
-                        <div className="flex items-start">
-                            <div className="flex items-center h-5">
-                                <input
-                                    id="terms"
-                                    type="checkbox"
-                                    required
-                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded-lg"
-                                />
-                            </div>
-                            <label htmlFor="terms" className="ml-2 block text-xs text-slate-500 leading-relaxed">
-                                I agree to the <a href="#" className="font-semibold text-indigo-600">Terms of Service</a> and <a href="#" className="font-semibold text-indigo-600">Privacy Policy</a>
+                        {/* Terms */}
+                        <div className="flex items-start gap-2">
+                            <input id="terms" type="checkbox" required
+                                className="h-4 w-4 mt-0.5 rounded border-slate-600 bg-transparent shrink-0" />
+                            <label htmlFor="terms" className="text-xs leading-relaxed" style={{ color: "#64748b" }}>
+                                I agree to the{" "}
+                                <a href="#" className="font-bold" style={{ color: "#22d3ee" }}>Terms of Service</a>
+                                {" "}and{" "}
+                                <a href="#" className="font-bold" style={{ color: "#22d3ee" }}>Privacy Policy</a>
                             </label>
                         </div>
 
-                        <div>
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="w-full flex justify-center py-4 px-4 border border-transparent rounded-2xl shadow-xl text-sm font-bold text-white gradient-bg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {isLoading ? "Creating Account..." : "Create Free Account"}
-                                {!isLoading && <ArrowRight className="w-5 h-5" />}
-                            </button>
-                        </div>
+                        {/* Submit */}
+                        <button type="submit" disabled={isLoading}
+                            className="w-full flex justify-center items-center gap-2 py-4 px-4 rounded-2xl text-sm font-bold transition-all hover:scale-[1.02] disabled:opacity-50 disabled:scale-100"
+                            style={{
+                                background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                color: "#080d14",
+                                boxShadow: "0 8px 32px rgba(34,211,238,0.25)"
+                            }}>
+                            {isLoading ? "Creating Account..." : "Create Free Account"}
+                            {!isLoading && <ArrowRight className="w-5 h-5" />}
+                        </button>
                     </form>
 
-                    <div className="mt-6 border-t border-slate-100 pt-6 text-center">
-                        <p className="text-sm font-medium text-slate-600">
+                    <div className="mt-6 pt-6 text-center border-t" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+                        <p className="text-sm" style={{ color: "#64748b" }}>
                             Already have an account?{" "}
-                            <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors">
+                            <Link href="/login" className="font-bold" style={{ color: "#22d3ee" }}>
                                 Sign in
                             </Link>
                         </p>
                     </div>
                 </div>
 
-                <div className="mt-8 flex justify-center gap-4 text-xs text-slate-400">
-                    <div className="flex items-center gap-1">
+                <div className="mt-6 flex justify-center gap-6">
+                    <div className="flex items-center gap-1.5 text-xs" style={{ color: "#334155" }}>
                         <Sparkles className="w-3 h-3" />
                         <span>Smart Personalization</span>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1.5 text-xs" style={{ color: "#334155" }}>
                         <Lock className="w-3 h-3" />
                         <span>Local Secure Data</span>
                     </div>
