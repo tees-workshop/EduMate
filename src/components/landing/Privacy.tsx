@@ -14,19 +14,9 @@ const privacyItems = [
         title: "No Data Selling",
         description: "We never sell, share, or monetize your personal data. Your information is yours, full stop.",
     },
-    {
-        icon: Server,
-        title: "Your Data, Your Control",
-        description: "Export or delete your data at any time with one click. No questions asked, no hidden retention.",
-    },
-    {
-        icon: Shield,
-        title: "FERPA Compliant",
-        description: "EduMate is built in full compliance with FERPA and GDPR standards, protecting your academic privacy.",
-    },
 ];
 
-const badges = ["FERPA Compliant", "GDPR Ready", "SOC 2 Type II", "256-bit AES Encryption"];
+
 
 export default function Privacy() {
     const { ref: leftRef, style: leftStyle } = useFadeUp(0);
@@ -64,19 +54,6 @@ export default function Privacy() {
                             We built EduMate with privacy at its core, not as an afterthought. Your academic data
                             belongs to you — we just help you use it smarter.
                         </p>
-
-                        <div className="flex flex-col gap-3">
-                            {badges.map((badge, i) => (
-                                <div key={badge} className="flex items-center gap-3 rounded-xl px-4 py-3 border"
-                                style={{
-                                        background: "rgba(5,150,105,0.05)",
-                                        borderColor: "rgba(5,150,105,0.15)"
-                                    }}>
-                                    <CheckCircle className="w-4 h-4 shrink-0" style={{ color: "#059669" }} />
-                                    <span className="text-sm font-semibold text-white">{badge}</span>
-                                    </div>
-                            ))} 
-                        </div>
                     </div>
 
                     {/* Right */}

@@ -210,18 +210,6 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
-                        {/* Terms */}
-                        <div className="flex items-start gap-2">
-                            <input id="terms" type="checkbox" required
-                                className="h-4 w-4 mt-0.5 rounded border-slate-600 bg-transparent shrink-0" />
-                            <label htmlFor="terms" className="text-xs leading-relaxed" style={{ color: "#64748b" }}>
-                                I agree to the{" "}
-                                <a href="#" className="font-bold" style={{ color: "#22d3ee" }}>Terms of Service</a>
-                                {" "}and{" "}
-                                <a href="#" className="font-bold" style={{ color: "#22d3ee" }}>Privacy Policy</a>
-                            </label>
-                        </div>
-
                         {/* Submit */}
                         <button type="submit" disabled={isLoading}
                             className="w-full flex justify-center items-center gap-2 py-4 px-4 rounded-2xl text-sm font-bold transition-all hover:scale-[1.02] disabled:opacity-50 disabled:scale-100"
