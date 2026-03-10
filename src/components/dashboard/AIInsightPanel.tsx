@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Sparkles, BookOpen, ArrowRight, TrendingUp } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Sparkles, BookOpen, ArrowRight, TrendingUp, Loader2 } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
-
-const insights: { topic: string; score: number; action: string }[] = [];
+import { useReadinessScore } from "@/hooks/useReadinessScore";
+import { db } from "@/lib/db";
 
 const weekdays = ["M", "T", "W", "T", "F", "S", "S"];
-// Empty heatmap for new users
 const heatmapData = [
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
@@ -16,18 +15,13 @@ const heatmapData = [
 ];
 
 function HeatCell({ value }: { value: number }) {
-    const intensity = {
-        0: "bg-slate-100",
-        1: "bg-indigo-100",
-        2: "bg-indigo-200",
-        3: "bg-indigo-300",
-        4: "bg-indigo-400",
-        5: "bg-indigo-500",
-    }[value] ?? "bg-slate-100";
-
+    const opacity = value === 0 ? 0.06 : value === 1 ? 0.2 : value === 2 ? 0.4 : value === 3 ? 0.6 : value === 4 ? 0.8 : 1;
     return (
         <div
-            className={`w-full aspect-square rounded-sm ${intensity} transition-transform hover:scale-125`}
+            className="w-full aspect-square rounded-sm transition-transform hover:scale-125 cursor-default"
+            style={{
+                background: value === 0 ? "rgba(255,255,255,0.06)" : `rgba(34,211,238,${opacity})`,
+            }}
             title={`${value} sessions`}
         />
     );
@@ -35,117 +29,214 @@ function HeatCell({ value }: { value: number }) {
 
 export default function AIInsightPanel() {
     const { user } = useUser();
+    const { score, label } = useReadinessScore();
     const [chatMsg, setChatMsg] = useState("");
-    const [messages, setMessages] = useState<{ from: string; text: string }[]>([]);
+    const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [materialNames, setMaterialNames] = useState<string[]>([]);
+    const bottomRef = useRef<HTMLDivElement>(null);
 
+    // Load materials for context
     useEffect(() => {
-        if (user) {
-            setMessages([
-                { from: "ai", text: `Hi ${user.name.split(" ")[0]}! I'm your study assistant. Once you upload your first few materials to the library, I can start helping you with quizzes and readiness predictions!` }
-            ]);
+        if (user?.id) {
+            db.getMaterialsByUser(user.id).then(mats => {
+                setMaterialNames(mats.map(m => m.name));
+            });
         }
     }, [user]);
 
-    const send = () => {
-        if (!chatMsg.trim()) return;
+    // Initial greeting
+    useEffect(() => {
+        if (user) {
+            setMessages([{
+                role: "assistant",
+                content: `Hi ${user.name.split(" ")[0]}! I'm your AI study assistant. I know your current readiness score is ${score !== null ? `${score}%` : "not yet calculated"}. Ask me anything about your subjects or how to improve!`
+            }]);
+        }
+    }, [user, score]);
+
+    // Auto scroll to bottom
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    const buildSystemPrompt = () => {
+        return `You are a helpful AI study assistant for a student named ${user?.name ?? "Student"}.
+
+Student context:
+- Readiness score: ${score !== null ? `${score}% (${label})` : "Not yet assessed"}
+- Study materials uploaded: ${materialNames.length > 0 ? materialNames.join(", ") : "None yet"}
+- Academic level: ${user?.level ?? "Unknown"}
+
+Your role:
+- Help the student understand academic concepts and topics
+- Give concise, clear explanations suitable for a student
+- Encourage and motivate them based on their readiness score
+- Suggest study strategies when relevant
+- Keep responses focused and under 150 words unless a detailed explanation is needed
+- Be friendly and supportive`;
+    };
+
+    const send = async () => {
+        if (!chatMsg.trim() || loading) return;
         const userMsg = chatMsg.trim();
-        setMessages((prev) => [...prev, { from: "user", text: userMsg }]);
         setChatMsg("");
-        setTimeout(() => {
-            setMessages((prev) => [
-                ...prev,
-                {
-                    from: "ai",
-                    text: "I'm still learning! Once you add study materials, I'll be able to help you better.",
-                },
-            ]);
-        }, 1000);
+
+        const newMessages: { role: "user" | "assistant"; content: string }[] = [
+            ...messages,
+            { role: "user", content: userMsg }
+        ];
+        setMessages(newMessages);
+        setLoading(true);
+
+        try {
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    messages: newMessages,
+                    systemPrompt: buildSystemPrompt()
+                }),
+            });
+            const data = await res.json();
+            setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
+        } catch {
+            setMessages(prev => [...prev, { role: "assistant", content: "Sorry, something went wrong. Please try again." }]);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="flex flex-col gap-4 h-full">
-            {/* AI Chat Panel */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col" style={{ minHeight: "220px" }}>
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-100">
-                    <div className="w-7 h-7 rounded-lg gradient-bg flex items-center justify-center">
-                        <Sparkles className="w-3.5 h-3.5 text-white" />
+
+            {/* AI Chat */}
+            <div className="rounded-2xl border flex flex-col overflow-hidden"
+                style={{
+                    background: "rgba(255,255,255,0.03)",
+                    borderColor: "rgba(255,255,255,0.07)",
+                    minHeight: "320px",
+                    maxHeight: "420px"
+                }}>
+                {/* Header */}
+                <div className="flex items-center gap-2 px-4 py-3 border-b"
+                    style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+                    <div className="w-7 h-7 rounded-lg flex items-center justify-center"
+                        style={{ background: "linear-gradient(135deg, #22d3ee, #059669)" }}>
+                        <Sparkles className="w-3.5 h-3.5" style={{ color: "#080d14" }} />
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-800">AI Study Assistant</p>
-                        <p className="text-xs text-green-500 font-medium flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" /> Online
+                        <p className="text-xs font-bold text-white">AI Study Assistant</p>
+                        <p className="text-xs font-medium flex items-center gap-1" style={{ color: "#059669" }}>
+                            <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: "#059669" }} />
+                            Online · Llama 3.3 70B
                         </p>
                     </div>
                 </div>
 
+                {/* Messages */}
                 <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2.5 scrollbar-thin">
                     {messages.map((msg, i) => (
-                        <div key={i} className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
+                        <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                             <div
-                                className={`max-w-[85%] px-3 py-2 rounded-xl text-xs leading-relaxed ${msg.from === "user"
-                                    ? "gradient-bg text-white rounded-br-sm"
-                                    : "bg-slate-50 text-slate-700 rounded-bl-sm border border-slate-100"
-                                    }`}
+                                className="max-w-[85%] px-3 py-2 rounded-xl text-xs leading-relaxed"
+                                style={msg.role === "user" ? {
+                                    background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                    color: "#080d14",
+                                    borderBottomRightRadius: "4px",
+                                    fontWeight: 600
+                                } : {
+                                    background: "rgba(255,255,255,0.06)",
+                                    color: "#94a3b8",
+                                    border: "1px solid rgba(255,255,255,0.08)",
+                                    borderBottomLeftRadius: "4px"
+                                }}
                             >
-                                {msg.text}
+                                {msg.content}
                             </div>
                         </div>
                     ))}
+                    {loading && (
+                        <div className="flex justify-start">
+                            <div className="px-3 py-2 rounded-xl text-xs flex items-center gap-2"
+                                style={{
+                                    background: "rgba(255,255,255,0.06)",
+                                    color: "#64748b",
+                                    border: "1px solid rgba(255,255,255,0.08)"
+                                }}>
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                                Thinking...
+                            </div>
+                        </div>
+                    )}
+                    <div ref={bottomRef} />
                 </div>
 
-                <div className="px-3 py-3 border-t border-slate-100 flex gap-2">
+                {/* Input */}
+                <div className="px-3 py-3 border-t flex gap-2"
+                    style={{ borderColor: "rgba(255,255,255,0.07)" }}>
                     <input
                         value={chatMsg}
                         onChange={(e) => setChatMsg(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && send()}
                         placeholder="Ask your AI tutor..."
-                        className="flex-1 text-xs border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-300 bg-slate-50"
+                        className="flex-1 text-xs rounded-xl px-3 py-2 focus:outline-none transition-all"
+                        style={{
+                            background: "rgba(255,255,255,0.05)",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            color: "#f1f5f9"
+                        }}
+                        onFocus={e => (e.currentTarget.style.borderColor = "rgba(34,211,238,0.3)")}
+                        onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
                     />
                     <button
                         onClick={send}
-                        className="gradient-bg text-white px-3 py-2 rounded-xl text-xs font-semibold hover:opacity-90 transition-opacity"
+                        disabled={loading}
+                        className="px-3 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 disabled:opacity-50"
+                        style={{
+                            background: "linear-gradient(135deg, #22d3ee, #059669)",
+                            color: "#080d14"
+                        }}
                     >
                         Send
                     </button>
                 </div>
             </div>
 
-            {/* Recommended Topics */}
-            <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
-                <h4 className="text-xs font-bold text-slate-700 mb-3 flex items-center gap-2">
-                    <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
+            {/* Topics to Review */}
+            <div className="rounded-2xl p-4 border"
+                style={{
+                    background: "rgba(255,255,255,0.03)",
+                    borderColor: "rgba(255,255,255,0.07)"
+                }}>
+                <h4 className="text-xs font-bold text-white mb-3 flex items-center gap-2">
+                    <BookOpen className="w-3.5 h-3.5" style={{ color: "#22d3ee" }} />
                     Topics to Review
                 </h4>
-                <div className="space-y-2.5">
-                    {insights.map((item, i) => (
-                        <div key={i} className="space-y-1">
-                            <div className="flex items-center justify-between">
-                                <span className="text-xs font-medium text-slate-700">{item.topic}</span>
-                                <span className={`text-xs font-bold ${item.score < 70 ? "text-amber-500" : "text-green-500"}`}>
-                                    {item.score}%
-                                </span>
-                            </div>
-                            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                <div
-                                    className={`h-full rounded-full ${item.score < 70 ? "bg-amber-400" : "bg-green-500"}`}
-                                    style={{ width: `${item.score}%` }}
-                                />
-                            </div>
-                            <p className="text-xs text-slate-400">→ {item.action}</p>
-                        </div>
-                    ))}
+                <div className="rounded-xl border border-dashed p-4 text-center"
+                    style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+                    <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: "#475569" }}>
+                        No Data Yet
+                    </p>
+                    <p className="text-[10px]" style={{ color: "#475569" }}>
+                        Complete a quiz to see topic insights.
+                    </p>
                 </div>
             </div>
 
             {/* Heatmap */}
-            <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
-                <h4 className="text-xs font-bold text-slate-700 mb-3 flex items-center gap-2">
-                    <TrendingUp className="w-3.5 h-3.5 text-indigo-500" />
+            <div className="rounded-2xl p-4 border"
+                style={{
+                    background: "rgba(255,255,255,0.03)",
+                    borderColor: "rgba(255,255,255,0.07)"
+                }}>
+                <h4 className="text-xs font-bold text-white mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-3.5 h-3.5" style={{ color: "#22d3ee" }} />
                     Weekly Activity
                 </h4>
                 <div className="grid grid-cols-7 gap-1 mb-2">
                     {weekdays.map((d, i) => (
-                        <div key={i} className="text-center text-xs text-slate-400 font-medium">{d}</div>
+                        <div key={i} className="text-center text-[10px] font-medium" style={{ color: "#475569" }}>{d}</div>
                     ))}
                 </div>
                 <div className="space-y-1">
@@ -157,17 +248,26 @@ export default function AIInsightPanel() {
                         </div>
                     ))}
                 </div>
-                <div className="flex items-center gap-2 mt-2">
-                    <span className="text-xs text-slate-400">Less</span>
+                <div className="flex items-center gap-1.5 mt-3">
+                    <span className="text-[10px]" style={{ color: "#475569" }}>Less</span>
                     {[0, 1, 2, 3, 4, 5].map((v) => (
-                        <HeatCell key={v} value={v} />
+                        <div key={v} className="w-3 h-3 rounded-sm"
+                            style={{
+                                background: v === 0 ? "rgba(255,255,255,0.06)" : `rgba(34,211,238,${v * 0.18})`
+                            }} />
                     ))}
-                    <span className="text-xs text-slate-400">More</span>
+                    <span className="text-[10px]" style={{ color: "#475569" }}>More</span>
                 </div>
             </div>
 
-            {/* Next Action CTA */}
-            <button className="gradient-bg text-white rounded-2xl p-4 text-sm font-semibold flex items-center justify-between hover:opacity-90 transition-opacity shadow-lg shadow-indigo-500/20">
+            {/* CTA */}
+            <button
+                className="rounded-2xl p-4 text-sm font-bold flex items-center justify-between transition-all hover:scale-[1.02]"
+                style={{
+                    background: "linear-gradient(135deg, #22d3ee, #059669)",
+                    color: "#080d14",
+                    boxShadow: "0 4px 20px rgba(34,211,238,0.2)"
+                }}>
                 <span>Start Today&apos;s Focus Session</span>
                 <ArrowRight className="w-4 h-4" />
             </button>

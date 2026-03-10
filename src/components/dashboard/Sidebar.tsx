@@ -4,9 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-    BookOpen, LayoutDashboard, Brain, Wrench, HelpCircle,
-    Lock, BarChart3, Settings, ChevronLeft, ChevronRight,
-    LogOut, User, Library, PenTool
+    LayoutDashboard, Brain, HelpCircle,
+    Wrench, Settings, ChevronLeft, ChevronRight,
+    LogOut, Library, PenTool, Menu, X
 } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 
@@ -23,7 +23,6 @@ const navSections = [
     {
         label: "Productivity",
         items: [
-            { icon: PenTool, label: "Smart Notepad", href: "/library?tab=notepad" },
             { icon: Wrench, label: "Study Tools", href: "/library" },
         ],
     },
@@ -35,106 +34,226 @@ const navSections = [
     },
 ];
 
+function EduMateLogo() {
+    return (
+        <svg width="32" height="32" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="sgrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#22d3ee" />
+                    <stop offset="100%" stopColor="#059669" />
+                </linearGradient>
+                <linearGradient id="sgrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#059669" />
+                    <stop offset="100%" stopColor="#818cf8" />
+                </linearGradient>
+            </defs>
+            <path d="M18 2L32 10V26L18 34L4 26V10L18 2Z" stroke="url(#sgrad1)" strokeWidth="1.5" fill="none" opacity="0.6" />
+            <path d="M18 10L24 18L18 26L12 18Z" fill="url(#sgrad2)" opacity="0.9" />
+            <circle cx="18" cy="18" r="3" fill="url(#sgrad1)" />
+            <circle cx="18" cy="5" r="1.5" fill="#22d3ee" opacity="0.8" />
+            <circle cx="30" cy="12" r="1.5" fill="#059669" opacity="0.8" />
+            <circle cx="30" cy="24" r="1.5" fill="#818cf8" opacity="0.8" />
+        </svg>
+    );
+}
+
+function NavContent({ collapsed, onClose }: { collapsed: boolean; onClose?: () => void }) {
+    const pathname = usePathname();
+    const { user } = useUser();
+
+    const getInitials = (name: string) =>
+        name.split(" ").map((n) => n[0]).join("").toUpperCase().substring(0, 2);
+
+    return (
+        <div className="flex flex-col h-full">
+            {/* Logo */}
+            <div className={`flex items-center h-16 px-4 border-b ${collapsed ? "justify-center" : "justify-between"}`}
+                style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+                <Link href="/" className="flex items-center gap-2.5 shrink-0" onClick={onClose}>
+                    <EduMateLogo />
+                    {!collapsed && (
+                        <span className="text-lg font-black text-white tracking-tight">
+                            Edu<span style={{
+                                background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent"
+                            }}>Mate</span>
+                        </span>
+                    )}
+                </Link>
+                {onClose && (
+                    <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
+                        <X className="w-4 h-4" />
+                    </button>
+                )}
+            </div>
+
+            {/* Nav links */}
+            <nav className="flex-1 overflow-y-auto py-6 px-3">
+                {navSections.map((section) => (
+                    <div key={section.label} className="mb-8">
+                        {!collapsed && (
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] px-3 mb-3"
+                                style={{ color: "rgba(255,255,255,0.2)" }}>
+                                {section.label}
+                            </p>
+                        )}
+                        <div className="space-y-1">
+                            {section.items.map((item) => {
+                                const Icon = item.icon;
+                                const isActive = pathname === item.href;
+                                return (
+                                    <Link
+                                        key={item.label}
+                                        href={item.href}
+                                        onClick={onClose}
+                                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${collapsed ? "justify-center" : ""}`}
+                                        style={{
+                                            background: isActive
+                                                ? "linear-gradient(135deg, rgba(34,211,238,0.15), rgba(5,150,105,0.15))"
+                                                : "transparent",
+                                            border: isActive
+                                                ? "1px solid rgba(34,211,238,0.2)"
+                                                : "1px solid transparent",
+                                        }}
+                                        onMouseEnter={e => {
+                                            if (!isActive) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+                                        }}
+                                        onMouseLeave={e => {
+                                            if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent";
+                                        }}
+                                    >
+                                        <Icon className="w-4 h-4 shrink-0" style={{
+                                            color: isActive ? "#22d3ee" : "#64748b"
+                                        }} />
+                                        {!collapsed && (
+                                            <span className="text-sm font-semibold"
+                                                style={{ color: isActive ? "#f1f5f9" : "#64748b" }}>
+                                                {item.label}
+                                            </span>
+                                        )}
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ))}
+            </nav>
+
+            {/* User card */}
+            <div className="p-3 border-t" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+                {!collapsed && user && (
+                    <div className="rounded-xl p-3 mb-3 border"
+                        style={{
+                            background: "rgba(255,255,255,0.04)",
+                            borderColor: "rgba(255,255,255,0.08)"
+                        }}>
+                        <div className="flex items-center gap-3 mb-3">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0"
+                                style={{
+                                    background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                    color: "#080d14"
+                                }}>
+                                {getInitials(user.name)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-xs font-bold text-white truncate">{user.name}</p>
+                                <p className="text-[10px] font-medium truncate" style={{ color: "#64748b" }}>
+                                    Student · {user.level}
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => {
+                                localStorage.removeItem("study_ai_user_id");
+                                window.location.href = "/login";
+                            }}
+                            className="w-full py-1.5 rounded-lg text-[10px] font-bold flex items-center justify-center gap-2 transition-all border"
+                            style={{
+                                background: "rgba(239,68,68,0.08)",
+                                borderColor: "rgba(239,68,68,0.15)",
+                                color: "#f87171"
+                            }}
+                        >
+                            <LogOut className="w-3 h-3" /> Log Out
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
 export default function Sidebar() {
     const [collapsed, setCollapsed] = useState(false);
-    const pathname = usePathname();
-    const { user, loading } = useUser();
+    const [mobileOpen, setMobileOpen] = useState(false);
 
-    const getInitials = (name: string) => {
-        return name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-            .toUpperCase()
-            .substring(0, 2);
+    const sidebarStyle = {
+        background: "rgba(8,13,20,0.97)",
+        backdropFilter: "blur(20px)",
+        borderColor: "rgba(255,255,255,0.06)"
     };
 
     return (
         <>
-            <aside
-                className={`fixed top-0 left-0 h-screen bg-slate-900 flex flex-col z-40 transition-all duration-300 ease-in-out ${collapsed ? "w-16" : "w-64"
-                    }`}
+            {/* Mobile hamburger */}
+            <button
+                className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-xl border"
+                style={{
+                    background: "rgba(8,13,20,0.9)",
+                    borderColor: "rgba(255,255,255,0.1)",
+                    color: "#94a3b8"
+                }}
+                onClick={() => setMobileOpen(true)}
             >
-                <div className={`flex items-center gap-3 px-4 h-16 border-b border-slate-800 ${collapsed ? "justify-center" : ""}`}>
-                    <Link href="/" className="flex items-center gap-2 shrink-0">
-                        <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center shadow-lg">
-                            <BookOpen className="w-4 h-4 text-white" />
-                        </div>
-                        {!collapsed && (
-                            <span className="text-lg font-black text-white">
-                                Edu<span className="gradient-text">Mate</span>
-                            </span>
-                        )}
-                    </Link>
-                </div>
+                <Menu className="w-5 h-5" />
+            </button>
 
-                <nav className="flex-1 overflow-y-auto scrollbar-thin py-6 px-3">
-                    {navSections.map((section) => (
-                        <div key={section.label} className="mb-8">
-                            {!collapsed && (
-                                <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] px-3 mb-4 opacity-50">
-                                    {section.label}
-                                </p>
-                            )}
-                            <div className="space-y-1">
-                                {section.items.map((item) => {
-                                    const Icon = item.icon;
-                                    const isActive = pathname === item.href;
-                                    return (
-                                        <Link
-                                            key={item.label}
-                                            href={item.href}
-                                            className={`flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-all group ${isActive
-                                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
-                                                : "text-slate-400 hover:bg-slate-800 hover:text-white"
-                                                }`}
-                                        >
-                                            <Icon className={`w-5 h-5 shrink-0 ${isActive ? "text-white" : "text-slate-400 group-hover:text-indigo-400"}`} />
-                                            {!collapsed && (
-                                                <span className="text-sm font-bold tracking-tight">{item.label}</span>
-                                            )}
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    ))}
-                </nav>
+            {/* Mobile overlay */}
+            {mobileOpen && (
+                <div
+                    className="md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+                    onClick={() => setMobileOpen(false)}
+                />
+            )}
 
-                <div className="p-4 mt-auto">
-                    {!collapsed && user && (
-                        <div className="bg-slate-800/50 p-4 rounded-3xl mb-4 border border-slate-700/50">
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className="w-8 h-8 rounded-xl gradient-bg flex items-center justify-center text-xs font-black text-white shrink-0">
-                                    {getInitials(user.name)}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-xs font-black text-white truncate">{user.name}</p>
-                                    <p className="text-[10px] text-slate-500 font-bold truncate">Student ({user.level})</p>
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => {
-                                    localStorage.removeItem("study_ai_user_id");
-                                    window.location.href = "/login";
-                                }}
-                                className="w-full py-2 bg-slate-800 text-slate-400 rounded-xl text-[10px] font-black hover:text-white transition-colors flex items-center justify-center gap-2"
-                            >
-                                <LogOut className="w-3 h-3" /> Log Out
-                            </button>
-                        </div>
-                    )}
+            {/* Mobile drawer */}
+            <aside
+                className={`md:hidden fixed top-0 left-0 h-screen w-72 z-50 border-r transition-transform duration-300 ${
+                    mobileOpen ? "translate-x-0" : "-translate-x-full"
+                }`}
+                style={sidebarStyle}
+            >
+                <NavContent collapsed={false} onClose={() => setMobileOpen(false)} />
+            </aside>
 
+            {/* Desktop sidebar */}
+            <aside
+                className={`hidden md:flex fixed top-0 left-0 h-screen flex-col z-40 border-r transition-all duration-300 ${
+                    collapsed ? "w-16" : "w-64"
+                }`}
+                style={sidebarStyle}
+            >
+                <NavContent collapsed={collapsed} />
+
+                {/* Collapse toggle */}
+                <div className="p-3 border-t" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
                     <button
                         onClick={() => setCollapsed(!collapsed)}
-                        className="w-full flex items-center justify-center py-2.5 rounded-2xl bg-indigo-600/10 text-indigo-400 hover:bg-indigo-600/20 transition-all border border-indigo-500/20"
+                        className="w-full flex items-center justify-center py-2 rounded-xl transition-all border"
+                        style={{
+                            background: "rgba(34,211,238,0.06)",
+                            borderColor: "rgba(34,211,238,0.15)",
+                            color: "#22d3ee"
+                        }}
                     >
                         {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
                     </button>
                 </div>
             </aside>
 
-            <div className={`shrink-0 transition-all duration-300 ${collapsed ? "w-16" : "w-64"}`} />
+            {/* Desktop spacer */}
+            <div className={`hidden md:block shrink-0 transition-all duration-300 ${collapsed ? "w-16" : "w-64"}`} />
         </>
     );
 }

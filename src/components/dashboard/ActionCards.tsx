@@ -1,139 +1,284 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Brain, Play, FileQuestion, Calendar, Trophy, FolderOpen, Plus, Check, Trash2, Zap } from "lucide-react";
+import { FileQuestion, Calendar, FolderOpen, Plus, Check, Trash2, Zap, FileText, File } from "lucide-react";
+import { useReadinessScore } from "@/hooks/useReadinessScore";
+import { useUser } from "@/hooks/useUser";
+import { db, Material, Task } from "@/lib/db";
 
-// Shared data for demo - Now empty for fresh start
-const initialTodos: { id: number; text: string; done: boolean }[] = [];
+function ToDoCard({ userId }: { userId: string }) {
+    const [todos, setTodos] = useState<Task[]>([]);
 
-function ToDoCard() {
-    const [todos, setTodos] = useState(initialTodos);
+    useEffect(() => {
+        if (!userId) return;
+        db.getTasksByUser(userId).then(setTodos).catch(console.error);
+    }, [userId]);
 
-    const toggle = (id: number) =>
-        setTodos(todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
+    const toggle = async (id: string) => {
+        const updated = todos.map((t) => t.id === id ? { ...t, done: !t.done } : t);
+        setTodos(updated);
+        const task = updated.find(t => t.id === id);
+        if (task) await db.saveTask(task);
+    };
 
     return (
-        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col h-full">
-            <h3 className="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-lg bg-green-100 flex items-center justify-center text-xs">✅</span>
+        <div className="rounded-2xl p-5 border flex flex-col h-full transition-all duration-300"
+            style={{
+                background: "rgba(255,255,255,0.03)",
+                borderColor: "rgba(255,255,255,0.07)",
+            }}>
+            <h3 className="font-bold text-white text-sm mb-4 flex items-center gap-2">
+                <span className="w-6 h-6 rounded-lg flex items-center justify-center text-xs"
+                    style={{ background: "rgba(5,150,105,0.15)", border: "1px solid rgba(5,150,105,0.2)" }}>
+                    ✅
+                </span>
                 To-Do List
             </h3>
-            <div className="space-y-4 flex-1 flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200 p-4">
+            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-4"
+                style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)" }}>
                 {todos.length > 0 ? (
                     <div className="space-y-2 w-full">
                         {todos.map((todo) => (
                             <div key={todo.id} className="flex items-center gap-3">
                                 <button
                                     onClick={() => toggle(todo.id)}
-                                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${todo.done ? "border-green-500 bg-green-500" : "border-slate-300"
-                                        }`}
+                                    className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all"
+                                    style={{
+                                        borderColor: todo.done ? "#059669" : "#475569",
+                                        background: todo.done ? "#059669" : "transparent"
+                                    }}
                                 >
                                     {todo.done && <Check className="w-3 h-3 text-white" />}
                                 </button>
-                                <span className={`text-xs ${todo.done ? "line-through text-slate-400" : "text-slate-600 font-medium"}`}>
+                                <span className="text-xs" style={{
+                                    color: todo.done ? "#475569" : "#94a3b8",
+                                    textDecoration: todo.done ? "line-through" : "none"
+                                }}>
                                     {todo.text}
                                 </span>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center">
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Stay Focused</p>
-                        <p className="text-[10px] text-slate-400 font-medium">No tasks for today. Add one in the library!</p>
+                    <div className="flex-1 flex flex-col items-center justify-center text-center">
+                        <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: "#475569" }}>
+                            Stay Focused
+                        </p>
+                        <p className="text-[10px]" style={{ color: "#475569" }}>
+                            No tasks yet. Add one in the library!
+                        </p>
                     </div>
                 )}
             </div>
-            <Link href="/library" className="mt-4 text-xs font-bold text-indigo-600 hover:underline">Manage all tasks →</Link>
+            <Link href="/library" className="mt-4 text-xs font-bold transition-colors"
+                style={{ color: "#22d3ee" }}>
+                Manage all tasks →
+            </Link>
+        </div>
+    );
+}
+
+function MaterialsCard({ userId }: { userId: string }) {
+    const [materials, setMaterials] = useState<Material[]>([]);
+
+    useEffect(() => {
+        if (!userId) return;
+        db.getMaterialsByUser(userId).then(setMaterials).catch(console.error);
+    }, [userId]);
+
+    const getIcon = (type: string) => {
+        if (type.includes("pdf")) return <FileText className="w-4 h-4" style={{ color: "#f87171" }} />;
+        return <File className="w-4 h-4" style={{ color: "#94a3b8" }} />;
+    };
+
+    return (
+        <div className="rounded-2xl p-5 border flex flex-col"
+            style={{
+                background: "rgba(255,255,255,0.03)",
+                borderColor: "rgba(255,255,255,0.07)"
+            }}>
+            <h3 className="font-bold text-white text-sm mb-4 flex items-center gap-2">
+                <FolderOpen className="w-4 h-4" style={{ color: "#059669" }} />
+                Study Materials
+                {materials.length > 0 && (
+                    <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full"
+                        style={{
+                            background: "rgba(5,150,105,0.15)",
+                            color: "#059669",
+                            border: "1px solid rgba(5,150,105,0.2)"
+                        }}>
+                        {materials.length}
+                    </span>
+                )}
+            </h3>
+            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-3"
+                style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)" }}>
+                {materials.length > 0 ? (
+                    <div className="space-y-2">
+                        {materials.slice(0, 4).map((mat) => (
+                            <div key={mat.id} className="flex items-center gap-2 rounded-lg px-2 py-1.5"
+                                style={{ background: "rgba(255,255,255,0.03)" }}>
+                                {getIcon(mat.type)}
+                                <span className="text-xs text-white truncate flex-1">{mat.name}</span>
+                                <span className="text-[10px] shrink-0" style={{ color: "#475569" }}>{mat.size}</span>
+                            </div>
+                        ))}
+                        {materials.length > 4 && (
+                            <p className="text-[10px] text-center pt-1" style={{ color: "#475569" }}>
+                                +{materials.length - 4} more
+                            </p>
+                        )}
+                    </div>
+                ) : (
+                    <div className="flex-1 flex flex-col items-center justify-center text-center py-4">
+                        <Trash2 className="w-6 h-6 mb-2" style={{ color: "#334155" }} />
+                        <p className="text-[10px]" style={{ color: "#475569" }}>Locker is empty.</p>
+                    </div>
+                )}
+            </div>
+            <Link href="/library" className="mt-4 text-xs font-bold" style={{ color: "#059669" }}>
+                Open Library →
+            </Link>
         </div>
     );
 }
 
 export default function ActionCards() {
+    const { score, label } = useReadinessScore();
+    const { user } = useUser();
+
     return (
         <div className="space-y-6">
-            {/* MERGED: Intelligent Preparation Card */}
-            <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-indigo-500/5 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-indigo-100 transition-colors" />
+            {/* Main card */}
+            <div className="rounded-2xl p-6 md:p-8 border relative overflow-hidden"
+                style={{
+                    background: "rgba(255,255,255,0.03)",
+                    borderColor: "rgba(255,255,255,0.07)",
+                    boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
+                }}>
+                <div className="absolute top-0 right-0 w-[250px] h-[250px] rounded-full pointer-events-none"
+                    style={{
+                        background: "#22d3ee",
+                        filter: "blur(80px)",
+                        opacity: 0.04,
+                    }} />
 
                 <div className="relative z-10 grid md:grid-cols-2 gap-8 items-center">
                     <div>
-                        <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-full mb-4">
-                            <Zap className="w-3.5 h-3.5 text-indigo-600" />
-                            <span className="text-[10px] font-bold text-indigo-700 uppercase tracking-wider">Intelligent prep</span>
+                        <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-4 border"
+                            style={{
+                                background: "rgba(34,211,238,0.08)",
+                                borderColor: "rgba(34,211,238,0.2)"
+                            }}>
+                            <Zap className="w-3.5 h-3.5" style={{ color: "#22d3ee" }} />
+                            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#22d3ee" }}>
+                                Intelligent Prep
+                            </span>
                         </div>
-                        <h3 className="text-2xl font-black text-slate-900 mb-2">Master Your Subjects</h3>
-                        <p className="text-sm text-slate-500 leading-relaxed mb-6">
+                        <h3 className="text-2xl font-black text-white mb-2">Master Your Subjects</h3>
+                        <p className="text-sm leading-relaxed mb-6" style={{ color: "#64748b" }}>
                             Run your weekly readiness check or generate AI-powered quizzes based on your latest uploads.
                         </p>
                         <div className="flex flex-wrap gap-3">
-                            <Link href="/library" className="gradient-bg text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-lg shadow-indigo-500/20 hover:scale-105 transition-all flex items-center gap-2">
+                            <Link href="/library"
+                                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105"
+                                style={{
+                                    background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                    color: "#080d14",
+                                    boxShadow: "0 4px 20px rgba(34,211,238,0.2)"
+                                }}>
                                 <Plus className="w-4 h-4" /> Add Material
                             </Link>
-                            <Link href="/dashboard/quizzes" className="bg-slate-900 text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-lg hover:bg-slate-800 transition-all flex items-center gap-2">
+                            <Link href="/dashboard/quizzes"
+                                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all border hover:scale-105"
+                                style={{
+                                    background: "rgba(255,255,255,0.05)",
+                                    borderColor: "rgba(255,255,255,0.1)",
+                                    color: "#f1f5f9"
+                                }}>
                                 <FileQuestion className="w-4 h-4" /> AI Quizzer
                             </Link>
                         </div>
                     </div>
 
-                    <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+                    {/* Performance panel */}
+                    <div className="rounded-xl p-5 border"
+                        style={{
+                            background: "rgba(255,255,255,0.03)",
+                            borderColor: "rgba(255,255,255,0.07)"
+                        }}>
                         <div className="flex items-center justify-between mb-4">
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Last Performance</p>
-                            <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">New Start</span>
+                            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "#64748b" }}>
+                                Last Performance
+                            </p>
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border"
+                                style={{
+                                    background: "rgba(34,211,238,0.08)",
+                                    borderColor: "rgba(34,211,238,0.2)",
+                                    color: "#22d3ee"
+                                }}>
+                                {label ?? "New Start"}
+                            </span>
                         </div>
                         <div className="space-y-4">
                             <div>
-                                <div className="flex justify-between text-xs font-bold text-slate-700 mb-1.5">
+                                <div className="flex justify-between text-xs font-bold text-white mb-2">
                                     <span>Readiness Score</span>
-                                    <span>0%</span>
+                                    <span>{score !== null ? `${score}%` : "0%"}</span>
                                 </div>
-                                <div className="h-2 bg-white rounded-full overflow-hidden border border-slate-200">
-                                    <div className="h-full gradient-bg w-[0%] rounded-full shadow-[0_0_8px_rgba(79,70,229,0.3)]" />
+                                <div className="h-2 rounded-full overflow-hidden"
+                                    style={{ background: "rgba(255,255,255,0.06)" }}>
+                                    <div className="h-full rounded-full transition-all duration-700"
+                                        style={{
+                                            width: `${score ?? 0}%`,
+                                            background: "linear-gradient(90deg, #22d3ee, #059669)",
+                                            boxShadow: "0 0 8px rgba(34,211,238,0.4)"
+                                        }} />
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3 text-xs text-slate-400 font-medium italic">
-                                <span className="text-indigo-400 font-bold">AI Note:</span>
-                                Upload your first document to calculate readiness!
+                            <div className="flex items-center gap-2 text-xs" style={{ color: "#64748b" }}>
+                                <span className="font-bold" style={{ color: "#22d3ee" }}>AI Note:</span>
+                                {score === null
+                                    ? "Upload your first document to calculate readiness!"
+                                    : score >= 70
+                                        ? "You're looking well prepared. Keep it up!"
+                                        : "Keep studying — you're making progress!"}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Grid for Secondary Info */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Secondary grid */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {/* Schedule */}
-                <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col">
-                    <h3 className="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-indigo-500" />
+                <div className="rounded-2xl p-5 border flex flex-col"
+                    style={{
+                        background: "rgba(255,255,255,0.03)",
+                        borderColor: "rgba(255,255,255,0.07)"
+                    }}>
+                    <h3 className="font-bold text-white text-sm mb-4 flex items-center gap-2">
+                        <Calendar className="w-4 h-4" style={{ color: "#818cf8" }} />
                         Today&apos;s Schedule
                     </h3>
-                    <div className="space-y-4 flex-1 flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200 p-4">
-                        <div className="text-center">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Free Day</p>
-                            <p className="text-[10px] text-slate-400 font-medium">No sessions scheduled yet.</p>
-                        </div>
+                    <div className="flex-1 flex flex-col items-center justify-center rounded-xl border border-dashed p-4"
+                        style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)" }}>
+                        <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: "#475569" }}>
+                            Free Day
+                        </p>
+                        <p className="text-[10px]" style={{ color: "#475569" }}>No sessions scheduled yet.</p>
                     </div>
-                    <Link href="/library" className="mt-4 text-xs font-bold text-indigo-600 hover:underline">Full calendar →</Link>
+                    <Link href="/library" className="mt-4 text-xs font-bold" style={{ color: "#818cf8" }}>
+                        Full calendar →
+                    </Link>
                 </div>
 
-                {/* To-Do List */}
-                <ToDoCard />
+                {/* To-Do */}
+                <ToDoCard userId={user?.id ?? ""} />
 
-                {/* Resources Preview */}
-                <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col">
-                    <h3 className="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
-                        <FolderOpen className="w-4 h-4 text-indigo-500" />
-                        Study Materials
-                    </h3>
-                    <div className="space-y-3 flex-1 flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200 p-4">
-                        <div className="text-center">
-                            <Trash2 className="w-6 h-6 text-slate-200 mx-auto mb-2" />
-                            <p className="text-[10px] text-slate-400 font-medium">Locker is empty.</p>
-                        </div>
-                    </div>
-                    <Link href="/library" className="mt-4 text-xs font-bold text-indigo-600 hover:underline">Open Library →</Link>
-                </div>
+                {/* Materials */}
+                <MaterialsCard userId={user?.id ?? ""} />
             </div>
         </div>
     );

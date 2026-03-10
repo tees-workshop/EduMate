@@ -1,6 +1,5 @@
 "use client";
 
-// Simple IndexedDB wrapper for the StudyAI app
 const DB_NAME = "StudyAIBB";
 const DB_VERSION = 1;
 
@@ -19,7 +18,7 @@ export interface Material {
     name: string;
     type: string;
     size: string;
-    data: any; // Could be base64 or blob
+    data: any;
     extractedText?: string;
     timestamp: number;
 }
@@ -79,6 +78,8 @@ export class StudyDB {
         });
     }
 
+    // ─── Users ───────────────────────────────────────────────
+
     async saveUser(user: User): Promise<void> {
         const db = await this.init();
         return new Promise((resolve, reject) => {
@@ -111,6 +112,8 @@ export class StudyDB {
             request.onerror = () => reject(request.error);
         });
     }
+
+    // ─── Materials ───────────────────────────────────────────
 
     async saveMaterial(material: Material): Promise<void> {
         const db = await this.init();
@@ -146,6 +149,19 @@ export class StudyDB {
         });
     }
 
+    async getMaterialById(id: string): Promise<Material | undefined> {
+    const db = await this.init();
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(["materials"], "readonly");
+        const store = transaction.objectStore("materials");
+        const request = store.get(id);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+    // ─── Tasks ───────────────────────────────────────────────
+
     async saveTask(task: Task): Promise<void> {
         const db = await this.init();
         return new Promise((resolve, reject) => {
@@ -174,6 +190,42 @@ export class StudyDB {
         return new Promise((resolve, reject) => {
             const transaction = db.transaction(["tasks"], "readwrite");
             const store = transaction.objectStore("tasks");
+            const request = store.delete(id);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    // ─── Notes ───────────────────────────────────────────────
+
+    async saveNote(note: Note): Promise<void> {
+        const db = await this.init();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(["notes"], "readwrite");
+            const store = transaction.objectStore("notes");
+            const request = store.put(note);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async getNotesByUser(userId: string): Promise<Note[]> {
+        const db = await this.init();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(["notes"], "readonly");
+            const store = transaction.objectStore("notes");
+            const index = store.index("userId");
+            const request = index.getAll(userId);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async deleteNote(id: string): Promise<void> {
+        const db = await this.init();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(["notes"], "readwrite");
+            const store = transaction.objectStore("notes");
             const request = store.delete(id);
             request.onsuccess = () => resolve();
             request.onerror = () => reject(request.error);

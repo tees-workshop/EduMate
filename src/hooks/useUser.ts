@@ -12,14 +12,12 @@ export function useUser() {
             const userId = localStorage.getItem("study_ai_user_id");
             if (userId) {
                 const userData = await db.getUser(userId);
-                if (userData) {
-                    setUser(userData);
-                }
+                if (userData) setUser(userData);
             }
             setLoading(false);
         }
         fetchUser();
     }, []);
 
-    return { user, loading };
+    return { user, setUser, loading };
 }
