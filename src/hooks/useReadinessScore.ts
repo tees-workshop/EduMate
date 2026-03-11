@@ -8,28 +8,36 @@ export function useReadinessScore() {
 
     useEffect(() => {
         try {
-            const baseline = sessionStorage.getItem("baseline_result");
-            const quiz = sessionStorage.getItem("quiz_result");
+            const quizRaw = sessionStorage.getItem("quiz_result");
+            const baselineRaw = sessionStorage.getItem("baseline_result");
 
-            // baseline_result has the actual prediction: { label, confidence, ready }
-            // quiz_result only has raw inputs — the prediction comes from results page
-            // So we read from baseline_result for now
-            if (baseline) {
-                const result = JSON.parse(baseline);
-                console.log("Baseline result:", result);
+            if (quizRaw) {
+                // Quiz taken — use scorePercent as the readiness score
+                const quiz = JSON.parse(quizRaw);
+                const percent = typeof quiz.scorePercent === "number"
+                    ? Math.round(quiz.scorePercent)
+                    : null;
 
-                if (typeof result.confidence === "number") {
-                    // confidence = probability of the predicted class
-                    // if ready = true, confidence is readiness score
-                    // if ready = false, readiness = 1 - confidence
-                    const readyProb = result.ready
-                        ? Math.round(result.confidence * 100)
-                        : Math.round((1 - result.confidence) * 100);
-                    setScore(readyProb);
+                if (percent !== null) {
+                    setScore(percent);
+                    if (percent >= 70) setLabel("Ready");
+                    else if (percent >= 50) setLabel("Needs Work");
+                    else setLabel("Not Ready");
+                    return;
                 }
+            }
 
-                if (typeof result.ready === "boolean") {
-                    setLabel(result.ready ? "Ready" : "Not Ready");
+            if (baselineRaw) {
+                // No quiz yet — fall back to habit model
+                const baseline = JSON.parse(baselineRaw);
+                if (typeof baseline.confidence === "number") {
+                    const percent = baseline.ready
+                        ? Math.round(baseline.confidence * 100)
+                        : Math.round((1 - baseline.confidence) * 100);
+                    setScore(percent);
+                    if (percent >= 70) setLabel("Ready");
+                    else if (percent >= 50) setLabel("Needs Work");
+                    else setLabel("Not Ready");
                 }
             }
         } catch (e) {
