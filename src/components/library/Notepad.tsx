@@ -142,7 +142,7 @@ export default function Notepad() {
                                     <p className="text-[10px] mt-0.5 truncate" style={{ color: "#475569" }}>
                                         {note.content ? note.content.slice(0, 30) + "..." : "Empty note"}
                                     </p>
-                                    <p className="text-[10px] mt-1" style={{ color: "#334155" }}>
+                                    <p className="text-[10px] mt-1" style={{ color: "#f1f5f9" }}>
                                         {new Date(note.timestamp).toLocaleDateString()}
                                     </p>
                                 </div>
@@ -205,7 +205,7 @@ export default function Notepad() {
                                 onChange={(e) => setActiveNote({ ...activeNote, content: e.target.value })}
                                 placeholder="Start typing your notes here..."
                                 className="w-full h-full resize-none bg-transparent border-none focus:outline-none leading-relaxed text-base"
-                                style={{ color: "#94a3b8", minHeight: "400px" }}
+                                style={{ color: "#ffff", minHeight: "400px" }}
                             />
                             {/* <div className="absolute right-6 bottom-6">
                                 <div className="flex items-center gap-2 rounded-xl px-3 py-2 border"
