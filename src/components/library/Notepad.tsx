@@ -139,7 +139,7 @@ export default function Notepad() {
                                         style={{ color: activeNote?.id === note.id ? "#22d3ee" : "#f1f5f9" }}>
                                         {note.title || "Untitled Note"}
                                     </p>
-                                    <p className="text-[10px] mt-0.5 truncate" style={{ color: "#475569" }}>
+                                    <p className="text-[10px] mt-0.5 truncate" style={{ color: "#f1f5f9" }}>
                                         {note.content ? note.content.slice(0, 30) + "..." : "Empty note"}
                                     </p>
                                     <p className="text-[10px] mt-1" style={{ color: "#f1f5f9" }}>
