@@ -204,7 +204,7 @@ export default function Notepad() {
                                 value={activeNote.content}
                                 onChange={(e) => setActiveNote({ ...activeNote, content: e.target.value })}
                                 placeholder="Start typing your notes here..."
-                                className="w-full h-full resize-none bg-transparent border-none focus:outline-none leading-relaxed text-base font-white"
+                                className="w-full h-full resize-none bg-transparent border-none focus:outline-none leading-relaxed text-base text-white"
                                 style={{ color: "#94a3b8", minHeight: "400px" }}
                             />
                             {/* <div className="absolute right-6 bottom-6">
