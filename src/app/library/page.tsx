@@ -124,7 +124,7 @@ export default function LibraryPage() {
                                             <p className="text-xs mb-1" style={{ color: "#64748b" }}>Total Materials</p>
                                             <p className="text-2xl font-black text-white">{materialCount} Files</p>
                                         </div>
-                                        <div className="rounded-xl p-4 border"
+                                        {/* <div className="rounded-xl p-4 border"
                                             style={{
                                                 background: "rgba(255,255,255,0.03)",
                                                 borderColor: "rgba(255,255,255,0.06)"
@@ -139,7 +139,7 @@ export default function LibraryPage() {
                                                 <div className="h-full rounded-full w-[15%]"
                                                     style={{ background: "linear-gradient(90deg, #22d3ee, #059669)" }} />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
 
