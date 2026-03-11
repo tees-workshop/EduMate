@@ -207,7 +207,7 @@ export default function Notepad() {
                                 className="w-full h-full resize-none bg-transparent border-none focus:outline-none leading-relaxed text-base"
                                 style={{ color: "#94a3b8", minHeight: "400px" }}
                             />
-                            <div className="absolute right-6 bottom-6">
+                            {/* <div className="absolute right-6 bottom-6">
                                 <div className="flex items-center gap-2 rounded-xl px-3 py-2 border"
                                     style={{
                                         background: "rgba(34,211,238,0.05)",
@@ -219,7 +219,7 @@ export default function Notepad() {
                                         Smart Mode Active
                                     </span>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </>
                 ) : (
