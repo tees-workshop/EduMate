@@ -131,8 +131,8 @@ export default function LibraryPage() {
                                             }}>
                                             <p className="text-xs mb-2" style={{ color: "#64748b" }}>Storage Used</p>
                                             <div className="flex justify-between text-xs font-bold text-white mb-2">
-                                                <span>42.5 MB</span>
-                                                <span style={{ color: "#22d3ee" }}>15%</span>
+                                                <span>0 MB</span>
+                                                <span style={{ color: "#22d3ee" }}>0%</span>
                                             </div>
                                             <div className="h-1.5 rounded-full overflow-hidden"
                                                 style={{ background: "rgba(255,255,255,0.06)" }}>
