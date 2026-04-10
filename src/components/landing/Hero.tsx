@@ -81,18 +81,18 @@ export default function Hero() {
                     {/* Left content */}
                     <div>
                         {/* Badge */}
-                        <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 border"
+                        {/* <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 border"
                             style={{
                                 background: "rgba(34,211,238,0.08)",
                                 borderColor: "rgba(34,211,238,0.2)"
                             }}>
                             <span className="w-2 h-2 rounded-full animate-pulse"
-                                style={{ background: "#22d3ee" }} />
+                                style={{ background: "#22d3ee" }} /> 
                             <span className="text-xs font-bold tracking-widest uppercase"
                                 style={{ color: "#22d3ee" }}>
                                 AI-Powered Readiness Engine
                             </span>
-                        </div>
+                        </div> */}
 
                         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.02] tracking-tight mb-6">
                             Study Smarter,{" "}

@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
     LayoutDashboard, Brain, HelpCircle,
-    Wrench, Settings, ChevronLeft, ChevronRight,
-    LogOut, Library, PenTool, Menu, X
+    Settings, ChevronLeft, ChevronRight,
+    LogOut, Library, Menu, X, Sparkles, Timer,
+    Wrench
 } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 
@@ -20,10 +21,12 @@ const navSections = [
             { icon: HelpCircle, label: "AI Quizzes", href: "/dashboard/quizzes" },
         ],
     },
-    {
+        {
         label: "Productivity",
         items: [
             { icon: Wrench, label: "Study Tools", href: "/library" },
+            { icon: Sparkles, label: "AI Assistant", href: "/dashboard/assistant" },
+            { icon: Timer, label: "Focus Session", href: "/dashboard/focus" },
         ],
     },
     {
@@ -82,7 +85,10 @@ function NavContent({ collapsed, onClose }: { collapsed: boolean; onClose?: () =
                     )}
                 </Link>
                 {onClose && (
-                    <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
+                    <button onClick={onClose} className="p-1.5 rounded-lg transition-colors"
+                        style={{ color: "#64748b" }}
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#f1f5f9"}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#64748b"}>
                         <X className="w-4 h-4" />
                     </button>
                 )}
@@ -107,6 +113,7 @@ function NavContent({ collapsed, onClose }: { collapsed: boolean; onClose?: () =
                                         key={item.label}
                                         href={item.href}
                                         onClick={onClose}
+                                        title={collapsed ? item.label : undefined}
                                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${collapsed ? "justify-center" : ""}`}
                                         style={{
                                             background: isActive
@@ -123,9 +130,8 @@ function NavContent({ collapsed, onClose }: { collapsed: boolean; onClose?: () =
                                             if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent";
                                         }}
                                     >
-                                        <Icon className="w-4 h-4 shrink-0" style={{
-                                            color: isActive ? "#22d3ee" : "#64748b"
-                                        }} />
+                                        <Icon className="w-4 h-4 shrink-0"
+                                            style={{ color: isActive ? "#22d3ee" : "#64748b" }} />
                                         {!collapsed && (
                                             <span className="text-sm font-semibold"
                                                 style={{ color: isActive ? "#f1f5f9" : "#64748b" }}>

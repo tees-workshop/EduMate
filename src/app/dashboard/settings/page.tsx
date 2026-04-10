@@ -12,7 +12,7 @@ import { useUser } from "@/hooks/useUser";
 
 const tabs = [
     { id: "profile", label: "Profile", icon: User },
-    { id: "appearance", label: "Appearance", icon: Palette },
+    // { id: "appearance", label: "Appearance", icon: Palette },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "account", label: "Account", icon: Shield },
 ];
@@ -108,9 +108,9 @@ export default function SettingsPage() {
     const [level, setLevel] = useState("");
 
     // Appearance
-    const [darkMode, setDarkMode] = useState(true);
-    const [compactMode, setCompactMode] = useState(false);
-    const [animationsEnabled, setAnimationsEnabled] = useState(true);
+    // const [darkMode, setDarkMode] = useState(true);
+    // const [compactMode, setCompactMode] = useState(false);
+    // const [animationsEnabled, setAnimationsEnabled] = useState(true);
 
     // Notifications
     const [studyReminders, setStudyReminders] = useState(true);
@@ -330,7 +330,7 @@ export default function SettingsPage() {
                             )}
 
                             {/* Appearance Tab */}
-                            {activeTab === "appearance" && (
+                            {/* {activeTab === "appearance" && (
                                 <SectionCard title="Display Preferences">
                                     <div className="grid grid-cols-2 gap-3 mb-6">
                                         {[
@@ -383,7 +383,7 @@ export default function SettingsPage() {
                                         </button>
                                     </div>
                                 </SectionCard>
-                            )}
+                            )} */}
 
                             {/* Notifications Tab */}
                             {activeTab === "notifications" && (

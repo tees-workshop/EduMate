@@ -26,18 +26,18 @@ export default function StatsRow() {
             color: "#059669",
             glow: "rgba(5,150,105,0.15)",
             border: "rgba(5,150,105,0.2)",
-            href: "/library",
+            href: "/library/Reminders",
         },
-        {
-            icon: Clock,
-            label: "Upcoming Deadlines",
-            value: "0",
-            sub: "No urgent milestones",
-            color: "#818cf8",
-            glow: "rgba(129,140,248,0.15)",
-            border: "rgba(129,140,248,0.2)",
-            href: "/library",
-        },
+        // {
+        //     icon: Clock,
+        //     label: "Upcoming Deadlines",
+        //     value: "0",
+        //     sub: "No urgent milestones",
+        //     color: "#818cf8",
+        //     glow: "rgba(129,140,248,0.15)",
+        //     border: "rgba(129,140,248,0.2)",
+        //     href: "/library",
+        // },
     ];
 
     return (
@@ -73,14 +73,14 @@ export default function StatsRow() {
                                 }}>
                                 <Icon className="w-5 h-5" style={{ color: stat.color }} />
                             </div>
-                            <span className="text-[10px] font-bold px-2 py-1 rounded-lg"
+                            {/* <span className="text-[10px] font-bold px-2 py-1 rounded-lg"
                                 style={{
                                     background: stat.glow,
                                     color: stat.color,
                                     border: `1px solid ${stat.border}`
                                 }}>
                                 Live
-                            </span>
+                            </span> */}
                         </div>
                         <p className="text-2xl font-black text-white mb-1">{stat.value}</p>
                         <p className="text-xs font-semibold text-white mb-0.5">{stat.label}</p>

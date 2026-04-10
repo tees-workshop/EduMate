@@ -253,7 +253,7 @@ export default function ActionCards() {
             {/* Secondary grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {/* Schedule */}
-                <div className="rounded-2xl p-5 border flex flex-col"
+                {/* <div className="rounded-2xl p-5 border flex flex-col"
                     style={{
                         background: "rgba(255,255,255,0.03)",
                         borderColor: "rgba(255,255,255,0.07)"
@@ -272,7 +272,7 @@ export default function ActionCards() {
                     <Link href="/library" className="mt-4 text-xs font-bold" style={{ color: "#818cf8" }}>
                         Full calendar →
                     </Link>
-                </div>
+                </div> */}
 
                 {/* To-Do */}
                 <ToDoCard userId={user?.id ?? ""} />
