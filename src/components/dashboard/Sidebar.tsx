@@ -24,7 +24,6 @@ const navSections = [
         {
         label: "Productivity",
         items: [
-            { icon: Wrench, label: "Study Tools", href: "/library" },
             { icon: Sparkles, label: "AI Assistant", href: "/dashboard/assistant" },
             { icon: Timer, label: "Focus Session", href: "/dashboard/focus" },
         ],

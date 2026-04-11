@@ -141,7 +141,7 @@ export default function Importer({ onSelectMaterial, onMaterialsLoaded }: Import
                     style={{ borderColor: "rgba(255,255,255,0.07)" }}>
                     <h3 className="text-sm font-bold text-white flex items-center gap-2">
                         <FileText className="w-4 h-4" style={{ color: "#22d3ee" }} />
-                        Uploaded Materials
+                        Uploads
                         {materials.length > 0 && (
                             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
                                 style={{

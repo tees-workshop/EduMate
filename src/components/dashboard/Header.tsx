@@ -54,7 +54,7 @@ export default function Header({ title = "Dashboard" }: { title?: string }) {
             </div>
 
             {/* Notifications */}
-            <div className="relative">
+            {/* <div className="relative">
                 <button
                     onClick={() => { setNotifOpen(!notifOpen); setAvatarOpen(false); }}
                     className="relative w-9 h-9 rounded-xl flex items-center justify-center transition-all border"
@@ -99,10 +99,10 @@ export default function Header({ title = "Dashboard" }: { title?: string }) {
                         </div>
                     </div>
                 )}
-            </div>
+            </div> */}
 
             {/* Avatar dropdown */}
-            <div className="relative">
+            {/* <div className="relative">
                 <button
                     onClick={() => { setAvatarOpen(!avatarOpen); setNotifOpen(false); }}
                     className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-xl transition-all border"
@@ -154,7 +154,7 @@ export default function Header({ title = "Dashboard" }: { title?: string }) {
                         </button>
                     </div>
                 )}
-            </div>
+            </div> */}
         </header>
     );
 }
