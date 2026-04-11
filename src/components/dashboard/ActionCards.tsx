@@ -59,7 +59,7 @@ function ToDoCard({ userId }: { userId: string }) {
                     </span>
                 )}
             </div>
-            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-4 min-h-[120px]"
+            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-4 min-h-30"
                 style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)" }}>
                 {todos.length > 0 ? (
                     <div className="space-y-2 w-full">
@@ -152,7 +152,7 @@ function MaterialsCard({ userId }: { userId: string }) {
                     </span>
                 )}
             </div>
-            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-3 min-h-[120px]"
+            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-3 min-h-30"
                 style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)" }}>
                 {materials.length > 0 ? (
                     <div className="space-y-2">
@@ -201,7 +201,7 @@ export default function ActionCards() {
                     borderColor: "rgba(255,255,255,0.07)",
                     boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
                 }}>
-                <div className="absolute top-0 right-0 w-[200px] h-[200px] rounded-full pointer-events-none"
+                <div className="absolute top-0 right-0 w-50 h-50 rounded-full pointer-events-none"
                     style={{ background: "#22d3ee", filter: "blur(80px)", opacity: 0.04 }} />
 
                 <div className="relative z-10">

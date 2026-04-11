@@ -11,7 +11,7 @@ const notifications = [
     { title: "Study Streak: 7 Days 🔥", time: "Today" },
 ];
 
-export default function Header {
+export default function Header({ title = "Dashboard" }: { title?: string }) {
     const [time, setTime] = useState("");
     const [notifOpen, setNotifOpen] = useState(false);
     const [avatarOpen, setAvatarOpen] = useState(false);
@@ -48,9 +48,9 @@ export default function Header {
             {/* Title — hidden on mobile */}
             <div className="flex-1 pl-10 md:pl-0">
                 <h1 className="hidden md:block text-lg font-bold text-white">{title}</h1>
-                <p className="hidden md:block text-xs" style={{ color: "#64748b" }}>
+                <h3 className="hidden md:block text-xs" style={{ color: "#64748b" }}>
                     {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })} · {time}
-                </p>
+                </h3>
             </div>
 
             {/* Notifications */}

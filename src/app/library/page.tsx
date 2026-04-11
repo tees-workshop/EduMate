@@ -29,17 +29,18 @@ export default function LibraryPage() {
                         backgroundImage: "linear-gradient(#22d3ee 1px, transparent 1px), linear-gradient(90deg, #22d3ee 1px, transparent 1px)",
                         backgroundSize: "60px 60px",
                     }} />
-                <div className="absolute w-[500px] h-[500px] rounded-full"
+                <div className="absolute w-125 h-125 rounded-full"
                     style={{ background: "#22d3ee", filter: "blur(140px)", opacity: 0.08, top: "-100px", left: "-100px", animation: "driftA1 8s ease-in-out infinite" }} />
-                <div className="absolute w-[400px] h-[400px] rounded-full"
+                <div className="absolute w-100 h-100 rounded-full"
                     style={{ background: "#059669", filter: "blur(130px)", opacity: 0.07, bottom: "-80px", right: "-80px", animation: "driftA2 10s ease-in-out infinite" }} />
-                <div className="absolute w-[300px] h-[300px] rounded-full"
+                <div className="absolute w-75 h-75 rounded-full"
                     style={{ background: "#818cf8", filter: "blur(120px)", opacity: 0.06, top: "40%", left: "50%", transform: "translate(-50%, -50%)", animation: "driftA3 12s ease-in-out infinite" }} />
             </div>
 
             <div className="relative z-10 flex w-full">
                 <Sidebar />
                 <div className="flex-1 flex flex-col min-w-0">
+                    <Header title="Library & Tools" />
                     <main className="flex-1 p-3 md:p-6 overflow-auto pt-16 md:pt-6">
 
                         {/* Tabs — scrollable on mobile */}
