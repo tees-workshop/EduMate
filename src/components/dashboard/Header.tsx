@@ -48,7 +48,7 @@ export default function Header({ title = "Dashboard" }: { title?: string }) {
             {/* Title — hidden on mobile */}
             <div className="flex-1 pl-10 md:pl-0">
                 <h1 className="hidden md:block text-lg font-bold text-white">{title}</h1>
-                <h3 className="hidden md:block text-xs" style={{ color: "#64748b" }}>
+                <h3 className="hidden md:block text-sm" style={{ color: "#64748b" }}>
                     {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })} · {time}
                 </h3>
             </div>
