@@ -93,11 +93,16 @@ export default function ResultsPage() {
 
     if (loading) {
         return (
-            <div className="flex min-h-screen bg-[#F8FAFC]">
+            <div className="flex min-h-screen">
                 <Sidebar />
-                <div className="flex-1 flex items-center justify-center">
+                <div className="flex-1 flex items-center justify-center"
+                                    style={{
+                                    background: "rgba(255,255,255,0.03)",
+                                    borderColor: "rgba(255,255,255,0.07)",
+                                    boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
+                                }}>
                     <div className="text-center">
-                        <Brain className="w-10 h-10 text-indigo-500 animate-pulse mx-auto mb-3" />
+                        <Brain className="w-10 h-10 text-white animate-pulse mx-auto mb-3" />
                         <p className="text-sm font-bold text-slate-500">Analysing your results...</p>
                     </div>
                 </div>
@@ -206,7 +211,7 @@ export default function ResultsPage() {
 
                         {/* Baseline Breakdown */}
                         {baseline && (
-                            <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
+                            <div className="rounded-3xl p-6 border border-slate-100 shadow-sm">
                                 <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center gap-2">
                                     <BarChart3 className="w-4 h-4 text-indigo-500" />
                                     Study Habits Analysis
