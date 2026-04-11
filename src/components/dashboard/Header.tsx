@@ -11,7 +11,7 @@ const notifications = [
     { title: "Study Streak: 7 Days 🔥", time: "Today" },
 ];
 
-export default function Header({ title = "Dashboard" }: { title?: string }) {
+export default function Header {
     const [time, setTime] = useState("");
     const [notifOpen, setNotifOpen] = useState(false);
     const [avatarOpen, setAvatarOpen] = useState(false);

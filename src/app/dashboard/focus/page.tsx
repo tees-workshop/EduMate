@@ -120,7 +120,6 @@ export default function FocusPage() {
             <div className="relative z-10 flex w-full">
                 <Sidebar />
                 <div className="flex-1 flex flex-col min-w-0">
-                    <Header title="Focus Session" />
                     <main className="flex-1 p-4 md:p-6 pt-16 md:pt-6 overflow-auto">
                         <div className="max-w-2xl mx-auto">
 
