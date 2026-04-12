@@ -156,11 +156,12 @@ Your role:
                             {/* Left — Chat */}
                             <div className="flex-1 flex flex-col rounded-2xl border overflow-hidden"
                                 style={{
-                                    background: "rgba(255,255,255,0.03)",
-                                    borderColor: "rgba(255,255,255,0.07)",
-                                    minHeight: "calc(100vh - 160px)"
+                                        background: "rgba(255,255,255,0.03)",
+                                        borderColor: "rgba(255,255,255,0.07)",
+                                        boxShadow: "0 4px 40px rgba(0,0,0,0.2)",
+                                        minHeight: "calc(100vh - 160px)"
                                 }}>
-
+                                   
                                 {/* Chat Header */}
                                 <div className="px-5 py-4 border-b flex items-center justify-between"
                                     style={{ borderColor: "rgba(255,255,255,0.07)" }}>
