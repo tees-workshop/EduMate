@@ -38,11 +38,9 @@ export default function Header({ title = "Dashboard" }: { title?: string }) {
 
     return (
         <header
-            className="h-16 flex items-center gap-4 px-4 sm:px-6 sticky top-0 z-30 border-b"
+            className="h-16 flex items-center gap-4 px-4 sm:px-6 sticky top-0 z-30 border-b theme-header"
             style={{
-                background: "rgba(8,13,20,0.8)",
                 backdropFilter: "blur(20px)",
-                borderColor: "rgba(255,255,255,0.06)"
             }}
         >
             {/* Title — hidden on mobile */}

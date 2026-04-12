@@ -55,7 +55,7 @@ function AuroraBackground() {
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen relative" style={{ background: "#080d14" }}>
+    <main className="min-h-screen relative theme-bg theme-text">
       <AuroraBackground />
       <div className="relative z-10">
         <Navbar />

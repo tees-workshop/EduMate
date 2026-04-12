@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { CSSProperties, useState, useEffect } from "react";
 import Link from "next/link";
 import { FileQuestion, Plus, Check, Trash2, Zap, FileText, File, FolderOpen, Brain } from "lucide-react";
 import { useReadinessScore } from "@/hooks/useReadinessScore";
 import { useUser } from "@/hooks/useUser";
 import { db, Material, Task } from "@/lib/db";
 
-function ToDoCard({ userId }: { userId: string }) {
+function ToDoCard({ userId, style }: { userId: string; style?: CSSProperties }) {
     const [todos, setTodos] = useState<Task[]>([]);
 
     const loadTasks = async () => {
@@ -39,6 +39,7 @@ function ToDoCard({ userId }: { userId: string }) {
             style={{
                 background: "rgba(255,255,255,0.03)",
                 borderColor: "rgba(255,255,255,0.07)",
+                ...style,
             }}>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-white text-sm flex items-center gap-2">
@@ -117,7 +118,7 @@ function ToDoCard({ userId }: { userId: string }) {
     );
 }
 
-function MaterialsCard({ userId }: { userId: string }) {
+function MaterialsCard({ userId, style }: { userId: string; style?: CSSProperties }) {
     const [materials, setMaterials] = useState<Material[]>([]);
 
     useEffect(() => {
@@ -134,7 +135,8 @@ function MaterialsCard({ userId }: { userId: string }) {
         <div className="rounded-2xl p-5 border flex flex-col"
             style={{
                 background: "rgba(255,255,255,0.03)",
-                borderColor: "rgba(255,255,255,0.07)"
+                borderColor: "rgba(255,255,255,0.07)",
+                ...style,
             }}>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-white text-sm flex items-center gap-2">
@@ -232,9 +234,9 @@ export default function ActionCards() {
                                 <Link href="/dashboard/quizzes"
                                     className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all border hover:scale-105"
                                     style={{
-                                        background: "rgba(255,255,255,0.05)",
-                                        borderColor: "rgba(255,255,255,0.1)",
-                                        color: "#f1f5f9"
+                                        background: "rgba(34,211,238,0.08)",
+                                        borderColor: "rgba(34,211,238,0.2)",
+                                        color: "#94a3b8"
                                     }}>
                                     <FileQuestion className="w-4 h-4" /> AI Quizzer
                                 </Link>
@@ -246,7 +248,8 @@ export default function ActionCards() {
                             className="rounded-xl p-5 border block transition-all hover:scale-[1.02]"
                             style={{
                                 background: "rgba(255,255,255,0.03)",
-                                borderColor: "rgba(255,255,255,0.07)"
+                                borderColor: "rgba(255,255,255,0.07)",
+                                boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
                             }}>
                             <div className="flex items-center justify-between mb-3">
                                 <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "#64748b" }}>
@@ -312,9 +315,21 @@ export default function ActionCards() {
             </div>
 
             {/* Secondary grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <ToDoCard userId={user?.id ?? ""} />
-                <MaterialsCard userId={user?.id ?? ""} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 rounded-xl p-5">
+                <ToDoCard userId={user?.id ?? ""} 
+                style={{
+                                background: "rgba(255,255,255,0.03)",
+                                borderColor: "rgba(255,255,255,0.07)",
+                                boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
+                            }}/>
+                            <div>
+                                <MaterialsCard userId={user?.id ?? ""}
+                                    style={{
+                                        background: "rgba(255,255,255,0.03)",
+                                        borderColor: "rgba(255,255,255,0.07)",
+                                        boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
+                            }}/>
+                            </div>
             </div>
         </div>
     );

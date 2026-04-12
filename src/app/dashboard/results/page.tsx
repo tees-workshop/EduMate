@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
-import { Brain, CheckCircle, XCircle, ChevronRight, BarChart3, HelpCircle, Trophy } from "lucide-react";
+import { Brain, CheckCircle, XCircle, ChevronRight, BarChart3, HelpCircle, Trophy, Loader2 } from "lucide-react";
 
 interface BaselineResult {
     label: number;
@@ -40,7 +40,6 @@ export default function ResultsPage() {
         const storedBaseline = sessionStorage.getItem("baseline_result");
         const storedQuiz = sessionStorage.getItem("quiz_result");
 
-        // If neither exists, redirect to readiness
         if (!storedBaseline && !storedQuiz) {
             router.push("/dashboard/readiness");
             return;
@@ -58,7 +57,7 @@ export default function ResultsPage() {
 
     const runQuizModel = async (qr: QuizResult) => {
         try {
-            const { predictQuizReadiness } = await import('@/lib/model');
+            const { predictQuizReadiness } = await import("@/lib/model");
             const result = await predictQuizReadiness({
                 scorePercent: qr.scorePercent,
                 questionsCorrect: qr.questionsCorrect,
@@ -70,40 +69,49 @@ export default function ResultsPage() {
             });
             setQuizPrediction({ ready: result.ready, confidence: result.confidence });
         } catch (e) {
-            console.error('Quiz model error:', e);
+            console.error("Quiz model error:", e);
         } finally {
             setLoading(false);
         }
     };
 
-    // Final verdict: if both exist, both must agree. If only one, use that.
     const getFinalVerdict = () => {
         if (baseline && quizPrediction) {
-            // Both signals available — both must say ready
             const ready = baseline.ready && quizPrediction.ready;
             const confidence = Math.round(((baseline.confidence + quizPrediction.confidence) / 2) * 100);
-            return { ready, confidence, source: 'both' };
+            return { ready, confidence, source: "both" };
         } else if (quizPrediction) {
-            return { ready: quizPrediction.ready, confidence: Math.round(quizPrediction.confidence * 100), source: 'quiz' };
+            return { ready: quizPrediction.ready, confidence: Math.round(quizPrediction.confidence * 100), source: "quiz" };
         } else if (baseline) {
-            return { ready: baseline.ready, confidence: Math.round(baseline.confidence * 100), source: 'baseline' };
+            return { ready: baseline.ready, confidence: Math.round(baseline.confidence * 100), source: "baseline" };
         }
         return null;
     };
 
+    // ── Loading state ──────────────────────────────────────────────
     if (loading) {
         return (
-            <div className="flex min-h-screen">
+            <div className="flex min-h-screen relative theme-bg theme-text">
+                <div className="fixed inset-0 pointer-events-none z-0">
+                    <div className="absolute inset-0 opacity-[0.025]"
+                        style={{
+                            backgroundImage: "linear-gradient(#22d3ee 1px, transparent 1px), linear-gradient(90deg, #22d3ee 1px, transparent 1px)",
+                            backgroundSize: "60px 60px",
+                        }} />
+                    <div className="absolute w-[500px] h-[500px] rounded-full"
+                        style={{ background: "#22d3ee", filter: "blur(140px)", opacity: 0.08, top: "-100px", left: "-100px", animation: "driftA1 8s ease-in-out infinite" }} />
+                    <div className="absolute w-[400px] h-[400px] rounded-full"
+                        style={{ background: "#059669", filter: "blur(130px)", opacity: 0.07, bottom: "-80px", right: "-80px", animation: "driftA2 10s ease-in-out infinite" }} />
+                </div>
                 <Sidebar />
-                <div className="flex-1 flex items-center justify-center"
-                                    style={{
-                                    background: "rgba(255,255,255,0.03)",
-                                    borderColor: "rgba(255,255,255,0.07)",
-                                    boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
-                                }}>
+                <div className="flex-1 flex items-center justify-center relative z-10">
                     <div className="text-center">
-                        <Brain className="w-10 h-10 text-white animate-pulse mx-auto mb-3" />
-                        <p className="text-sm font-bold text-slate-500">Analysing your results...</p>
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                            style={{ background: "linear-gradient(135deg, #22d3ee, #059669)", boxShadow: "0 8px 24px rgba(34,211,238,0.3)" }}>
+                            <Loader2 className="w-8 h-8 text-white animate-spin" />
+                        </div>
+                        <p className="text-sm font-bold text-white mb-1">Analysing your results...</p>
+                        <p className="text-xs" style={{ color: "#475569" }}>Running readiness model</p>
                     </div>
                 </div>
             </div>
@@ -112,6 +120,10 @@ export default function ResultsPage() {
 
     const verdict = getFinalVerdict();
     if (!verdict) return null;
+
+    const verdictReady = verdict.ready;
+    const verdictColor = verdictReady ? "#059669" : "#f87171";
+    const verdictGlow  = verdictReady ? "rgba(5,150,105,0.15)" : "rgba(248,113,113,0.15)";
 
     const baselineExplanations = baseline ? [
         {
@@ -176,145 +188,210 @@ export default function ResultsPage() {
     ] : [];
 
     return (
-        <div className="flex min-h-screen bg-[#F8FAFC]">
-            <Sidebar />
-            <div className="flex-1 flex flex-col min-w-0">
-                <Header title="Readiness Results" />
-                <main className="flex-1 p-4 md:p-6 overflow-auto">
-                    <div className="max-w-2xl mx-auto space-y-6">
+        <div className="flex min-h-screen relative" style={{ background: "#080d14" }}>
 
-                        {/* Final Verdict */}
-                        <div className={`rounded-3xl p-8 border shadow-sm relative overflow-hidden ${verdict.ready ? "bg-green-50 border-green-100" : "bg-red-50 border-red-100"}`}>
-                            <div className="flex items-center gap-4">
-                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg ${verdict.ready ? "bg-green-500" : "bg-red-500"}`}>
-                                    {verdict.ready
-                                        ? <Trophy className="w-8 h-8 text-white" />
-                                        : <XCircle className="w-8 h-8 text-white" />
-                                    }
-                                </div>
-                                <div>
-                                    <p className="text-xs font-black uppercase tracking-widest text-slate-500 mb-1">
-                                        {verdict.source === 'both' ? 'Combined Verdict' : verdict.source === 'quiz' ? 'Quiz Verdict' : 'Baseline Verdict'}
-                                    </p>
-                                    <h2 className="text-3xl font-black text-slate-900">
-                                        {verdict.ready ? "Ready!" : "Not Ready Yet"}
-                                    </h2>
-                                    <p className={`text-sm font-bold mt-1 ${verdict.ready ? "text-green-600" : "text-red-600"}`}>
-                                        {verdict.confidence}% confidence
-                                        {verdict.source === 'both' && " · based on habits + quiz performance"}
-                                        {verdict.source === 'quiz' && " · based on quiz performance"}
-                                        {verdict.source === 'baseline' && " · based on study habits"}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Baseline Breakdown */}
-                        {baseline && (
-                            <div className="rounded-3xl p-6 border border-slate-100 shadow-sm">
-                                <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center gap-2">
-                                    <BarChart3 className="w-4 h-4 text-indigo-500" />
-                                    Study Habits Analysis
-                                </h3>
-                                <div className="space-y-4">
-                                    {baselineExplanations.map((item) => (
-                                        <div key={item.label}>
-                                            <div className="flex items-center justify-between mb-1">
-                                                <div className="flex items-center gap-2">
-                                                    {item.good
-                                                        ? <CheckCircle className="w-3.5 h-3.5 text-green-500" />
-                                                        : <XCircle className="w-3.5 h-3.5 text-red-400" />
-                                                    }
-                                                    <span className="text-xs font-bold text-slate-700">{item.label}</span>
-                                                </div>
-                                                <span className="text-xs font-black text-slate-500">{item.value} / {item.max}</span>
-                                            </div>
-                                            <div className="h-2 bg-slate-100 rounded-full overflow-hidden mb-1">
-                                                <div
-                                                    className={`h-full rounded-full transition-all ${item.good ? "bg-green-400" : "bg-red-400"}`}
-                                                    style={{ width: `${(item.value / item.max) * 100}%` }}
-                                                />
-                                            </div>
-                                            <p className="text-[10px] text-slate-400 font-medium">{item.note}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Quiz Breakdown */}
-                        {quizResult && (
-                            <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
-                                <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center gap-2">
-                                    <Brain className="w-4 h-4 text-indigo-500" />
-                                    Quiz Performance Analysis
-                                </h3>
-                                <div className="space-y-4">
-                                    {quizExplanations.map((item) => (
-                                        <div key={item.label}>
-                                            <div className="flex items-center justify-between mb-1">
-                                                <div className="flex items-center gap-2">
-                                                    {item.good
-                                                        ? <CheckCircle className="w-3.5 h-3.5 text-green-500" />
-                                                        : <XCircle className="w-3.5 h-3.5 text-red-400" />
-                                                    }
-                                                    <span className="text-xs font-bold text-slate-700">{item.label}</span>
-                                                </div>
-                                                <span className="text-xs font-black text-slate-500">{item.value} / {item.max}</span>
-                                            </div>
-                                            <div className="h-2 bg-slate-100 rounded-full overflow-hidden mb-1">
-                                                <div
-                                                    className={`h-full rounded-full transition-all ${item.good ? "bg-green-400" : "bg-red-400"}`}
-                                                    style={{ width: `${(item.value / item.max) * 100}%` }}
-                                                />
-                                            </div>
-                                            <p className="text-[10px] text-slate-400 font-medium">{item.note}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Next steps */}
-                        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
-                            <h3 className="text-sm font-black text-slate-800 mb-2 flex items-center gap-2">
-                                <HelpCircle className="w-4 h-4 text-indigo-500" />
-                                What's Next?
-                            </h3>
-                            <p className="text-xs text-slate-500 leading-relaxed mb-4">
-                                {verdict.ready
-                                    ? "You're showing strong readiness signals. Keep up the momentum!"
-                                    : "Focus on the weak areas highlighted above before your assessment."}
-                            </p>
-                            <div className="flex gap-3">
-                                {!quizResult && (
-                                    <button
-                                        onClick={() => router.push("/dashboard/quizzes")}
-                                        className="flex-1 gradient-bg text-white py-3 rounded-2xl font-black text-sm shadow-lg shadow-indigo-500/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
-                                    >
-                                        <Brain className="w-4 h-4" /> Take Quiz <ChevronRight className="w-4 h-4" />
-                                    </button>
-                                )}
-                                {!baseline && (
-                                    <button
-                                        onClick={() => router.push("/dashboard/readiness")}
-                                        className="flex-1 py-3 rounded-2xl border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
-                                    >
-                                        Do Baseline Check
-                                    </button>
-                                )}
-                                <button
-                                    onClick={() => router.push("/dashboard")}
-                                    className="flex-1 py-3 rounded-2xl border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-all"
-                                >
-                                    Back to Dashboard
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                </main>
+            {/* Background */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute inset-0 opacity-[0.025]"
+                    style={{
+                        backgroundImage: "linear-gradient(#22d3ee 1px, transparent 1px), linear-gradient(90deg, #22d3ee 1px, transparent 1px)",
+                        backgroundSize: "60px 60px",
+                    }} />
+                <div className="absolute w-[500px] h-[500px] rounded-full"
+                    style={{ background: "#22d3ee", filter: "blur(140px)", opacity: 0.08, top: "-100px", left: "-100px", animation: "driftA1 8s ease-in-out infinite" }} />
+                <div className="absolute w-[400px] h-[400px] rounded-full"
+                    style={{ background: verdictColor, filter: "blur(130px)", opacity: 0.06, bottom: "-80px", right: "-80px", animation: "driftA2 10s ease-in-out infinite" }} />
+                <div className="absolute w-[300px] h-[300px] rounded-full"
+                    style={{ background: "#818cf8", filter: "blur(120px)", opacity: 0.05, top: "40%", left: "50%", transform: "translate(-50%,-50%)", animation: "driftA3 12s ease-in-out infinite" }} />
             </div>
+
+            <div className="relative z-10 flex w-full">
+                <Sidebar />
+                <div className="flex-1 flex flex-col min-w-0">
+                    <Header title="Readiness Results" />
+                    <main className="flex-1 p-3 sm:p-4 md:p-6 overflow-auto pt-16 md:pt-6">
+                        <div className="max-w-2xl mx-auto space-y-4 sm:space-y-5">
+
+                            {/* ── Final Verdict ─────────────────────────────── */}
+                            <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-7 border relative overflow-hidden"
+                                style={{
+                                    background: verdictReady ? "rgba(5,150,105,0.08)" : "rgba(248,113,113,0.08)",
+                                    borderColor: verdictReady ? "rgba(5,150,105,0.25)" : "rgba(248,113,113,0.25)",
+                                    boxShadow: `0 8px 40px ${verdictGlow}`
+                                }}>
+                                {/* Glow blob */}
+                                <div className="absolute top-0 right-0 w-[200px] h-[200px] rounded-full pointer-events-none"
+                                    style={{ background: verdictColor, filter: "blur(60px)", opacity: 0.12 }} />
+
+                                <div className="relative z-10 flex items-center gap-4 sm:gap-5">
+                                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0"
+                                        style={{
+                                            background: verdictReady
+                                                ? "linear-gradient(135deg, #059669, #22d3ee)"
+                                                : "linear-gradient(135deg, #f87171, #f97316)",
+                                            boxShadow: `0 8px 24px ${verdictColor}55`
+                                        }}>
+                                        {verdictReady
+                                            ? <Trophy className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
+                                            : <XCircle className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
+                                        }
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: "#64748b" }}>
+                                            {verdict.source === "both" ? "Combined Verdict" : verdict.source === "quiz" ? "Quiz Verdict" : "Baseline Verdict"}
+                                        </p>
+                                        <h2 className="text-2xl sm:text-3xl font-black text-white">
+                                            {verdictReady ? "Ready!" : "Not Ready Yet"}
+                                        </h2>
+                                        <p className="text-sm font-bold mt-1" style={{ color: verdictColor }}>
+                                            {verdict.confidence}% confidence
+                                            {verdict.source === "both" && " · habits + quiz"}
+                                            {verdict.source === "quiz"  && " · quiz performance"}
+                                            {verdict.source === "baseline" && " · study habits"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* ── Baseline Breakdown ────────────────────────── */}
+                            {baseline && (
+                                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 border"
+                                    style={{
+                                        background: "rgba(255,255,255,0.03)",
+                                        borderColor: "rgba(255,255,255,0.07)"
+                                    }}>
+                                    <h3 className="text-sm font-black text-white mb-4 flex items-center gap-2">
+                                        <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+                                            style={{ background: "rgba(34,211,238,0.1)", border: "1px solid rgba(34,211,238,0.2)" }}>
+                                            <BarChart3 className="w-3.5 h-3.5" style={{ color: "#22d3ee" }} />
+                                        </div>
+                                        Study Habits Analysis
+                                    </h3>
+                                    <div className="space-y-4">
+                                        {baselineExplanations.map((item) => (
+                                            <MetricRow key={item.label} item={item} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ── Quiz Breakdown ────────────────────────────── */}
+                            {quizResult && (
+                                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 border"
+                                    style={{
+                                        background: "rgba(255,255,255,0.03)",
+                                        borderColor: "rgba(255,255,255,0.07)"
+                                    }}>
+                                    <h3 className="text-sm font-black text-white mb-4 flex items-center gap-2">
+                                        <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+                                            style={{ background: "rgba(129,140,248,0.1)", border: "1px solid rgba(129,140,248,0.2)" }}>
+                                            <Brain className="w-3.5 h-3.5" style={{ color: "#818cf8" }} />
+                                        </div>
+                                        Quiz Performance Analysis
+                                    </h3>
+                                    <div className="space-y-4">
+                                        {quizExplanations.map((item) => (
+                                            <MetricRow key={item.label} item={item} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ── What's Next ───────────────────────────────── */}
+                            <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 border"
+                                style={{
+                                    background: "rgba(255,255,255,0.03)",
+                                    borderColor: "rgba(255,255,255,0.07)"
+                                }}>
+                                <h3 className="text-sm font-black text-white mb-2 flex items-center gap-2">
+                                    <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+                                        style={{ background: "rgba(5,150,105,0.1)", border: "1px solid rgba(5,150,105,0.2)" }}>
+                                        <HelpCircle className="w-3.5 h-3.5" style={{ color: "#059669" }} />
+                                    </div>
+                                    What's Next?
+                                </h3>
+                                <p className="text-xs leading-relaxed mb-4" style={{ color: "#64748b" }}>
+                                    {verdictReady
+                                        ? "You're showing strong readiness signals. Keep up the momentum!"
+                                        : "Focus on the weak areas highlighted above before your assessment."}
+                                </p>
+                                <div className="flex flex-col sm:flex-row gap-3">
+                                    {!quizResult && (
+                                        <button
+                                            onClick={() => router.push("/dashboard/quizzes")}
+                                            className="flex-1 py-3 rounded-2xl font-black text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                            style={{
+                                                background: "linear-gradient(135deg, #22d3ee, #059669)",
+                                                color: "#fff",
+                                                boxShadow: "0 4px 20px rgba(34,211,238,0.2)"
+                                            }}>
+                                            <Brain className="w-4 h-4" /> Take Quiz <ChevronRight className="w-4 h-4" />
+                                        </button>
+                                    )}
+                                    {!baseline && (
+                                        <button
+                                            onClick={() => router.push("/dashboard/readiness")}
+                                            className="flex-1 py-3 rounded-2xl border text-sm font-bold transition-all hover:opacity-80"
+                                            style={{
+                                                background: "rgba(255,255,255,0.04)",
+                                                borderColor: "rgba(255,255,255,0.08)",
+                                                color: "#94a3b8"
+                                            }}>
+                                            Do Baseline Check
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={() => router.push("/dashboard")}
+                                        className="flex-1 py-3 rounded-2xl border text-sm font-bold transition-all hover:opacity-80"
+                                        style={{
+                                            background: "rgba(255,255,255,0.04)",
+                                            borderColor: "rgba(255,255,255,0.08)",
+                                            color: "#94a3b8"
+                                        }}>
+                                        Back to Dashboard
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="h-4 sm:h-0" />
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// ── Metric row component ────────────────────────────────────────────
+function MetricRow({ item }: {
+    item: { label: string; value: number; max: number; good: boolean; note: string };
+}) {
+    const fillPct = Math.min(100, (item.value / item.max) * 100);
+    return (
+        <div>
+            <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center gap-2">
+                    {item.good
+                        ? <CheckCircle className="w-3.5 h-3.5" style={{ color: "#059669" }} />
+                        : <XCircle    className="w-3.5 h-3.5" style={{ color: "#f87171" }} />
+                    }
+                    <span className="text-xs font-bold text-white">{item.label}</span>
+                </div>
+                <span className="text-xs font-black" style={{ color: "#64748b" }}>
+                    {item.value} / {item.max}
+                </span>
+            </div>
+            <div className="h-1.5 rounded-full overflow-hidden mb-1"
+                style={{ background: "rgba(255,255,255,0.06)" }}>
+                <div className="h-full rounded-full transition-all duration-700"
+                    style={{
+                        width: `${fillPct}%`,
+                        background: item.good
+                            ? "linear-gradient(90deg, #059669, #22d3ee)"
+                            : "linear-gradient(90deg, #f87171, #f97316)"
+                    }} />
+            </div>
+            <p className="text-[10px] font-medium" style={{ color: "#475569" }}>{item.note}</p>
         </div>
     );
 }

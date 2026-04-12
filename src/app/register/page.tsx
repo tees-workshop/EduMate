@@ -101,8 +101,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden"
-            style={{ background: "#080d14" }}>
+        <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden theme-bg theme-text">
             <AuroraBackground />
 
             <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
@@ -112,7 +111,7 @@ export default function RegisterPage() {
                             style={{ background: "linear-gradient(135deg, #22d3ee, #059669)", borderRadius: "10px" }} />
                         <div className="relative"><EduMateLogo /></div>
                     </div>
-                    <span className="text-2xl font-black text-white tracking-tight">
+                    <span className="text-2xl font-black theme-text tracking-tight">
                         Edu<span style={{
                             background: "linear-gradient(135deg, #22d3ee, #059669)",
                             WebkitBackgroundClip: "text",
@@ -121,16 +120,16 @@ export default function RegisterPage() {
                     </span>
                 </Link>
 
-                <h2 className="text-center text-3xl font-black text-white tracking-tight">
+                <h2 className="text-center text-3xl font-black theme-text tracking-tight">
                     Create account
                 </h2>
-                <p className="mt-2 text-center text-sm" style={{ color: "#64748b" }}>
+                <p className="mt-2 text-center text-sm theme-text-muted">
                     Start your smarter study journey today
                 </p>
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-                <div className="py-8 px-4 sm:rounded-3xl sm:px-10 border backdrop-blur-xl"
+                <div className="py-8 px-4 sm:rounded-3xl sm:px-10 border backdrop-blur-xl theme-card theme-border"
                     style={{
                         background: "rgba(255,255,255,0.04)",
                         borderColor: "rgba(34,211,238,0.15)",
@@ -148,12 +147,12 @@ export default function RegisterPage() {
                     <form className="space-y-5" onSubmit={handleRegister}>
                         {/* Name */}
                         <div>
-                            <label className="block text-sm font-bold text-white mb-1.5">Full Name</label>
+                            <label className="block text-sm font-bold theme-text mb-1.5">Full Name</label>
                             <div className="relative">
                                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
                                 <input type="text" required value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white placeholder-slate-600 focus:outline-none transition-all"
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl theme-text theme-input placeholder-slate-600 focus:outline-none transition-all"
                                     style={inputStyle}
                                     onFocus={e => e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)"}
                                     onBlur={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"}
@@ -163,12 +162,12 @@ export default function RegisterPage() {
 
                         {/* Email */}
                         <div>
-                            <label className="block text-sm font-bold text-white mb-1.5">Email Address</label>
+                            <label className="block text-sm font-bold theme-text mb-1.5">Email Address</label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
                                 <input type="email" required value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white placeholder-slate-600 focus:outline-none transition-all"
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl theme-text theme-input placeholder-slate-600 focus:outline-none transition-all"
                                     style={inputStyle}
                                     onFocus={e => e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)"}
                                     onBlur={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"}
@@ -178,11 +177,11 @@ export default function RegisterPage() {
 
                         {/* Level */}
                         <div>
-                            <label className="block text-sm font-bold text-white mb-1.5">Academic Level</label>
+                            <label className="block text-sm font-bold theme-text mb-1.5">Academic Level</label>
                             <div className="relative">
                                 <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
                                 <select value={level} onChange={(e) => setLevel(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white focus:outline-none transition-all appearance-none"
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl theme-text focus:outline-none transition-all appearance-none"
                                     style={inputStyle}
                                     onFocus={e => e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)"}
                                     onBlur={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"}>
@@ -197,12 +196,12 @@ export default function RegisterPage() {
 
                         {/* Password */}
                         <div>
-                            <label className="block text-sm font-bold text-white mb-1.5">Password</label>
+                            <label className="block text-sm font-bold theme-text mb-1.5">Password</label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
                                 <input type="password" required value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white placeholder-slate-600 focus:outline-none transition-all"
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl theme-text theme-input placeholder-slate-600 focus:outline-none transition-all"
                                     style={inputStyle}
                                     onFocus={e => e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)"}
                                     onBlur={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"}

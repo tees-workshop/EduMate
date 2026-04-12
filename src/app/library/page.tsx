@@ -22,7 +22,7 @@ export default function LibraryPage() {
     ];
 
     return (
-        <div className="flex min-h-screen relative" style={{ background: "#080d14" }}>
+        <div className="flex min-h-screen relative theme-bg theme-text">
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute inset-0 opacity-[0.025]"
                     style={{

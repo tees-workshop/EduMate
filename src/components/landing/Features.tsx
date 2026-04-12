@@ -24,17 +24,17 @@ const features = [
     {
         icon: Lock,
         title: "Digital Locker",
-        description: "Securely store, organize, and access all your notes, past papers, and study materials — all on your device.",
+        description: "Securely store, organize, and access all your notes, past papers, and study materials all on your device.",
         color: "#818cf8",
         badge: "Core Feature",
     },
-    {
-        icon: BarChart3,
-        title: "Smart Analytics",
-        description: "Deep visual insights into your study patterns, strengths, and weak areas for data-driven decisions.",
-        color: "#22d3ee",
-        badge: "Analytics",
-    },
+    // {
+    //     icon: BarChart3,
+    //     title: "Smart Analytics",
+    //     description: "Deep visual insights into your study patterns, strengths, and weak areas for data-driven decisions.",
+    //     color: "#22d3ee",
+    //     badge: "Analytics",
+    // },
     {
         icon: FileQuestion,
         title: "AI Quiz Generator",
@@ -42,20 +42,20 @@ const features = [
         color: "#059669",
         badge: "AI Powered",
     },
-    {
-        icon: Calendar,
-        title: "Smart Study Planner",
-        description: "AI-driven timetables that adapt to your deadlines, pace, and performance — so you never fall behind.",
-        color: "#818cf8",
-        badge: "AI Powered",
-    },
-    {
-        icon: Target,
-        title: "Goal Tracker",
-        description: "Set academic goals, break them into milestones, and stay motivated with visual progress tracking.",
-        color: "#22d3ee",
-        badge: "Productivity",
-    },
+    // {
+    //     icon: Calendar,
+    //     title: "Smart Study Planner",
+    //     description: "AI-driven timetables that adapt to your deadlines, pace, and performance — so you never fall behind.",
+    //     color: "#818cf8",
+    //     badge: "AI Powered",
+    // },
+    // {
+    //     icon: Target,
+    //     title: "Goal Tracker",
+    //     description: "Set academic goals, break them into milestones, and stay motivated with visual progress tracking.",
+    //     color: "#22d3ee",
+    //     badge: "Productivity",
+    // },
     {
         icon: Zap,
         title: "Focus Mode",
@@ -83,10 +83,8 @@ function FeatureCard({ feature, index }: { feature: typeof features[0]; index: n
     return (
         <div
             ref={ref}
-            className="rounded-2xl p-6 border transition-all duration-700 cursor-default"
+            className="rounded-2xl p-6 border transition-all duration-700 cursor-default theme-card theme-border"
             style={{
-                background: "rgba(255,255,255,0.03)",
-                borderColor: "rgba(255,255,255,0.07)",
                 boxShadow: "0 4px 24px rgba(0,0,0,0.2)",
                 opacity: visible ? 1 : 0,
                 transform: visible ? "translateY(0)" : "translateY(32px)",
@@ -120,8 +118,8 @@ function FeatureCard({ feature, index }: { feature: typeof features[0]; index: n
                     {feature.badge}
                 </span>
             </div>
-            <h3 className="text-base font-bold text-white mb-2">{feature.title}</h3>
-            <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>{feature.description}</p>
+            <h3 className="text-base font-bold theme-text mb-2">{feature.title}</h3>
+            <p className="text-sm leading-relaxed theme-text-muted">{feature.description}</p>
         </div>
     );
 }
@@ -140,7 +138,7 @@ export default function Features() {
     }, []);
 
     return (
-        <section id="features" className="py-20 lg:py-28 relative">
+        <section id="features" className="py-20 lg:py-28 relative theme-text">
 
             {/* Background blobs */}
 
@@ -167,7 +165,7 @@ export default function Features() {
                             Everything You Need
                         </span>
                     </div>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight">
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black theme-text mb-4 tracking-tight">
                         Powerful Features for{" "}
                         <span style={{
                             background: "linear-gradient(135deg, #22d3ee, #059669)",
@@ -177,7 +175,7 @@ export default function Features() {
                             Serious Students
                         </span>
                     </h2>
-                    <p className="text-lg max-w-2xl mx-auto" style={{ color: "#94a3b8" }}>
+                    <p className="text-lg max-w-2xl mx-auto theme-text-muted">
                         From AI-powered readiness checks to secure file storage — EduMate has every tool you need to excel academically.
                     </p>
                 </div>

@@ -14,6 +14,103 @@
   --font-heading: var(--font-merriweather);
 }
 
+
+/* ── DARK MODE (default) ────────────────────────────────────────── */
+:root,
+html.dark-mode {
+    --bg:           #080d14;
+    --bg-card:      rgba(255,255,255,0.03);
+    --bg-card-hover:rgba(255,255,255,0.05);
+    --border:       rgba(255,255,255,0.07);
+    --border-focus: rgba(34,211,238,0.3);
+    --text:         #f1f5f9;
+    --text-muted:   #64748b;
+    --text-faint:   #334155;
+    --input-bg:     rgba(255,255,255,0.05);
+    --sidebar-bg:   rgba(8,13,20,0.97);
+    --header-bg:    rgba(8,13,20,0.8);
+    --grid-color:   #22d3ee;
+    --blob-opacity: 0.08;
+}
+
+/* ── LIGHT MODE ─────────────────────────────────────────────────── */
+html.light-mode {
+    --bg:           #f0f4f8;
+    --bg-card:      rgba(255,255,255,0.85);
+    --bg-card-hover:rgba(255,255,255,1);
+    --border:       rgba(0,0,0,0.08);
+    --border-focus: rgba(8,145,178,0.4);
+    --text:         #0f172a;
+    --text-muted:   #475569;
+    --text-faint:   #94a3b8;
+    --input-bg:     rgba(255,255,255,0.9);
+    --sidebar-bg:   rgba(240,244,248,0.97);
+    --header-bg:    rgba(240,244,248,0.85);
+    --grid-color:   #0891b2;
+    --blob-opacity: 0.06;
+}
+
+/* ── THEME-AWARE UTILITY CLASSES ─────────────────────────────────── */
+/* These are the classes you use throughout the app instead of
+   hardcoded colors. They automatically switch with the theme.      */
+
+.theme-bg          { background-color: var(--bg) !important; }
+.theme-card        { background: var(--bg-card) !important; border-color: var(--border) !important; }
+.theme-text        { color: var(--text) !important; }
+.theme-text-muted  { color: var(--text-muted) !important; }
+.theme-text-faint  { color: var(--text-faint) !important; }
+.theme-border      { border-color: var(--border) !important; }
+.theme-input       { background: var(--input-bg) !important; border-color: var(--border) !important; color: var(--text) !important; }
+.theme-sidebar     { background: var(--sidebar-bg) !important; border-color: var(--border) !important; }
+.theme-header      { background: var(--header-bg) !important; border-color: var(--border) !important; }
+
+html.light-mode .text-white { color: var(--text); }
+html.light-mode [style*="color: #f1f5f9"] { color: var(--text) !important; }
+html.light-mode [style*="color: #ffffff"] { color: var(--text) !important; }
+html.light-mode input,
+html.light-mode textarea,
+html.light-mode select,
+html.light-mode button {
+    color: var(--text);
+}
+html.light-mode input::placeholder,
+html.light-mode textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+/* Light mode backdrop for glass cards */
+html.light-mode .glass,
+html.light-mode .glass-card {
+    background: rgba(255,255,255,0.9) !important;
+    border-color: rgba(0,0,0,0.08) !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08) !important;
+    backdrop-filter: blur(20px);
+}
+
+/* Light mode body */
+html.light-mode body {
+    background-color: #f0f4f8;
+    color: #0f172a;
+}
+
+/* Light mode sidebar nav text */
+html.light-mode .sidebar-label { color: #475569; }
+html.light-mode .sidebar-label-active { color: #0f172a; }
+
+/* Light mode aurora blobs — subtler */
+html.light-mode .aurora-blob { opacity: 0.05 !important; }
+
+/* Light mode input placeholders */
+html.light-mode input::placeholder,
+html.light-mode textarea::placeholder {
+    color: #94a3b8;
+}
+
+/* Light mode scrollbar */
+html.light-mode ::-webkit-scrollbar-track { background: #e2e8f0; }
+html.light-mode ::-webkit-scrollbar-thumb { background: #cbd5e1; }
+html.light-mode ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
 * {
   box-sizing: border-box;
 }
@@ -23,10 +120,11 @@ html {
 }
 
 body {
-  background-color: #080d14;
-  color: #f1f5f9;
+  background-color: var(--bg);
+  color: var(--text);
   font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 h1, h2, h3 {

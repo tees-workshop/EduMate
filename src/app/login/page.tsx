@@ -86,8 +86,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden"
-            style={{ background: "#080d14" }}>
+        <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden theme-bg theme-text">
             <AuroraBackground />
 
             <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
@@ -98,7 +97,7 @@ export default function LoginPage() {
                             style={{ background: "linear-gradient(135deg, #22d3ee, #059669)", borderRadius: "10px" }} />
                         <div className="relative"><EduMateLogo /></div>
                     </div>
-                    <span className="text-2xl font-black text-white tracking-tight">
+                    <span className="text-2xl font-black theme-text tracking-tight">
                         Edu<span style={{
                             background: "linear-gradient(135deg, #22d3ee, #059669)",
                             WebkitBackgroundClip: "text",
@@ -107,16 +106,16 @@ export default function LoginPage() {
                     </span>
                 </Link>
 
-                <h2 className="text-center text-3xl font-black text-white tracking-tight">
+                <h2 className="text-center text-3xl font-black theme-text tracking-tight">
                     Welcome back
                 </h2>
-                <p className="mt-2 text-center text-sm" style={{ color: "#64748b" }}>
+                <p className="mt-2 text-center text-sm theme-text-muted">
                     Sign in to continue your study journey
                 </p>
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-                <div className="py-8 px-4 sm:rounded-3xl sm:px-10 border backdrop-blur-xl"
+                <div className="py-8 px-4 sm:rounded-3xl sm:px-10 border backdrop-blur-xl theme-card theme-border"
                     style={{
                         background: "rgba(255,255,255,0.04)",
                         borderColor: "rgba(34,211,238,0.15)",
@@ -134,13 +133,13 @@ export default function LoginPage() {
                     <form className="space-y-5" onSubmit={handleLogin}>
                         {/* Email */}
                         <div>
-                            <label className="block text-sm font-bold text-white mb-1.5">Email address</label>
+                            <label className="block text-sm font-bold theme-text mb-1.5">Email address</label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
                                 <input
                                     type="email" required value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white placeholder-slate-600 focus:outline-none transition-all"
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl theme-text theme-input placeholder-slate-600 focus:outline-none transition-all"
                                     style={{
                                         background: "rgba(255,255,255,0.05)",
                                         border: "1px solid rgba(255,255,255,0.08)"
@@ -154,13 +153,13 @@ export default function LoginPage() {
 
                         {/* Password */}
                         <div>
-                            <label className="block text-sm font-bold text-white mb-1.5">Password</label>
+                            <label className="block text-sm font-bold theme-text mb-1.5">Password</label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#475569" }} />
                                 <input
                                     type="password" required value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl text-white placeholder-slate-600 focus:outline-none transition-all"
+                                    className="block w-full pl-10 pr-3 py-3 rounded-2xl theme-text theme-input placeholder-slate-600 focus:outline-none transition-all"
                                     style={{
                                         background: "rgba(255,255,255,0.05)",
                                         border: "1px solid rgba(255,255,255,0.08)"
@@ -177,7 +176,7 @@ export default function LoginPage() {
                             <div className="flex items-center gap-2">
                                 <input id="remember-me" type="checkbox"
                                     className="h-4 w-4 rounded border-slate-600 bg-transparent" />
-                                <label htmlFor="remember-me" className="text-xs" style={{ color: "#64748b" }}>
+                                <label htmlFor="remember-me" className="text-xs theme-text-muted">
                                     Remember me
                                 </label>
                             </div>
@@ -215,11 +214,11 @@ export default function LoginPage() {
 
                 {/* Footer badges */}
                 <div className="mt-6 flex justify-center gap-6">
-                    <div className="flex items-center gap-1.5 text-xs" style={{ color: "#334155" }}>
+                    <div className="flex items-center gap-1.5 text-xs theme-text-muted">
                         <Sparkles className="w-3 h-3" />
                         <span>AI Powered</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-xs" style={{ color: "#334155" }}>
+                    <div className="flex items-center gap-1.5 text-xs theme-text-muted">
                         <Lock className="w-3 h-3" />
                         <span>IndexedDB Secured</span>
                     </div>

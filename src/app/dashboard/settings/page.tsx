@@ -9,23 +9,19 @@ import {
 } from "lucide-react";
 import { db } from "@/lib/db";
 import { useUser } from "@/hooks/useUser";
+import { useTheme } from "@/context/ThemeContext";
 
 const tabs = [
     { id: "profile", label: "Profile", icon: User },
-    // { id: "appearance", label: "Appearance", icon: Palette },
+    { id: "appearance", label: "Appearance", icon: Palette },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "account", label: "Account", icon: Shield },
 ];
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
     return (
-        <div className="rounded-2xl border p-6 mb-5"
-            style={{
-                background: "rgba(255,255,255,0.03)",
-                borderColor: "rgba(255,255,255,0.07)"
-            }}>
-            <h3 className="text-sm font-black text-white mb-5 uppercase tracking-widest"
-                style={{ color: "#94a3b8" }}>
+        <div className="rounded-2xl border p-6 mb-5 theme-card theme-border">
+            <h3 className="text-sm font-black theme-text-muted mb-5 uppercase tracking-widest">
                 {title}
             </h3>
             {children}
@@ -45,19 +41,14 @@ function InputField({
 }) {
     return (
         <div className="mb-4">
-            <label className="block text-xs font-bold mb-2" style={{ color: "#64748b" }}>{label}</label>
+            <label className="block text-xs font-bold mb-2 theme-text-muted">{label}</label>
             <input
                 type={type}
                 value={value}
                 onChange={e => onChange?.(e.target.value)}
                 placeholder={placeholder}
                 disabled={disabled}
-                className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none transition-all disabled:opacity-40"
-                style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    color: "#f1f5f9"
-                }}
+                className="w-full px-4 py-3 rounded-xl text-sm theme-input focus:outline-none transition-all disabled:opacity-40"
                 onFocus={e => !disabled && (e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)")}
                 onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
             />
@@ -72,11 +63,10 @@ function Toggle({ enabled, onChange, label, sub }: {
     sub?: string;
 }) {
     return (
-        <div className="flex items-center justify-between py-3 border-b"
-            style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+        <div className="flex items-center justify-between py-3 border-b theme-border">
             <div>
-                <p className="text-sm font-semibold text-white">{label}</p>
-                {sub && <p className="text-xs mt-0.5" style={{ color: "#475569" }}>{sub}</p>}
+                <p className="text-sm font-semibold theme-text">{label}</p>
+                {sub && <p className="text-xs mt-0.5 theme-text-muted">{sub}</p>}
             </div>
             <button
                 onClick={() => onChange(!enabled)}
@@ -108,9 +98,9 @@ export default function SettingsPage() {
     const [level, setLevel] = useState("");
 
     // Appearance
-    // const [darkMode, setDarkMode] = useState(true);
-    // const [compactMode, setCompactMode] = useState(false);
-    // const [animationsEnabled, setAnimationsEnabled] = useState(true);
+    const { theme, setTheme } = useTheme();
+    const [compactMode, setCompactMode] = useState(false);
+    const [animationsEnabled, setAnimationsEnabled] = useState(true);
 
     // Notifications
     const [studyReminders, setStudyReminders] = useState(true);
@@ -204,7 +194,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="flex min-h-screen relative" style={{ background: "#080d14" }}>
+        <div className="flex min-h-screen relative theme-bg theme-text">
 
             {/* Background */}
             <div className="fixed inset-0 pointer-events-none z-0">
@@ -248,18 +238,12 @@ export default function SettingsPage() {
                                         <button
                                             key={tab.id}
                                             onClick={() => setActiveTab(tab.id)}
-                                            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+                                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${isActive ? "theme-text" : "theme-text-muted"}`}
                                             style={isActive ? {
                                                 background: "linear-gradient(135deg, #22d3ee, #059669)",
                                                 color: "#080d14",
                                                 boxShadow: "0 4px 16px rgba(34,211,238,0.2)"
-                                            } : { color: "#64748b" }}
-                                            onMouseEnter={e => {
-                                                if (!isActive) (e.currentTarget as HTMLElement).style.color = "#f1f5f9";
-                                            }}
-                                            onMouseLeave={e => {
-                                                if (!isActive) (e.currentTarget as HTMLElement).style.color = "#64748b";
-                                            }}
+                                            } : undefined}
                                         >
                                             <Icon className="w-4 h-4" />
                                             <span className="hidden sm:inline">{tab.label}</span>
@@ -303,7 +287,7 @@ export default function SettingsPage() {
                                                 style={{
                                                     background: "rgba(255,255,255,0.05)",
                                                     border: "1px solid rgba(255,255,255,0.08)",
-                                                    color: "#f1f5f9"
+                                                    color: "#64748b"
                                                 }}
                                                 onFocus={e => (e.currentTarget.style.borderColor = "rgba(34,211,238,0.4)")}
                                                 onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
@@ -330,60 +314,65 @@ export default function SettingsPage() {
                             )}
 
                             {/* Appearance Tab */}
-                            {/* {activeTab === "appearance" && (
-                                <SectionCard title="Display Preferences">
-                                    <div className="grid grid-cols-2 gap-3 mb-6">
-                                        {[
-                                            { label: "Dark Mode", icon: Moon, active: darkMode, onClick: () => setDarkMode(true) },
-                                            { label: "Light Mode", icon: Sun, active: !darkMode, onClick: () => setDarkMode(false) },
-                                        ].map(({ label, icon: Icon, active, onClick }) => (
-                                            <button
-                                                key={label}
-                                                onClick={onClick}
-                                                className="rounded-xl p-4 border text-center transition-all"
-                                                style={{
-                                                    background: active ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.03)",
-                                                    borderColor: active ? "rgba(34,211,238,0.3)" : "rgba(255,255,255,0.07)",
-                                                }}>
-                                                <Icon className="w-5 h-5 mx-auto mb-2"
-                                                    style={{ color: active ? "#22d3ee" : "#475569" }} />
-                                                <p className="text-xs font-bold"
-                                                    style={{ color: active ? "#22d3ee" : "#475569" }}>
-                                                    {label}
-                                                </p>
-                                                {active && (
-                                                    <CheckCircle className="w-3.5 h-3.5 mx-auto mt-1"
-                                                        style={{ color: "#22d3ee" }} />
-                                                )}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    <Toggle
-                                        enabled={compactMode}
-                                        onChange={setCompactMode}
-                                        label="Compact Mode"
-                                        sub="Reduce spacing and padding in the UI"
-                                    />
-                                    <Toggle
-                                        enabled={animationsEnabled}
-                                        onChange={setAnimationsEnabled}
-                                        label="Animations"
-                                        sub="Enable smooth transitions and animations"
-                                    />
-                                    <div className="mt-5">
-                                        <button
-                                            onClick={() => showToast("Appearance preferences saved!", "success")}
-                                            className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105"
-                                            style={{
-                                                background: "linear-gradient(135deg, #22d3ee, #059669)",
-                                                color: "#080d14",
-                                                boxShadow: "0 4px 16px rgba(34,211,238,0.2)"
-                                            }}>
-                                            <Save className="w-4 h-4" /> Save Preferences
-                                        </button>
-                                    </div>
-                                </SectionCard>
-                            )} */}
+{activeTab === "appearance" && (
+    <SectionCard title="Display Preferences">
+        <p className="text-xs mb-5 theme-text-muted">
+            Choose how EduMate looks across all pages.
+        </p>
+ 
+        <div className="grid grid-cols-2 gap-3 mb-6">
+            {[
+                {
+                    label: "Dark Mode",
+                    value: "dark",
+                    description: "Easy on the eyes at night",
+                    icon: "🌙",
+                },
+                {
+                    label: "Light Mode",
+                    value: "light",
+                    description: "Clean and bright interface",
+                    icon: "☀️",
+                },
+            ].map(({ label, value, description, icon }) => {
+                const isActive = theme === value;
+
+                return (
+                    <button
+                        key={value}
+                        onClick={() => setTheme(value as "dark" | "light")}
+                        className="rounded-2xl p-4 border text-left transition-all hover:scale-[1.02] theme-card theme-border"
+                        style={{
+                            background: isActive
+                                ? "rgba(34,211,238,0.08)"
+                                : "rgba(255,255,255,0.03)",
+                        }}>
+                        <div className="text-2xl mb-2">{icon}</div>
+                        <p className="text-sm font-bold theme-text mb-1">{label}</p>
+                        <p className="text-[10px] theme-text-muted">{description}</p>
+                        {isActive && (
+                            <div className="mt-2 flex items-center gap-1.5">
+                                <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#22d3ee" }} />
+                                <span className="text-[10px] font-bold" style={{ color: "#22d3ee" }}>Active</span>
+                            </div>
+                        )}
+                    </button>
+                );
+            })}
+        </div>
+ 
+        <button
+            onClick={() => showToast("Appearance preferences saved!", "success")}
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105"
+            style={{
+                background: "linear-gradient(135deg, #22d3ee, #059669)",
+                color: "#080d14",
+                boxShadow: "0 4px 16px rgba(34,211,238,0.2)"
+            }}>
+            <Save className="w-4 h-4" /> Save Preferences
+        </button>
+    </SectionCard>
+)}
 
                             {/* Notifications Tab */}
                             {activeTab === "notifications" && (

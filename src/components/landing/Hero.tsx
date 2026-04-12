@@ -5,8 +5,7 @@ import { ArrowRight, Star, Zap } from "lucide-react";
 
 export default function Hero() {
     return (
-        <section className="relative min-h-screen flex items-center overflow-hidden pt-20"
-            >
+        <section className="relative min-h-screen flex items-center overflow-hidden pt-20 theme-text">
 
             {/* Aurora blobs — Option D (drift + pulse + orbit combined) */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -94,7 +93,7 @@ export default function Hero() {
                             </span>
                         </div> */}
 
-                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.02] tracking-tight mb-6">
+                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black theme-text leading-[1.02] tracking-tight mb-6">
                             Study Smarter,{" "}
                             <span style={{
                                 background: "linear-gradient(135deg, #22d3ee, #059669)",
@@ -106,7 +105,7 @@ export default function Hero() {
                             Assessment
                         </h1>
 
-                        <p className="text-lg leading-relaxed mb-8 max-w-xl" style={{ color: "#94a3b8" }}>
+                        <p className="text-lg leading-relaxed mb-8 max-w-xl theme-text-muted">
                             EduMate uses machine learning to predict your exam readiness from your
                             study habits and quiz performance — so you never walk in underprepared again.
                         </p>
@@ -126,11 +125,9 @@ export default function Hero() {
                             </Link>
                             <Link
                                 href="/dashboard"
-                                className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all border"
+                                className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all border theme-card theme-border theme-text"
                                 style={{
-                                    background: "rgba(255,255,255,0.05)",
-                                    borderColor: "rgba(255,255,255,0.1)",
-                                    color: "#f1f5f9"
+                                    background: "rgba(255,255,255,0.08)"
                                 }}
                             >
                                 View Demo
@@ -144,7 +141,7 @@ export default function Hero() {
                                     <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                                 ))}
                             </div>
-                            <p className="text-sm font-semibold" style={{ color: "#94a3b8" }}>
+                            <p className="text-sm font-semibold theme-text-muted">
                                 Built for students, by a student
                             </p>
                         </div>
@@ -152,16 +149,14 @@ export default function Hero() {
 
                     {/* Right – Option D: Dashboard split */}
                     <div className="relative">
-                        <div className="rounded-2xl p-6 border backdrop-blur-xl"
+                        <div className="rounded-2xl p-6 border backdrop-blur-xl theme-card theme-border"
                             style={{
-                                background: "rgba(255,255,255,0.04)",
-                                borderColor: "rgba(34,211,238,0.15)",
-                                boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)"
+                                boxShadow: "0 8px 32px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.06)"
                             }}>
 
                             {/* Card header */}
                             <div className="flex items-center justify-between mb-5">
-                                <div className="text-sm font-bold text-white">Data Structures Final</div>
+                                <div className="text-sm font-bold theme-text">Data Structures Final</div>
                                 <div className="px-3 py-1 rounded-lg text-xs font-bold"
                                     style={{ background: "rgba(5,150,105,0.15)", color: "#34d399" }}>
                                     Ready ✓
@@ -185,8 +180,7 @@ export default function Hero() {
                                         }}>
                                         80%
                                     </div>
-                                    <div className="text-[9px] font-black uppercase tracking-widest"
-                                        style={{ color: "#64748b" }}>
+                                    <div className="text-[9px] font-black uppercase tracking-widest theme-text-muted">
                                         Readiness
                                     </div>
                                 </div>
@@ -205,7 +199,7 @@ export default function Hero() {
                                                 borderColor: "rgba(255,255,255,0.06)"
                                             }}>
                                             <div className="flex items-center justify-between mb-1.5">
-                                                <span className="text-xs font-bold text-white">{item.label}</span>
+                                                <span className="text-xs font-bold theme-text">{item.label}</span>
                                                 <span className="text-xs font-black"
                                                     style={{ color: item.color }}>{item.value}</span>
                                             </div>
@@ -226,7 +220,7 @@ export default function Hero() {
                                     borderLeft: "2px solid #818cf8"
                                 }}>
                                 <Zap className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "#818cf8" }} />
-                                <p style={{ color: "#c7d2fe" }}>
+                                <p className="theme-text-muted">
                                     <strong>AI Tip:</strong> Your quiz performance confirms your baseline prediction. You are ready — go ace that exam!
                                 </p>
                             </div>

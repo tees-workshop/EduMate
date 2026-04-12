@@ -9,23 +9,23 @@ const steps = [
         step: "01",
         title: "Upload Your Materials",
         description:
-            "Add your notes, syllabi, and past papers to your Digital Locker. StudyAI securely indexes everything to power your insights.",
+            "Add your notes, syllabi, and past papers to your Digital Locker so EduMate can index them and build your study foundation.",
         color: "#22d3ee",
     },
     {
         icon: Cpu,
         step: "02",
-        title: "AI Analyzes & Plans",
+        title: "Take A Baseline Prediction",
         description:
-            "Our AI assesses your knowledge gaps, builds a personalized study schedule, and generates practice quizzes aligned to your exams.",
+            "Answer a quick baseline survey on your sleep, exam score, practice paper count, and study hours so EduMate can predict your readiness and guide your next steps.",
         color: "#059669",
     },
     {
         icon: Rocket,
         step: "03",
-        title: "Study Smart & Succeed",
+        title: "Take a Quiz",
         description:
-            "Follow your AI-crafted plan, track your readiness score climbing, and walk into every exam with full confidence.",
+            "Answer an AI-generated quiz tailored to your study level, then review your score and improve your confidence before exam day.",
         color: "#818cf8",
     },
 ];

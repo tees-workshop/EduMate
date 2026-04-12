@@ -23,7 +23,7 @@ export default function Privacy() {
     const { ref: rightRef, style: rightStyle } = useFadeUp(200);
 
     return (
-        <section id="privacy" className="py-20 lg:py-28 relative">
+        <section id="privacy" className="py-20 lg:py-28 relative theme-text">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                     {/* Left */}
@@ -40,7 +40,7 @@ export default function Privacy() {
                             </span>
                         </div>
 
-                       <h2 className="text-3xl sm:text-4xl font-black text-white mb-4 tracking-tight">
+                       <h2 className="text-3xl sm:text-4xl font-black theme-text mb-4 tracking-tight">
                             Your Privacy is{" "}
                             <span style={{
                                 background: "linear-gradient(135deg, #22d3ee, #059669)",
@@ -50,9 +50,9 @@ export default function Privacy() {
                                 Non-Negotiable
                             </span>
                         </h2>
-                        <p className="text-lg leading-relaxed mb-8" style={{ color: "#94a3b8" }}>
+                        <p className="text-lg leading-relaxed mb-8 theme-text-muted">
                             We built EduMate with privacy at its core, not as an afterthought. Your academic data
-                            belongs to you — we just help you use it smarter.
+                            belongs to you, we just help you use it smarter.
                         </p>
                     </div>
 
@@ -63,10 +63,8 @@ export default function Privacy() {
                             return (
                                 <div
                                     key={i}
-                                    className="rounded-2xl p-5 border transition-all duration-300"
+                                    className="rounded-2xl p-5 border transition-all duration-300 theme-card theme-border"
                                     style={{
-                                        background: "rgba(255,255,255,0.03)",
-                                        borderColor: "rgba(255,255,255,0.07)",
                                         boxShadow: "0 4px 24px rgba(0,0,0,0.2)"
                                     }}
                                     onMouseEnter={e => {
@@ -85,8 +83,8 @@ export default function Privacy() {
                                         }}>
                                         <Icon className="w-5 h-5" style={{ color: "#059669" }} />
                                     </div>
-                                    <h4 className="font-bold text-white text-sm mb-2">{item.title}</h4>
-                                    <p className="text-xs leading-relaxed" style={{ color: "#94a3b8" }}>
+                                    <h4 className="font-bold theme-text text-sm mb-2">{item.title}</h4>
+                                    <p className="text-xs leading-relaxed theme-text-muted">
                                         {item.description}
                                     </p>
                                 </div>

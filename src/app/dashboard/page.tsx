@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function DashboardPage() {
     return (
-        <div className="flex min-h-screen relative" style={{ background: "#080d14" }}>
+        <div className="flex min-h-screen relative theme-bg theme-text">
 
             {/* Background */}
             <div className="fixed inset-0 pointer-events-none z-0">

@@ -28,11 +28,7 @@ function EduMateLogo() {
 
 export default function Footer() {
     return (
-        <footer className="relative border-t" 
-        style={{
-            background: "#080d14",
-            borderColor: "rgba(255,255,255,0.06)" 
-        }}>
+        <footer className="relative border-t theme-card theme-border theme-text">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
 
@@ -40,14 +36,14 @@ export default function Footer() {
                     <div className="flex items-center gap-3">
                         <EduMateLogo />
                         <div>
-                            <span className="text-base font-black text-white">
+                            <span className="text-base font-black theme-text">
                                 Edu<span style={{
                                     background: "linear-gradient(135deg, #22d3ee, #059669)",
                                     WebkitBackgroundClip: "text",
                                     WebkitTextFillColor: "transparent"
                                 }}>Mate</span>
                             </span>
-                            <p className="text-xs" style={{ color: "#475569" }}>
+                            <p className="text-xs theme-text-muted">
                                 Built for students, by a student.
                             </p>
                         </div>
@@ -55,7 +51,7 @@ export default function Footer() {
 
 
                     {/* Copyright */}
-                    <p className="text-xs" style={{ color: "#334155" }}>
+                    <p className="text-xs theme-text-muted">
                         © 2026 EduMate. <br/> All rights reserved.
                     </p>
                 </div>

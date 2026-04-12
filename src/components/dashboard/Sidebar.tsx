@@ -100,7 +100,7 @@ function NavContent({ collapsed, onClose }: { collapsed: boolean; onClose?: () =
                     <div key={section.label} className="mb-8">
                         {!collapsed && (
                             <p className="text-[10px] font-black uppercase tracking-[0.2em] px-3 mb-3"
-                                style={{ color: "rgba(255,255,255,0.2)" }}>
+                                style={{ color: "#64748b" }}>
                                 {section.label}
                             </p>
                         )}
@@ -195,9 +195,9 @@ export default function Sidebar() {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const sidebarStyle = {
-        background: "rgba(8,13,20,0.97)",
+        background: "var(--sidebar-bg)",
         backdropFilter: "blur(20px)",
-        borderColor: "rgba(255,255,255,0.06)"
+        borderColor: "var(--border)"
     };
 
     return (
