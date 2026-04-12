@@ -114,7 +114,7 @@ export default function HowItWorks() {
                 {/* CTA under steps */}
                 <div ref={ctaRef} style={ctaStyle} className="text-center mt-16">
                     <a
-                        href="/dashboard"
+                        href="/register"
                         className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all hover:scale-105"
                         style={{
                             background: "linear-gradient(135deg, #22d3ee, #059669)",
