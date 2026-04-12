@@ -1,11 +1,23 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useFadeUp } from "@/hooks/useFadeUp";
+import { startDemoSession } from "@/lib/demo";
 
 export default function CTABanner() {
     const { ref, style } = useFadeUp(0);
+    const [demoLoading, setDemoLoading] = useState(false);
+    const router = useRouter();
+
+    const handleDemo = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        setDemoLoading(true);
+        await startDemoSession();
+        router.push("/dashboard");
+    };
 
     return (
         <section className="py-20 lg:py-28 theme-text">
@@ -68,17 +80,17 @@ export default function CTABanner() {
                                 Create Free Account
                                 <ArrowRight className="w-5 h-5" />
                             </Link>
-                            <Link
-                                href="/dashboard"
-                                className="flex items-center justify-center px-8 py-4 rounded-2xl font-bold text-base transition-all border"
+                            {/* <button
+                                onClick={handleDemo}
+                                disabled={demoLoading}
+                                className="flex items-center justify-center px-8 py-4 rounded-2xl font-bold text-base transition-all border theme-card theme-border theme-text disabled:opacity-50"
                                 style={{
                                     background: "rgba(255,255,255,0.05)",
                                     borderColor: "rgba(255,255,255,0.1)",
-                                    color: "#f1f5f9"
                                 }}
                             >
-                                View Dashboard Demo
-                            </Link>
+                                {demoLoading ? "Preparing Demo..." : "View Dashboard Demo"}
+                            </button> */}
                         </div>
                     </div>
                 </div>

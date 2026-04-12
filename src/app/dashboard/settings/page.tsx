@@ -185,6 +185,7 @@ export default function SettingsPage() {
             for (const t of tasks) await db.deleteTask(t.id);
             const notes = await db.getNotesByUser(user.id);
             for (const n of notes) await db.deleteNote(n.id);
+            await db.deleteUser(user.id);
             sessionStorage.clear();
             localStorage.removeItem("currentUserId");
             window.location.href = "/";

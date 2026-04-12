@@ -3,7 +3,6 @@ import Header from "@/components/dashboard/Header";
 import WelcomeBanner from "@/components/dashboard/WelcomeBanner";
 import StatsRow from "@/components/dashboard/StatsRow";
 import ActionCards from "@/components/dashboard/ActionCards";
-import AIInsightPanel from "@/components/dashboard/AIInsightPanel";
 
 export const metadata = {
     title: "Dashboard | EduMate",
@@ -63,10 +62,9 @@ export default function DashboardPage() {
                     <Header title="Dashboard" />
                     <main className="flex-1 p-4 md:p-6 overflow-auto pt-16 md:pt-6">
                         <WelcomeBanner />
-                        <StatsRow />
-                        <div className="grid xl:grid-cols-[1fr_320px] gap-6">
-                            <div><ActionCards /></div>
-                            <div><AIInsightPanel /></div>
+                        <div className="flex flex-col gap-6 w-full">
+                            <StatsRow />
+                            <ActionCards />
                         </div>
                     </main>
                 </div>

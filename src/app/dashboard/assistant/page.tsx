@@ -214,9 +214,9 @@ Your role:
                                                         fontWeight: 600,
                                                         borderBottomRightRadius: "4px"
                                                     } : {
-                                                        background: "rgba(255,255,255,0.05)",
-                                                        color: "#cbd5e1",
-                                                        border: "1px solid rgba(255,255,255,0.07)",
+                                                        background: "var(--bg-card)",
+                                                        color: "var(--text)",
+                                                        border: "1px solid var(--border)",
                                                         borderBottomLeftRadius: "4px"
                                                     }}
                                                 >

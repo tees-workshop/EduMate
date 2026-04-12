@@ -65,7 +65,7 @@ const features = [
     },
 ];
 
-function FeatureCard({ feature, index }: { feature: typeof features[0]; index: number }) {
+function FeatureCard({ feature, index, className = "" }: { feature: typeof features[0]; index: number; className?: string }) {
     const ref = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
 
@@ -83,7 +83,7 @@ function FeatureCard({ feature, index }: { feature: typeof features[0]; index: n
     return (
         <div
             ref={ref}
-            className="rounded-2xl p-6 border transition-all duration-700 cursor-default theme-card theme-border"
+            className={`rounded-2xl p-6 border transition-all duration-700 cursor-default theme-card theme-border h-full ${className}`}
             style={{
                 boxShadow: "0 4px 24px rgba(0,0,0,0.2)",
                 opacity: visible ? 1 : 0,
@@ -180,10 +180,15 @@ export default function Features() {
                     </p>
                 </div>
 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                    {features.map((feature, i) => (
-                        <FeatureCard key={feature.title} feature={feature} index={i} />
-                    ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-5">
+                    {features.map((feature, i) => {
+                        const smSpan = i === 4 ? "sm:col-span-2" : "sm:col-span-1";
+                        const lgSpan = i < 3 ? "lg:col-span-2" : "lg:col-span-3";
+                        const className = `${smSpan} ${lgSpan}`;
+                        return (
+                            <FeatureCard key={feature.title} feature={feature} index={i} className={className} />
+                        );
+                    })}
                 </div>
             </div>
         </section>

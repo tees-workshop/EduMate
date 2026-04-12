@@ -172,7 +172,7 @@ export default function FocusPage() {
                                 <div className="relative w-48 h-48 md:w-64 md:h-64 mb-8">
                                     <svg className="w-full h-full -rotate-90" viewBox="0 0 264 264">
                                         <circle cx="132" cy="132" r="120" fill="none"
-                                            stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
+                                            stroke="var(--border)" strokeWidth="8" />
                                         <circle cx="132" cy="132" r="120" fill="none"
                                             stroke={color} strokeWidth="8" strokeLinecap="round"
                                             strokeDasharray={circumference}

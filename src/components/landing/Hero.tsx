@@ -1,9 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Star, Zap } from "lucide-react";
+import VideoModal from "./VideoModal";
 
 export default function Hero() {
+    const [isVideoOpen, setIsVideoOpen] = useState(false);
+
     return (
         <section className="relative min-h-screen flex items-center overflow-hidden pt-20 theme-text">
 
@@ -123,15 +127,15 @@ export default function Hero() {
                                 Start for Free
                                 <ArrowRight className="w-5 h-5" />
                             </Link>
-                            <Link
-                                href="/dashboard"
-                                className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all border theme-card theme-border theme-text"
+                            <button
+                                onClick={() => setIsVideoOpen(true)}
+                                className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all border theme-card theme-border theme-text hover:bg-white/5"
                                 style={{
                                     background: "rgba(255,255,255,0.08)"
                                 }}
                             >
                                 View Demo
-                            </Link>
+                            </button>
                         </div>
 
                         {/* Honest tagline */}
@@ -229,6 +233,8 @@ export default function Hero() {
 
                 </div>
             </div>
+
+            <VideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
         </section>
     );
 }

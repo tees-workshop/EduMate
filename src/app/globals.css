@@ -35,17 +35,18 @@ html.dark-mode {
 
 /* ── LIGHT MODE ─────────────────────────────────────────────────── */
 html.light-mode {
-    --bg:           #f0f4f8;
-    --bg-card:      rgba(255,255,255,0.85);
-    --bg-card-hover:rgba(255,255,255,1);
-    --border:       rgba(0,0,0,0.08);
+    --bg:           #e2e8f0; /* Slightly deeper background to make the white cards pop */
+    --bg-card:      rgba(255,255,255,0.65); /* More transparent white for glass effect */
+    --bg-card-hover:rgba(255,255,255,0.85); /* Brighter on hover */
+    --card-border:  rgba(255,255,255,0.8); /* White edge for cards to simulate glass bevel */
+    --border:       rgba(0,0,0,0.08); /* Darker border for inputs and lines */
     --border-focus: rgba(8,145,178,0.4);
     --text:         #0f172a;
     --text-muted:   #475569;
     --text-faint:   #94a3b8;
     --input-bg:     rgba(255,255,255,0.9);
-    --sidebar-bg:   rgba(240,244,248,0.97);
-    --header-bg:    rgba(240,244,248,0.85);
+    --sidebar-bg:   rgba(255,255,255,0.7); /* Translucent sidebar */
+    --header-bg:    rgba(255,255,255,0.65);
     --grid-color:   #0891b2;
     --blob-opacity: 0.06;
 }
@@ -55,14 +56,43 @@ html.light-mode {
    hardcoded colors. They automatically switch with the theme.      */
 
 .theme-bg          { background-color: var(--bg) !important; }
-.theme-card        { background: var(--bg-card) !important; border-color: var(--border) !important; }
+
+/* In both modes, cards get the blur filter, but in light mode we use a specific lighter border and a soft drop shadow */
+.theme-card { 
+    background: var(--bg-card) !important; 
+    border-color: var(--border) !important; 
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+html.light-mode .theme-card {
+    border-color: var(--card-border) !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04) !important;
+}
+
 .theme-text        { color: var(--text) !important; }
 .theme-text-muted  { color: var(--text-muted) !important; }
 .theme-text-faint  { color: var(--text-faint) !important; }
 .theme-border      { border-color: var(--border) !important; }
 .theme-input       { background: var(--input-bg) !important; border-color: var(--border) !important; color: var(--text) !important; }
-.theme-sidebar     { background: var(--sidebar-bg) !important; border-color: var(--border) !important; }
-.theme-header      { background: var(--header-bg) !important; border-color: var(--border) !important; }
+.theme-sidebar     { 
+    background: var(--sidebar-bg) !important; 
+    border-color: var(--border) !important; 
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+html.light-mode .theme-sidebar {
+    border-color: var(--card-border) !important;
+}
+
+.theme-header      { 
+    background: var(--header-bg) !important; 
+    border-color: var(--border) !important; 
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+html.light-mode .theme-header {
+    border-color: var(--card-border) !important;
+}
 
 html.light-mode .text-white { color: var(--text); }
 html.light-mode [style*="color: #f1f5f9"] { color: var(--text) !important; }
@@ -78,19 +108,33 @@ html.light-mode textarea::placeholder {
     color: #94a3b8 !important;
 }
 
+/* Force inline hardcoded dark-mode cards to become light-mode glass */
+html.light-mode [style*="rgba(255,255,255,0.02)"],
+html.light-mode [style*="rgba(255, 255, 255, 0.02)"],
+html.light-mode [style*="rgba(255,255,255,0.03)"],
+html.light-mode [style*="rgba(255, 255, 255, 0.03)"],
+html.light-mode [style*="rgba(255,255,255,0.05)"],
+html.light-mode [style*="rgba(255, 255, 255, 0.05)"] {
+    background: var(--bg-card) !important;
+    border-color: var(--card-border) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04) !important;
+}
+
 /* Light mode backdrop for glass cards */
 html.light-mode .glass,
 html.light-mode .glass-card {
-    background: rgba(255,255,255,0.9) !important;
-    border-color: rgba(0,0,0,0.08) !important;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.08) !important;
-    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.6) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.8) !important; 
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05) !important; 
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 /* Light mode body */
 html.light-mode body {
-    background-color: #f0f4f8;
-    color: #0f172a;
+    background-color: var(--bg);
 }
 
 /* Light mode sidebar nav text */

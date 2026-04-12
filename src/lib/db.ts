@@ -1,7 +1,7 @@
 "use client";
 
 const DB_NAME = "StudyAIBB";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 export interface User {
     id: string;
@@ -39,6 +39,14 @@ export interface Note {
     timestamp: number;
 }
 
+export interface Topic {
+    id: string;
+    userId: string;
+    name: string;
+    type: "ai" | "manual";
+    timestamp: number;
+}
+
 export class StudyDB {
     private db: IDBDatabase | null = null;
 
@@ -64,6 +72,10 @@ export class StudyDB {
                 if (!db.objectStoreNames.contains("notes")) {
                     const noteStore = db.createObjectStore("notes", { keyPath: "id" });
                     noteStore.createIndex("userId", "userId", { unique: false });
+                }
+                if (!db.objectStoreNames.contains("topics")) {
+                    const topicStore = db.createObjectStore("topics", { keyPath: "id" });
+                    topicStore.createIndex("userId", "userId", { unique: false });
                 }
             };
 
@@ -109,6 +121,17 @@ export class StudyDB {
             const store = transaction.objectStore("users");
             const request = store.getAll();
             request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async deleteUser(id: string): Promise<void> {
+        const db = await this.init();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(["users"], "readwrite");
+            const store = transaction.objectStore("users");
+            const request = store.delete(id);
+            request.onsuccess = () => resolve();
             request.onerror = () => reject(request.error);
         });
     }
@@ -226,6 +249,42 @@ export class StudyDB {
         return new Promise((resolve, reject) => {
             const transaction = db.transaction(["notes"], "readwrite");
             const store = transaction.objectStore("notes");
+            const request = store.delete(id);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    // ─── Topics ──────────────────────────────────────────────
+
+    async saveTopic(topic: Topic): Promise<void> {
+        const db = await this.init();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(["topics"], "readwrite");
+            const store = transaction.objectStore("topics");
+            const request = store.put(topic);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async getTopicsByUser(userId: string): Promise<Topic[]> {
+        const db = await this.init();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(["topics"], "readonly");
+            const store = transaction.objectStore("topics");
+            const index = store.index("userId");
+            const request = index.getAll(userId);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async deleteTopic(id: string): Promise<void> {
+        const db = await this.init();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(["topics"], "readwrite");
+            const store = transaction.objectStore("topics");
             const request = store.delete(id);
             request.onsuccess = () => resolve();
             request.onerror = () => reject(request.error);
