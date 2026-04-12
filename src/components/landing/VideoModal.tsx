@@ -54,35 +54,11 @@ export default function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClo
                 {/* Video container with 16:9 aspect ratio */}
                 <div className="relative w-full pt-[56.25%]">
                     
-                    {/* Placeholder for real video. 
-                        To use real video, uncomment the <video> tag below and remove this placeholder block.
-                    */}
-                    <div className="absolute inset-0 flex items-center justify-center flex-col gap-6" 
-                         style={{ background: "linear-gradient(135deg, #0f172a, #080d14)" }}>
-                             
-                        <div className="w-20 h-20 rounded-full flex items-center justify-center backdrop-blur-md border animate-pulse" 
-                             style={{ 
-                                 background: "rgba(34,211,238,0.1)",
-                                 borderColor: "rgba(34,211,238,0.3)"
-                             }}>
-                           <Play className="w-8 h-8 ml-1" style={{ color: "#22d3ee" }} />
-                        </div>
-                        <div className="text-center">
-                            <h3 className="text-xl font-bold text-white mb-2">EduMate Dashboard Demo</h3>
-                            <p className="text-sm font-medium" style={{ color: "#94a3b8" }}>
-                                Waiting for video asset. <br/> Replace placeholder in src/components/landing/VideoModal.tsx
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* 
-                      <video 
-                          src="/demo.mp4" 
-                          controls 
-                          autoPlay 
-                          className="absolute inset-0 w-full h-full object-cover" 
-                      /> 
-                    */}
+                    <img
+                        src="/demo.webp"
+                        alt="EduMate Dashboard Demo"
+                        className="absolute inset-0 w-full h-full object-contain bg-black"
+                    />
                 </div>
             </div>
             
