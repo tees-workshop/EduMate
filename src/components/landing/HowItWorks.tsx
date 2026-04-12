@@ -122,7 +122,7 @@ export default function HowItWorks() {
                             boxShadow: "0 8px 32px rgba(34,211,238,0.25)"
                         }}
                     >
-                        Get Started in 30 Seconds →
+                        Get Started Now →
                     </a>
                 </div>
             </div>
