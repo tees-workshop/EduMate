@@ -446,7 +446,7 @@ export default function QuizPage() {
                                         style={{
                                             background: confidence === c.value ? c.activeBg : "var(--bg-card)",
                                             borderColor: confidence === c.value ? c.activeColor : "var(--border)",
-                                            color: "var(--text)",
+                                            color: confidence === c.value ? c.activeColor : "var(--text)",
                                             transform: confidence === c.value ? "scale(1.04)" : "scale(1)"
                                         }}>
                                         {c.label}
