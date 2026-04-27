@@ -83,21 +83,16 @@ export default function StatsRow() {
                     <Link
                         key={i}
                         href={stat.href}
-                        className="rounded-2xl p-5 border transition-all duration-300 block"
-                        style={{
-                            background: "rgba(255,255,255,0.03)",
-                            borderColor: "rgba(255,255,255,0.07)",
-                            boxShadow: "0 4px 24px rgba(0,0,0,0.2)"
-                        }}
+                        className="rounded-2xl p-5 border transition-all duration-300 block theme-card"
                         onMouseEnter={e => {
                             (e.currentTarget as HTMLAnchorElement).style.borderColor = stat.border;
                             (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
-                            (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 8px 32px rgba(0,0,0,0.3)`;
+                            (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 8px 32px rgba(0,0,0,0.1)`;
                         }}
                         onMouseLeave={e => {
-                            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.07)";
+                            (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--border)";
                             (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
-                            (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 24px rgba(0,0,0,0.2)";
+                            (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
                         }}
                     >
                         <div className="flex items-center justify-between mb-4">
@@ -117,8 +112,8 @@ export default function StatsRow() {
                                 Live
                             </span> */}
                         </div>
-                        <p className="text-2xl font-black text-white mb-1">{stat.value}</p>
-                        <p className="text-xs font-semibold text-white mb-0.5">{stat.label}</p>
+                        <p className="text-2xl font-black theme-text mb-1">{stat.value}</p>
+                        <p className="text-xs font-semibold theme-text mb-0.5">{stat.label}</p>
                         <p className="text-xs" style={{ color: "#64748b" }}>{stat.sub}</p>
                     </Link>
                 );
@@ -131,12 +126,12 @@ export default function StatsRow() {
                              style={{ background: "rgba(34,211,238,0.15)", border: "1px solid rgba(34,211,238,0.2)" }}>
                              <BookOpen className="w-5 h-5" style={{ color: "#22d3ee" }} />
                         </div>
-                        <h4 className="text-xs font-bold text-white">Topics to Review</h4>
+                        <h4 className="text-xs font-bold theme-text">Topics to Review</h4>
                     </div>
                     <div className="flex-1 flex flex-col min-h-[80px]">
                         {topics.length === 0 ? (
                             <div className="rounded-xl border border-dashed p-4 text-center h-full flex flex-col justify-center"
-                                style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+                                style={{ borderColor: "var(--border)" }}>
                                 <p className="text-[10px] font-black uppercase tracking-widest mb-1 theme-text-muted">
                                     No Data Yet
                                 </p>
@@ -150,8 +145,8 @@ export default function StatsRow() {
                                     <button key={t.id} onClick={() => deleteTopic(t.id)}
                                         className="group relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all border"
                                         style={{
-                                            background: t.type === "ai" ? "rgba(34,211,238,0.1)" : "rgba(255,255,255,0.05)",
-                                            borderColor: t.type === "ai" ? "rgba(34,211,238,0.2)" : "rgba(255,255,255,0.1)",
+                                            background: t.type === "ai" ? "rgba(34,211,238,0.1)" : "var(--bg-card)",
+                                            borderColor: t.type === "ai" ? "rgba(34,211,238,0.2)" : "var(--border)",
                                             color: t.type === "ai" ? "#22d3ee" : "var(--text)"
                                         }}
                                         title="Click to mark as mastered">
@@ -162,7 +157,7 @@ export default function StatsRow() {
                             </div>
                         )}
                         
-                        <div className="mt-auto pt-3 border-t" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                        <div className="mt-auto pt-3 border-t" style={{ borderColor: "var(--border)" }}>
                             <div className="flex items-center gap-2">
                                 <input
                                     type="text"
