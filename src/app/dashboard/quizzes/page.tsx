@@ -168,12 +168,7 @@ export default function QuizPage() {
         return (
             <PageShell title="AI Quiz Generator">
                 {/* Hero card */}
-                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border mb-4 sm:mb-6 relative overflow-hidden"
-                    style={{
-                        background: "rgba(255,255,255,0.03)",
-                        borderColor: "rgba(255,255,255,0.07)",
-                        boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
-                    }}>
+                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border mb-4 sm:mb-6 relative overflow-hidden theme-card">
                     <div className="absolute top-0 right-0 w-[200px] h-[200px] rounded-full pointer-events-none"
                         style={{ background: "#22d3ee", filter: "blur(80px)", opacity: 0.05 }} />
                     <div className="relative z-10">
@@ -184,7 +179,7 @@ export default function QuizPage() {
                             }}>
                             <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                         </div>
-                        <h2 className="text-xl sm:text-2xl font-black text-white mb-2">AI Quiz Generator</h2>
+                        <h2 className="text-xl sm:text-2xl font-black theme-text mb-2">AI Quiz Generator</h2>
                         <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "#64748b" }}>
                             Pick a study material from your library. The AI will generate a custom quiz to test your readiness.
                         </p>
@@ -194,11 +189,7 @@ export default function QuizPage() {
                 {/* Materials list */}
                 <div className="space-y-3 mb-5 sm:mb-6">
                     {materials.length === 0 ? (
-                        <div className="rounded-2xl sm:rounded-3xl p-10 sm:p-12 border text-center"
-                            style={{
-                                background: "rgba(255,255,255,0.03)",
-                                borderColor: "rgba(255,255,255,0.07)"
-                            }}>
+                        <div className="rounded-2xl sm:rounded-3xl p-10 sm:p-12 border text-center theme-card">
                             <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
                                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
                                 <FileText className="w-7 h-7" style={{ color: "#334155" }} />
@@ -226,17 +217,17 @@ export default function QuizPage() {
                             return (
                                 <div key={m.id}
                                     onClick={() => setSelectedMaterial(m)}
-                                    className="rounded-2xl p-4 border-2 cursor-pointer transition-all flex items-center gap-3 sm:gap-4"
+                                    className="rounded-2xl p-4 border-2 cursor-pointer transition-all flex items-center gap-3 sm:gap-4 theme-card"
                                     style={{
-                                        background: isSelected ? "rgba(34,211,238,0.06)" : "rgba(255,255,255,0.03)",
-                                        borderColor: isSelected ? "rgba(34,211,238,0.4)" : "rgba(255,255,255,0.07)",
+                                        background: isSelected ? "rgba(34,211,238,0.15)" : "var(--bg-card)",
+                                        borderColor: isSelected ? "var(--grid-color)" : "var(--border)",
                                         boxShadow: isSelected ? "0 4px 20px rgba(34,211,238,0.1)" : "none"
                                     }}
                                     onMouseEnter={e => {
-                                        if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.14)";
+                                        if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = "var(--border-focus)";
                                     }}
                                     onMouseLeave={e => {
-                                        if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
+                                        if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
                                     }}
                                 >
                                     <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0"
@@ -250,7 +241,7 @@ export default function QuizPage() {
                                         }
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-bold truncate" style={{ color: isSelected ? "#f1f5f9" : "#f1f5f9" }}>{m.name}</p>
+                                        <p className="text-sm font-bold truncate" style={{ color: "var(--text)" }}>{m.name}</p>
                                         <p className="text-xs mt-0.5" style={{ color: "#475569" }}>
                                             {m.type.split('/').pop()?.toUpperCase()} · {m.size}
                                         </p>
@@ -285,26 +276,17 @@ export default function QuizPage() {
         const fillPct = ((questionCount - 5) / (20 - 5)) * 100;
         return (
             <PageShell title="AI Quiz Generator">
-                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border"
-                    style={{
-                        background: "rgba(255,255,255,0.03)",
-                        borderColor: "rgba(255,255,255,0.07)",
-                        boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
-                    }}>
-                    <h2 className="text-xl sm:text-2xl font-black text-white mb-1">Configure Your Quiz</h2>
+                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border theme-card">
+                    <h2 className="text-xl sm:text-2xl font-black theme-text mb-1">Configure Your Quiz</h2>
                     <p className="text-xs sm:text-sm mb-6" style={{ color: "#64748b" }}>
                         Generating from:{" "}
                         <span className="font-bold" style={{ color: "#22d3ee" }}>{selectedMaterial?.name}</span>
                     </p>
 
                     {/* Question count slider */}
-                    <div className="rounded-2xl p-5 border mb-6"
-                        style={{
-                            background: "rgba(255,255,255,0.03)",
-                            borderColor: "rgba(255,255,255,0.06)"
-                        }}>
+                    <div className="rounded-2xl p-5 border mb-6 theme-card">
                         <div className="flex items-center justify-between mb-4">
-                            <p className="text-sm font-bold text-white">Number of Questions</p>
+                            <p className="text-sm font-bold theme-text">Number of Questions</p>
                             <span className="text-2xl font-black" style={{ color: "#22d3ee" }}>{questionCount}</span>
                         </div>
                         <input
@@ -337,12 +319,8 @@ export default function QuizPage() {
                     <div className="flex gap-3">
                         <button
                             onClick={() => setStage('select')}
-                            className="flex-1 py-3 rounded-2xl border text-sm font-bold flex items-center justify-center gap-2 transition-all hover:opacity-80"
-                            style={{
-                                background: "rgba(255,255,255,0.04)",
-                                borderColor: "rgba(255,255,255,0.08)",
-                                color: "#94a3b8"
-                            }}>
+                            className="flex-1 py-3 rounded-2xl border text-sm font-bold flex items-center justify-center gap-2 transition-all hover:opacity-80 theme-card theme-text"
+                        >
                             <ChevronLeft className="w-4 h-4" /> Back
                         </button>
                         <button
@@ -372,11 +350,7 @@ export default function QuizPage() {
                 <div className="space-y-3 sm:space-y-4">
 
                     {/* Progress bar */}
-                    <div className="rounded-2xl p-4 border"
-                        style={{
-                            background: "rgba(255,255,255,0.03)",
-                            borderColor: "rgba(255,255,255,0.07)"
-                        }}>
+                    <div className="rounded-2xl p-4 border theme-card">
                         <div className="flex justify-between text-xs font-bold mb-2" style={{ color: "#64748b" }}>
                             <span>Question {currentQ + 1} of {questions.length}</span>
                             <span className="flex items-center gap-1">
@@ -394,16 +368,12 @@ export default function QuizPage() {
                     </div>
 
                     {/* Question card */}
-                    <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border"
-                        style={{
-                            background: "rgba(255,255,255,0.03)",
-                            borderColor: "rgba(255,255,255,0.07)"
-                        }}>
+                    <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border theme-card">
                         <p className="text-[10px] font-black uppercase tracking-widest mb-3"
-                            style={{ color: "#22d3ee" }}>
+                            style={{ color: "var(--grid-color)" }}>
                             Question {currentQ + 1}
                         </p>
-                        <p className="text-base sm:text-lg font-bold text-white leading-relaxed mb-5 sm:mb-6">
+                        <p className="text-base sm:text-lg font-bold theme-text leading-relaxed mb-5 sm:mb-6">
                             {currentQuestion.question}
                         </p>
 
@@ -414,17 +384,17 @@ export default function QuizPage() {
                                     <button
                                         key={i}
                                         onClick={() => setSelected(i)}
-                                        className="w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 transition-all text-sm font-medium"
+                                        className="w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 transition-all text-sm font-medium theme-card"
                                         style={{
-                                            background: isSelected ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.02)",
-                                            borderColor: isSelected ? "rgba(34,211,238,0.4)" : "rgba(255,255,255,0.07)",
-                                            color: isSelected ? "#f1f5f9" : "#94a3b8",
+                                            background: isSelected ? "rgba(34,211,238,0.15)" : "var(--bg-card)",
+                                            borderColor: isSelected ? "var(--grid-color)" : "var(--border)",
+                                            color: "var(--text)",
                                         }}
                                         onMouseEnter={e => {
-                                            if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.14)";
+                                            if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = "var(--border-focus)";
                                         }}
                                         onMouseLeave={e => {
-                                            if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
+                                            if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
                                         }}
                                     >
                                         <span className="font-black mr-2 sm:mr-3" style={{ color: isSelected ? "#22d3ee" : "#475569" }}>
@@ -438,11 +408,7 @@ export default function QuizPage() {
                     </div>
 
                     {/* Hint */}
-                    <div className="rounded-2xl p-4 border"
-                        style={{
-                            background: "rgba(255,255,255,0.03)",
-                            borderColor: "rgba(255,255,255,0.07)"
-                        }}>
+                    <div className="rounded-2xl p-4 border theme-card">
                         <button
                             onClick={() => { setShowHint(true); setHintsUsed(h => h + 1); }}
                             disabled={showHint}
@@ -465,12 +431,8 @@ export default function QuizPage() {
 
                     {/* Confidence */}
                     {selected !== null && (
-                        <div className="rounded-2xl p-4 border"
-                            style={{
-                                background: "rgba(255,255,255,0.03)",
-                                borderColor: "rgba(255,255,255,0.07)"
-                            }}>
-                            <p className="text-xs font-bold text-white mb-3">How confident are you?</p>
+                        <div className="rounded-2xl p-4 border theme-card">
+                            <p className="text-xs font-bold theme-text mb-3">How confident are you?</p>
                             <div className="flex gap-2 sm:gap-3">
                                 {[
                                     { value: 1, label: 'Not Sure',  activeBg: "rgba(248,113,113,0.12)", activeBorder: "rgba(248,113,113,0.3)", activeColor: "#f87171" },
@@ -480,11 +442,11 @@ export default function QuizPage() {
                                     <button
                                         key={c.value}
                                         onClick={() => setConfidence(c.value)}
-                                        className="flex-1 py-2 rounded-xl border-2 text-xs font-black transition-all"
+                                        className="flex-1 py-2 rounded-xl border-2 text-xs font-black transition-all theme-card"
                                         style={{
-                                            background: confidence === c.value ? c.activeBg : "rgba(255,255,255,0.03)",
-                                            borderColor: confidence === c.value ? c.activeBorder : "rgba(255,255,255,0.07)",
-                                            color: confidence === c.value ? c.activeColor : "#475569",
+                                            background: confidence === c.value ? c.activeBg : "var(--bg-card)",
+                                            borderColor: confidence === c.value ? c.activeColor : "var(--border)",
+                                            color: "var(--text)",
                                             transform: confidence === c.value ? "scale(1.04)" : "scale(1)"
                                         }}>
                                         {c.label}
@@ -552,7 +514,7 @@ export default function QuizPage() {
                                 <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: "#64748b" }}>
                                     Quiz Complete
                                 </p>
-                                <h2 className="text-3xl sm:text-4xl font-black text-white">{scorePercent}%</h2>
+                                <h2 className="text-3xl sm:text-4xl font-black theme-text">{scorePercent}%</h2>
                                 <p className="text-sm font-bold mt-0.5" style={{ color: "#64748b" }}>
                                     {correct} of {answers.length} correct
                                 </p>
@@ -567,11 +529,7 @@ export default function QuizPage() {
                             { label: "Wrong",     value: answers.length - correct, color: "#f87171" },
                             { label: "Questions", value: answers.length,         color: "#22d3ee" },
                         ].map((s) => (
-                            <div key={s.label} className="rounded-2xl p-3 sm:p-4 border text-center"
-                                style={{
-                                    background: "rgba(255,255,255,0.03)",
-                                    borderColor: "rgba(255,255,255,0.07)"
-                                }}>
+                            <div key={s.label} className="rounded-2xl p-3 sm:p-4 border text-center theme-card">
                                 <p className="text-xl sm:text-2xl font-black" style={{ color: s.color }}>{s.value}</p>
                                 <p className="text-[10px] sm:text-xs font-bold mt-0.5" style={{ color: "#475569" }}>{s.label}</p>
                             </div>
@@ -599,12 +557,8 @@ export default function QuizPage() {
                             setSelected(null);
                             setConfidence(null);
                         }}
-                        className="w-full py-3 rounded-2xl border text-sm font-bold transition-all hover:opacity-80"
-                        style={{
-                            background: "rgba(255,255,255,0.04)",
-                            borderColor: "rgba(255,255,255,0.08)",
-                            color: "#94a3b8"
-                        }}>
+                        className="w-full py-3 rounded-2xl border text-sm font-bold transition-all hover:opacity-80 theme-card theme-text"
+                    >
                         Take Another Quiz
                     </button>
                 </div>

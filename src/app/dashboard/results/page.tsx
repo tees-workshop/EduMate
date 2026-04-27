@@ -110,8 +110,8 @@ export default function ResultsPage() {
                             style={{ background: "linear-gradient(135deg, #22d3ee, #059669)", boxShadow: "0 8px 24px rgba(34,211,238,0.3)" }}>
                             <Loader2 className="w-8 h-8 text-white animate-spin" />
                         </div>
-                        <p className="text-sm font-bold text-white mb-1">Analysing your results...</p>
-                        <p className="text-xs" style={{ color: "#475569" }}>Running readiness model</p>
+                        <p className="text-sm font-bold theme-text mb-1">Analysing your results...</p>
+                        <p className="text-xs theme-text-muted">Running readiness model</p>
                     </div>
                 </div>
             </div>
@@ -188,7 +188,7 @@ export default function ResultsPage() {
     ] : [];
 
     return (
-        <div className="flex min-h-screen relative" style={{ background: "#080d14" }}>
+        <div className="flex min-h-screen relative theme-bg">
 
             {/* Background */}
             <div className="fixed inset-0 pointer-events-none z-0">
@@ -240,7 +240,7 @@ export default function ResultsPage() {
                                         <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: "#64748b" }}>
                                             {verdict.source === "both" ? "Combined Verdict" : verdict.source === "quiz" ? "Quiz Verdict" : "Baseline Verdict"}
                                         </p>
-                                        <h2 className="text-2xl sm:text-3xl font-black text-white">
+                                        <h2 className="text-2xl sm:text-3xl font-black theme-text">
                                             {verdictReady ? "Ready!" : "Not Ready Yet"}
                                         </h2>
                                         <p className="text-sm font-bold mt-1" style={{ color: verdictColor }}>
@@ -255,12 +255,8 @@ export default function ResultsPage() {
 
                             {/* ── Baseline Breakdown ────────────────────────── */}
                             {baseline && (
-                                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 border"
-                                    style={{
-                                        background: "rgba(255,255,255,0.03)",
-                                        borderColor: "rgba(255,255,255,0.07)"
-                                    }}>
-                                    <h3 className="text-sm font-black text-white mb-4 flex items-center gap-2">
+                                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 border theme-card">
+                                    <h3 className="text-sm font-black theme-text mb-4 flex items-center gap-2">
                                         <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
                                             style={{ background: "rgba(34,211,238,0.1)", border: "1px solid rgba(34,211,238,0.2)" }}>
                                             <BarChart3 className="w-3.5 h-3.5" style={{ color: "#22d3ee" }} />
@@ -277,12 +273,8 @@ export default function ResultsPage() {
 
                             {/* ── Quiz Breakdown ────────────────────────────── */}
                             {quizResult && (
-                                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 border"
-                                    style={{
-                                        background: "rgba(255,255,255,0.03)",
-                                        borderColor: "rgba(255,255,255,0.07)"
-                                    }}>
-                                    <h3 className="text-sm font-black text-white mb-4 flex items-center gap-2">
+                                <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 border theme-card">
+                                    <h3 className="text-sm font-black theme-text mb-4 flex items-center gap-2">
                                         <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
                                             style={{ background: "rgba(129,140,248,0.1)", border: "1px solid rgba(129,140,248,0.2)" }}>
                                             <Brain className="w-3.5 h-3.5" style={{ color: "#818cf8" }} />
@@ -298,12 +290,8 @@ export default function ResultsPage() {
                             )}
 
                             {/* ── What's Next ───────────────────────────────── */}
-                            <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 border"
-                                style={{
-                                    background: "rgba(255,255,255,0.03)",
-                                    borderColor: "rgba(255,255,255,0.07)"
-                                }}>
-                                <h3 className="text-sm font-black text-white mb-2 flex items-center gap-2">
+                            <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 border theme-card">
+                                <h3 className="text-sm font-black theme-text mb-2 flex items-center gap-2">
                                     <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
                                         style={{ background: "rgba(5,150,105,0.1)", border: "1px solid rgba(5,150,105,0.2)" }}>
                                         <HelpCircle className="w-3.5 h-3.5" style={{ color: "#059669" }} />
@@ -331,23 +319,15 @@ export default function ResultsPage() {
                                     {!baseline && (
                                         <button
                                             onClick={() => router.push("/dashboard/readiness")}
-                                            className="flex-1 py-3 rounded-2xl border text-sm font-bold transition-all hover:opacity-80"
-                                            style={{
-                                                background: "rgba(255,255,255,0.04)",
-                                                borderColor: "rgba(255,255,255,0.08)",
-                                                color: "#94a3b8"
-                                            }}>
+                                            className="flex-1 py-3 rounded-2xl border text-sm font-bold transition-all hover:opacity-80 theme-card theme-text"
+                                        >
                                             Do Baseline Check
                                         </button>
                                     )}
                                     <button
                                         onClick={() => router.push("/dashboard")}
-                                        className="flex-1 py-3 rounded-2xl border text-sm font-bold transition-all hover:opacity-80"
-                                        style={{
-                                            background: "rgba(255,255,255,0.04)",
-                                            borderColor: "rgba(255,255,255,0.08)",
-                                            color: "#94a3b8"
-                                        }}>
+                                        className="flex-1 py-3 rounded-2xl border text-sm font-bold transition-all hover:opacity-80 theme-card theme-text"
+                                    >
                                         Back to Dashboard
                                     </button>
                                 </div>
@@ -375,7 +355,7 @@ function MetricRow({ item }: {
                         ? <CheckCircle className="w-3.5 h-3.5" style={{ color: "#059669" }} />
                         : <XCircle    className="w-3.5 h-3.5" style={{ color: "#f87171" }} />
                     }
-                    <span className="text-xs font-bold text-white">{item.label}</span>
+                    <span className="text-xs font-bold theme-text">{item.label}</span>
                 </div>
                 <span className="text-xs font-black" style={{ color: "#64748b" }}>
                     {item.value} / {item.max}
