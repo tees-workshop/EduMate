@@ -35,14 +35,10 @@ function ToDoCard({ userId, style }: { userId: string; style?: CSSProperties }) 
     const completed = todos.filter(t => t.done);
 
     return (
-        <div className="rounded-2xl p-5 border flex flex-col"
-            style={{
-                background: "rgba(255,255,255,0.03)",
-                borderColor: "rgba(255,255,255,0.07)",
-                ...style,
-            }}>
+    return (
+        <div className="rounded-2xl p-5 border flex flex-col theme-card" style={style}>
             <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-white text-sm flex items-center gap-2">
+                <h3 className="font-bold theme-text text-sm flex items-center gap-2">
                     <span className="w-6 h-6 rounded-lg flex items-center justify-center text-xs"
                         style={{ background: "rgba(5,150,105,0.15)", border: "1px solid rgba(5,150,105,0.2)" }}>
                         ✅
@@ -60,8 +56,8 @@ function ToDoCard({ userId, style }: { userId: string; style?: CSSProperties }) 
                     </span>
                 )}
             </div>
-            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-4 min-h-30"
-                style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)" }}>
+            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-4 min-h-[120px]"
+                style={{ borderColor: "var(--border)", background: "var(--bg-card)" }}>
                 {todos.length > 0 ? (
                     <div className="space-y-2 w-full">
                         {pending.slice(0, 4).map((todo) => (
@@ -132,14 +128,10 @@ function MaterialsCard({ userId, style }: { userId: string; style?: CSSPropertie
     };
 
     return (
-        <div className="rounded-2xl p-5 border flex flex-col"
-            style={{
-                background: "rgba(255,255,255,0.03)",
-                borderColor: "rgba(255,255,255,0.07)",
-                ...style,
-            }}>
+    return (
+        <div className="rounded-2xl p-5 border flex flex-col theme-card" style={style}>
             <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-white text-sm flex items-center gap-2">
+                <h3 className="font-bold theme-text text-sm flex items-center gap-2">
                     <FolderOpen className="w-4 h-4" style={{ color: "#059669" }} />
                     Study Materials
                 </h3>
@@ -154,15 +146,14 @@ function MaterialsCard({ userId, style }: { userId: string; style?: CSSPropertie
                     </span>
                 )}
             </div>
-            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-3 min-h-30"
-                style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)" }}>
+            <div className="flex-1 flex flex-col rounded-xl border border-dashed p-3 min-h-[120px]"
+                style={{ borderColor: "var(--border)", background: "var(--bg-card)" }}>
                 {materials.length > 0 ? (
                     <div className="space-y-2">
                         {materials.slice(0, 4).map((mat) => (
-                            <div key={mat.id} className="flex items-center gap-2 rounded-lg px-2 py-1.5"
-                                style={{ background: "rgba(255,255,255,0.03)" }}>
+                                <div key={mat.id} className="flex items-center gap-2 rounded-lg px-2 py-1.5 theme-card">
                                 {getIcon(mat.type)}
-                                <span className="text-xs text-white truncate flex-1">{mat.name}</span>
+                                <span className="text-xs theme-text truncate flex-1">{mat.name}</span>
                                 <span className="text-[10px] shrink-0" style={{ color: "#475569" }}>{mat.size}</span>
                             </div>
                         ))}
@@ -197,12 +188,7 @@ export default function ActionCards() {
         <div className="space-y-5">
 
             {/* Hero Card */}
-            <div className="rounded-2xl p-5 md:p-7 border relative overflow-hidden"
-                style={{
-                    background: "rgba(255,255,255,0.03)",
-                    borderColor: "rgba(255,255,255,0.07)",
-                    boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
-                }}>
+            <div className="rounded-2xl p-5 md:p-7 border relative overflow-hidden theme-card">
                 <div className="absolute top-0 right-0 w-50 h-50 rounded-full pointer-events-none"
                     style={{ background: "#22d3ee", filter: "blur(80px)", opacity: 0.04 }} />
 
@@ -217,7 +203,7 @@ export default function ActionCards() {
 
                     <div className="grid md:grid-cols-2 gap-6 items-center">
                         <div>
-                            <h3 className="text-xl md:text-2xl font-black text-white mb-2">Master Your Subjects</h3>
+                            <h3 className="text-xl md:text-2xl font-black theme-text mb-2">Master Your Subjects</h3>
                             <p className="text-sm leading-relaxed mb-5" style={{ color: "#64748b" }}>
                                 Run your readiness check or generate AI-powered quizzes to test your knowledge before assessments.
                             </p>
@@ -245,12 +231,7 @@ export default function ActionCards() {
 
                         {/* Readiness Panel */}
                         <Link href="/dashboard/readiness"
-                            className="rounded-xl p-5 border block transition-all hover:scale-[1.02]"
-                            style={{
-                                background: "rgba(255,255,255,0.03)",
-                                borderColor: "rgba(255,255,255,0.07)",
-                                boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
-                            }}>
+                            className="rounded-xl p-5 border block transition-all hover:scale-[1.02] theme-card">
                             <div className="flex items-center justify-between mb-3">
                                 <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "#64748b" }}>
                                     Readiness Score
@@ -270,7 +251,7 @@ export default function ActionCards() {
                                 <div className="relative w-16 h-16 shrink-0">
                                     <svg viewBox="0 0 64 64" className="w-full h-full -rotate-90">
                                         <circle cx="32" cy="32" r="28" fill="none"
-                                            stroke="rgba(255,255,255,0.06)" strokeWidth="6" />
+                                            style={{ stroke: "var(--border)" }} strokeWidth="6" />
                                         <circle cx="32" cy="32" r="28" fill="none"
                                             stroke={scoreColor} strokeWidth="6"
                                             strokeLinecap="round"
@@ -280,12 +261,12 @@ export default function ActionCards() {
                                         />
                                     </svg>
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <span className="text-sm font-black text-white">{score ?? 0}%</span>
+                                        <span className="text-sm font-black theme-text">{score ?? 0}%</span>
                                     </div>
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="h-2 rounded-full overflow-hidden mb-2"
-                                        style={{ background: "rgba(255,255,255,0.06)" }}>
+                                        style={{ background: "var(--border)" }}>
                                         <div className="h-full rounded-full transition-all duration-700"
                                             style={{
                                                 width: `${score ?? 0}%`,
@@ -316,20 +297,10 @@ export default function ActionCards() {
 
             {/* Secondary grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 rounded-xl p-5">
-                <ToDoCard userId={user?.id ?? ""} 
-                style={{
-                                background: "rgba(255,255,255,0.03)",
-                                borderColor: "rgba(255,255,255,0.07)",
-                                boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
-                            }}/>
-                            <div>
-                                <MaterialsCard userId={user?.id ?? ""}
-                                    style={{
-                                        background: "rgba(255,255,255,0.03)",
-                                        borderColor: "rgba(255,255,255,0.07)",
-                                        boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
-                            }}/>
-                            </div>
+                <ToDoCard userId={user?.id ?? ""} />
+                <div>
+                    <MaterialsCard userId={user?.id ?? ""} />
+                </div>
             </div>
         </div>
     );
