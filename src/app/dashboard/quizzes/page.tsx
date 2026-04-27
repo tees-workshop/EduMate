@@ -296,7 +296,7 @@ export default function QuizPage() {
                             onChange={e => setQuestionCount(Number(e.target.value))}
                             className="w-full h-2 rounded-full appearance-none cursor-pointer"
                             style={{
-                                background: `linear-gradient(to right, #22d3ee ${fillPct}%, rgba(255,255,255,0.08) ${fillPct}%)`,
+                                background: `linear-gradient(to right, #22d3ee ${fillPct}%, var(--border) ${fillPct}%)`,
                                 accentColor: "#22d3ee",
                             }}
                         />
@@ -358,7 +358,7 @@ export default function QuizPage() {
                             </span>
                         </div>
                         <div className="h-1.5 rounded-full overflow-hidden"
-                            style={{ background: "rgba(255,255,255,0.06)" }}>
+                            style={{ background: "var(--border)" }}>
                             <div className="h-full rounded-full transition-all duration-500"
                                 style={{
                                     width: `${progress}%`,

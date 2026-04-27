@@ -362,7 +362,7 @@ function MetricRow({ item }: {
                 </span>
             </div>
             <div className="h-1.5 rounded-full overflow-hidden mb-1"
-                style={{ background: "rgba(255,255,255,0.06)" }}>
+                style={{ background: "var(--border)" }}>
                 <div className="h-full rounded-full transition-all duration-700"
                     style={{
                         width: `${fillPct}%`,

@@ -100,12 +100,7 @@ export default function ReadinessPage() {
                         <div className="max-w-2xl mx-auto">
 
                             {/* Header card */}
-                            <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border mb-4 sm:mb-6 relative overflow-hidden"
-                                style={{
-                                    background: "rgba(255,255,255,0.03)",
-                                    borderColor: "rgba(255,255,255,0.07)",
-                                    boxShadow: "0 4px 40px rgba(0,0,0,0.2)"
-                                }}>
+                            <div className="rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border mb-4 sm:mb-6 relative overflow-hidden theme-card">
                                 <div className="absolute top-0 right-0 w-[200px] h-[200px] rounded-full pointer-events-none"
                                     style={{ background: "#22d3ee", filter: "blur(80px)", opacity: 0.05 }} />
                                 <div className="relative z-10">
@@ -116,8 +111,8 @@ export default function ReadinessPage() {
                                         }}>
                                         <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                                     </div>
-                                    <h2 className="text-xl sm:text-2xl font-black text-white mb-2">Pre-Assessment Check</h2>
-                                    <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "#64748b" }}>
+                                    <h2 className="text-xl sm:text-2xl font-black theme-text mb-2">Pre-Assessment Check</h2>
+                                    <p className="text-xs sm:text-sm leading-relaxed theme-text-muted">
                                         Answer honestly. Our AI uses your study habits to predict your baseline readiness before you take the quiz.
                                     </p>
                                 </div>
@@ -132,14 +127,9 @@ export default function ReadinessPage() {
 
                                     return (
                                         <div key={field.key}
-                                            className="rounded-2xl p-4 sm:p-5 md:p-6 border transition-all"
-                                            style={{
-                                                background: "rgba(255,255,255,0.03)",
-                                                borderColor: "rgba(255,255,255,0.07)",
-                                                boxShadow: "0 4px 24px rgba(0,0,0,0.15)"
-                                            }}
-                                            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "rgba(34,211,238,0.15)"}
-                                            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)"}
+                                            className="rounded-2xl p-4 sm:p-5 md:p-6 border transition-all theme-card"
+                                            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--border-focus)"}
+                                            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--border)"}
                                         >
                                             {/* Field header */}
                                             <div className="flex items-start justify-between gap-3 mb-4 sm:mb-5">
@@ -152,14 +142,14 @@ export default function ReadinessPage() {
                                                         <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                                                     </div>
                                                     <div className="min-w-0">
-                                                        <p className="text-sm font-bold text-white">{field.label}</p>
-                                                        <p className="text-[11px] sm:text-xs mt-0.5 leading-snug" style={{ color: "#64748b" }}>
+                                                        <p className="text-sm font-bold theme-text">{field.label}</p>
+                                                        <p className="text-[11px] sm:text-xs mt-0.5 leading-snug theme-text-muted">
                                                             {field.description}
                                                         </p>
                                                     </div>
                                                 </div>
                                                 <span className="text-lg sm:text-xl font-black shrink-0"
-                                                    style={{ color: "#22d3ee" }}>
+                                                    style={{ color: "var(--grid-color)" }}>
                                                     {field.format(value)}
                                                 </span>
                                             </div>
@@ -177,7 +167,7 @@ export default function ReadinessPage() {
                                                 }))}
                                                 className="w-full h-2 rounded-full appearance-none cursor-pointer"
                                                 style={{
-                                                    background: `linear-gradient(to right, #22d3ee ${fillPct}%, rgba(255,255,255,0.08) ${fillPct}%)`,
+                                                    background: `linear-gradient(to right, #22d3ee ${fillPct}%, var(--border) ${fillPct}%)`,
                                                     accentColor: "#22d3ee",
                                                 }}
                                             />
