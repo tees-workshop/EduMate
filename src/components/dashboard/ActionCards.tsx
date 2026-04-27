@@ -35,7 +35,6 @@ function ToDoCard({ userId, style }: { userId: string; style?: CSSProperties }) 
     const completed = todos.filter(t => t.done);
 
     return (
-    return (
         <div className="rounded-2xl p-5 border flex flex-col theme-card" style={style}>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold theme-text text-sm flex items-center gap-2">
@@ -125,9 +124,8 @@ function MaterialsCard({ userId, style }: { userId: string; style?: CSSPropertie
     const getIcon = (type: string) => {
         if (type.includes("pdf")) return <FileText className="w-4 h-4" style={{ color: "#f87171" }} />;
         return <File className="w-4 h-4" style={{ color: "#94a3b8" }} />;
-    };
-
-    return (
+    }
+    
     return (
         <div className="rounded-2xl p-5 border flex flex-col theme-card" style={style}>
             <div className="flex items-center justify-between mb-4">
