@@ -145,9 +145,9 @@ export default function StatsRow() {
                                     <button key={t.id} onClick={() => deleteTopic(t.id)}
                                         className="group relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all border"
                                         style={{
-                                            background: t.type === "ai" ? "rgba(34,211,238,0.1)" : "var(--bg-card)",
-                                            borderColor: t.type === "ai" ? "rgba(34,211,238,0.2)" : "var(--border)",
-                                            color: t.type === "ai" ? "#22d3ee" : "var(--text)"
+                                            background: t.type === "ai" ? "rgba(34,211,238,0.1)" : "rgba(148,163,184,0.15)",
+                                            borderColor: t.type === "ai" ? "rgba(34,211,238,0.2)" : "rgba(148,163,184,0.3)",
+                                            color: t.type === "ai" ? "#0891b2" : "var(--text)"
                                         }}
                                         title="Click to mark as mastered">
                                         {t.name}
@@ -158,18 +158,19 @@ export default function StatsRow() {
                         )}
                         
                         <div className="mt-auto pt-3 border-t" style={{ borderColor: "var(--border)" }}>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 rounded-xl p-1 pb-0">
                                 <input
                                     type="text"
                                     value={newTopic}
                                     onChange={e => setNewTopic(e.target.value)}
                                     onKeyDown={e => e.key === "Enter" && addTopic()}
                                     placeholder="Add manual topic..."
-                                    className="flex-1 bg-transparent border-none text-[10px] focus:outline-none theme-text"
+                                    style={{ background: "transparent" }}
+                                    className="flex-1 border-none text-xs focus:outline-none theme-text pl-1"
                                 />
-                                <button onClick={addTopic} className="w-6 h-6 rounded-md flex items-center justify-center transition-all hover:scale-110 shrink-0"
-                                    style={{ background: "rgba(34,211,238,0.15)", color: "#22d3ee" }}>
-                                    <Plus className="w-3.5 h-3.5" />
+                                <button onClick={addTopic} className="w-7 h-7 rounded-lg flex items-center justify-center transition-all hover:scale-110 shrink-0"
+                                    style={{ background: "rgba(34,211,238,0.15)", color: "#0891b2" }}>
+                                    <Plus className="w-4 h-4" />
                                 </button>
                             </div>
                         </div>
