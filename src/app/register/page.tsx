@@ -207,7 +207,7 @@ export default function RegisterPage() {
                                 color: "#080d14",
                                 boxShadow: "0 8px 32px rgba(34,211,238,0.25)"
                             }}>
-                            {isLoading ? "Creating Account..." : "Create Free Account"}
+                            {isLoading ? "Creating Account..." : "Create Account"}
                             {!isLoading && <ArrowRight className="w-5 h-5" />}
                         </button>
                     </form>
