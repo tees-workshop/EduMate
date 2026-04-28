@@ -196,7 +196,7 @@ export default function LoginPage() {
                             Don&apos;t have an account?{" "}
                             <Link href="/register" className="font-bold transition-colors"
                                 style={{ color: "#22d3ee" }}>
-                                Create Free Account
+                                Create Account
                             </Link>
                         </p>
                     </div>
