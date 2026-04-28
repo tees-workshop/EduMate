@@ -124,7 +124,7 @@ export default function Hero() {
                                     boxShadow: "0 8px 32px rgba(34,211,238,0.25)"
                                 }}
                             >
-                                Start for Free
+                                Start Now
                                 <ArrowRight className="w-5 h-5" />
                             </Link>
                             <button
