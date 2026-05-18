@@ -1,4 +1,4 @@
-import { db, User, Topic, Task } from "./db";
+import { db, User } from "./db";
 
 export const startDemoSession = async () => {
     const demoId = "demo_student_123";

@@ -5,7 +5,7 @@ import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
 import {
     User, Palette, Bell, Shield, Save, Trash2,
-    Eye, EyeOff, CheckCircle, AlertTriangle, Moon, Sun
+    Eye, EyeOff, CheckCircle, AlertTriangle
 } from "lucide-react";
 import { db } from "@/lib/db";
 import { useUser } from "@/hooks/useUser";
@@ -99,8 +99,7 @@ export default function SettingsPage() {
 
     // Appearance
     const { theme, setTheme } = useTheme();
-    const [compactMode, setCompactMode] = useState(false);
-    const [animationsEnabled, setAnimationsEnabled] = useState(true);
+
 
     // Notifications
     const [studyReminders, setStudyReminders] = useState(true);
@@ -117,9 +116,12 @@ export default function SettingsPage() {
 
     useEffect(() => {
         if (user) {
-            setName(user.name);
-            setEmail(user.email);
-            setLevel(user.level ?? "");
+            const timer = setTimeout(() => {
+                setName(user.name);
+                setEmail(user.email);
+                setLevel(user.level ?? "");
+            }, 0);
+            return () => clearTimeout(timer);
         }
     }, [user]);
 

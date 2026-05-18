@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
@@ -82,22 +82,22 @@ export default function QuizPage() {
     const [error, setError] = useState("");
     const qStartTimeRef = useRef<number>(Date.now());
 
-    useEffect(() => {
-        if (user) loadMaterials();
-    }, [user]);
-
-    const loadMaterials = async () => {
+    const loadMaterials = useCallback(async () => {
         if (!user) return;
         const data = await db.getMaterialsByUser(user.id);
         setMaterials(data.sort((a, b) => b.timestamp - a.timestamp));
-    };
+    }, [user]);
+
+    useEffect(() => {
+        if (user) loadMaterials();
+    }, [user, loadMaterials]);
 
     const generateQuiz = async () => {
         if (!selectedMaterial) return;
         setLoading(true);
         setError("");
         try {
-            const material = (selectedMaterial as any).extractedText || selectedMaterial.name;
+            const material = selectedMaterial.extractedText || selectedMaterial.name;
             const res = await fetch('/api/generate-quiz', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -108,8 +108,9 @@ export default function QuizPage() {
             setQuestions(data.questions);
             setStage('quiz');
             qStartTimeRef.current = Date.now();
-        } catch (err: any) {
-            setError(err.message || 'Something went wrong');
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Something went wrong';
+            setError(message);
         } finally {
             setLoading(false);
         }

@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-    Brain, Wrench, Lock, BarChart3, FileQuestion,
-    Calendar, Target, Zap, BookOpen
+    Brain, Wrench, Lock, FileQuestion,
+    Zap, BookOpen
 } from "lucide-react";
 
 const features = [

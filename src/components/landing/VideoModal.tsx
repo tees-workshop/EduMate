@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Play } from "lucide-react";
+import { X } from "lucide-react";
 import { useEffect } from "react";
 
 export default function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -54,6 +54,7 @@ export default function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClo
                 {/* Video container with 16:9 aspect ratio */}
                 <div className="relative w-full pt-[56.25%]">
                     
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src="/demo.webp"
                         alt="EduMate Dashboard Demo"

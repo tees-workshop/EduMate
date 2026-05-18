@@ -6,8 +6,7 @@ import { usePathname } from "next/navigation";
 import {
     LayoutDashboard, Brain, HelpCircle,
     Settings, ChevronLeft, ChevronRight,
-    LogOut, Library, Menu, X, Sparkles, Timer,
-    Wrench
+    LogOut, Library, Menu, X, Sparkles, Timer
 } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 

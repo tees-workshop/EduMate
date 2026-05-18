@@ -18,7 +18,7 @@ export interface Material {
     name: string;
     type: string;
     size: string;
-    data: any;
+    data: string; // Base64 data URL
     extractedText?: string;
     timestamp: number;
 }
@@ -56,239 +56,144 @@ export class StudyDB {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-            request.onupgradeneeded = (event: any) => {
-                const db = event.target.result;
-                if (!db.objectStoreNames.contains("users")) {
-                    db.createObjectStore("users", { keyPath: "id" });
-                }
-                if (!db.objectStoreNames.contains("materials")) {
-                    const materialStore = db.createObjectStore("materials", { keyPath: "id" });
-                    materialStore.createIndex("userId", "userId", { unique: false });
-                }
-                if (!db.objectStoreNames.contains("tasks")) {
-                    const taskStore = db.createObjectStore("tasks", { keyPath: "id" });
-                    taskStore.createIndex("userId", "userId", { unique: false });
-                }
-                if (!db.objectStoreNames.contains("notes")) {
-                    const noteStore = db.createObjectStore("notes", { keyPath: "id" });
-                    noteStore.createIndex("userId", "userId", { unique: false });
-                }
-                if (!db.objectStoreNames.contains("topics")) {
-                    const topicStore = db.createObjectStore("topics", { keyPath: "id" });
-                    topicStore.createIndex("userId", "userId", { unique: false });
+            request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
+                const db = (event.target as IDBOpenDBRequest).result;
+                const stores = [
+                    { name: "users", keyPath: "id" },
+                    { name: "materials", keyPath: "id", index: "userId" },
+                    { name: "tasks", keyPath: "id", index: "userId" },
+                    { name: "notes", keyPath: "id", index: "userId" },
+                    { name: "topics", keyPath: "id", index: "userId" },
+                ];
+
+                for (const store of stores) {
+                    if (!db.objectStoreNames.contains(store.name)) {
+                        const s = db.createObjectStore(store.name, { keyPath: store.keyPath });
+                        if (store.index) {
+                            s.createIndex(store.index, store.index, { unique: false });
+                        }
+                    }
                 }
             };
 
-            request.onsuccess = (event: any) => {
-                this.db = event.target.result;
+            request.onsuccess = (event: Event) => {
+                this.db = (event.target as IDBOpenDBRequest).result;
                 resolve(this.db!);
             };
 
-            request.onerror = (event: any) => {
-                reject("IndexedDB error: " + event.target.errorCode);
+            request.onerror = () => {
+                reject("IndexedDB error: " + request.error?.message);
             };
+        });
+    }
+
+    /**
+     * Unified generic helper to execute transactions dryly and safely
+     */
+    private async execute<T>(
+        storeName: string,
+        mode: IDBTransactionMode,
+        operation: (store: IDBObjectStore) => IDBRequest
+    ): Promise<T> {
+        const db = await this.init();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], mode);
+            const store = transaction.objectStore(storeName);
+            const request = operation(store);
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
         });
     }
 
     // ─── Users ───────────────────────────────────────────────
 
     async saveUser(user: User): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["users"], "readwrite");
-            const store = transaction.objectStore("users");
-            const request = store.put(user);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("users", "readwrite", store => store.put(user));
     }
 
     async getUser(id: string): Promise<User | undefined> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["users"], "readonly");
-            const store = transaction.objectStore("users");
-            const request = store.get(id);
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("users", "readonly", store => store.get(id));
     }
 
     async getAllUsers(): Promise<User[]> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["users"], "readonly");
-            const store = transaction.objectStore("users");
-            const request = store.getAll();
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("users", "readonly", store => store.getAll());
     }
 
     async deleteUser(id: string): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["users"], "readwrite");
-            const store = transaction.objectStore("users");
-            const request = store.delete(id);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("users", "readwrite", store => store.delete(id));
     }
 
     // ─── Materials ───────────────────────────────────────────
 
     async saveMaterial(material: Material): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["materials"], "readwrite");
-            const store = transaction.objectStore("materials");
-            const request = store.put(material);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("materials", "readwrite", store => store.put(material));
     }
 
     async getMaterialsByUser(userId: string): Promise<Material[]> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["materials"], "readonly");
-            const store = transaction.objectStore("materials");
+        return this.execute("materials", "readonly", store => {
             const index = store.index("userId");
-            const request = index.getAll(userId);
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-        });
-    }
-
-    async deleteMaterial(id: string): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["materials"], "readwrite");
-            const store = transaction.objectStore("materials");
-            const request = store.delete(id);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
+            return index.getAll(userId);
         });
     }
 
     async getMaterialById(id: string): Promise<Material | undefined> {
-    const db = await this.init();
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(["materials"], "readonly");
-        const store = transaction.objectStore("materials");
-        const request = store.get(id);
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-    });
-}
+        return this.execute("materials", "readonly", store => store.get(id));
+    }
+
+    async deleteMaterial(id: string): Promise<void> {
+        return this.execute("materials", "readwrite", store => store.delete(id));
+    }
 
     // ─── Tasks ───────────────────────────────────────────────
 
     async saveTask(task: Task): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["tasks"], "readwrite");
-            const store = transaction.objectStore("tasks");
-            const request = store.put(task);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("tasks", "readwrite", store => store.put(task));
     }
 
     async getTasksByUser(userId: string): Promise<Task[]> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["tasks"], "readonly");
-            const store = transaction.objectStore("tasks");
+        return this.execute("tasks", "readonly", store => {
             const index = store.index("userId");
-            const request = index.getAll(userId);
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
+            return index.getAll(userId);
         });
     }
 
     async deleteTask(id: string): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["tasks"], "readwrite");
-            const store = transaction.objectStore("tasks");
-            const request = store.delete(id);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("tasks", "readwrite", store => store.delete(id));
     }
 
     // ─── Notes ───────────────────────────────────────────────
 
     async saveNote(note: Note): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["notes"], "readwrite");
-            const store = transaction.objectStore("notes");
-            const request = store.put(note);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("notes", "readwrite", store => store.put(note));
     }
 
     async getNotesByUser(userId: string): Promise<Note[]> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["notes"], "readonly");
-            const store = transaction.objectStore("notes");
+        return this.execute("notes", "readonly", store => {
             const index = store.index("userId");
-            const request = index.getAll(userId);
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
+            return index.getAll(userId);
         });
     }
 
     async deleteNote(id: string): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["notes"], "readwrite");
-            const store = transaction.objectStore("notes");
-            const request = store.delete(id);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("notes", "readwrite", store => store.delete(id));
     }
 
     // ─── Topics ──────────────────────────────────────────────
 
     async saveTopic(topic: Topic): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["topics"], "readwrite");
-            const store = transaction.objectStore("topics");
-            const request = store.put(topic);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("topics", "readwrite", store => store.put(topic));
     }
 
     async getTopicsByUser(userId: string): Promise<Topic[]> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["topics"], "readonly");
-            const store = transaction.objectStore("topics");
+        return this.execute("topics", "readonly", store => {
             const index = store.index("userId");
-            const request = index.getAll(userId);
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
+            return index.getAll(userId);
         });
     }
 
     async deleteTopic(id: string): Promise<void> {
-        const db = await this.init();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(["topics"], "readwrite");
-            const store = transaction.objectStore("topics");
-            const request = store.delete(id);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
+        return this.execute("topics", "readwrite", store => store.delete(id));
     }
 }
 

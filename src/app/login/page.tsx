@@ -68,7 +68,7 @@ export default function LoginPage() {
             if (user.password !== password) { setError("Incorrect password. Please try again."); setIsLoading(false); return; }
             localStorage.setItem("study_ai_user_id", userId);
             router.push("/dashboard");
-        } catch (error) {
+        } catch {
             setError("Login failed. Please try again.");
         } finally {
             setIsLoading(false);

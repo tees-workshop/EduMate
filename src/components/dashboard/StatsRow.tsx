@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { TrendingUp, CheckCircle, Clock, BookOpen, ArrowRight, Plus, X } from "lucide-react";
+import { TrendingUp, CheckCircle, BookOpen, ArrowRight, Plus, X } from "lucide-react";
 import { useReadinessScore } from "@/hooks/useReadinessScore";
 import { useUser } from "@/hooks/useUser";
 import { db, Topic } from "@/lib/db";
@@ -13,15 +13,18 @@ export default function StatsRow() {
     const [topics, setTopics] = useState<Topic[]>([]);
     const [newTopic, setNewTopic] = useState("");
 
-    const loadTopics = async () => {
+    const loadTopics = useCallback(async () => {
         if (!user) return;
         const data = await db.getTopicsByUser(user.id);
         setTopics(data.sort((a, b) => b.timestamp - a.timestamp));
-    };
+    }, [user]);
 
     useEffect(() => {
-        loadTopics();
-    }, [user]);
+        const timer = setTimeout(() => {
+            loadTopics();
+        }, 0);
+        return () => clearTimeout(timer);
+    }, [user, loadTopics]);
 
     const addTopic = async () => {
         if (!newTopic.trim() || !user) return;

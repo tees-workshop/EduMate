@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Upload, File, Trash2, FileText, CheckCircle, Search, Plus, Eye } from "lucide-react";
 import { db, Material } from "@/lib/db";
 import { useUser } from "@/hooks/useUser";
@@ -18,11 +18,7 @@ export default function Importer({ onSelectMaterial, onMaterialsLoaded }: Import
     const [dragOver, setDragOver] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        if (user) loadMaterials();
-    }, [user]);
-
-    const loadMaterials = async () => {
+    const loadMaterials = useCallback(async () => {
         if (!user) return;
         setIsLoading(true);
         try {
@@ -35,7 +31,11 @@ export default function Importer({ onSelectMaterial, onMaterialsLoaded }: Import
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [user, onMaterialsLoaded]);
+
+    useEffect(() => {
+        if (user) loadMaterials();
+    }, [user, loadMaterials]);
 
     const handleFileUpload = async (files: FileList) => {
         if (!files || !user) return;

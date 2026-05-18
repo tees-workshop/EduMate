@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sparkles, TrendingUp, Calendar } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import { useReadinessScore } from "@/hooks/useReadinessScore";
 
@@ -12,9 +12,15 @@ export default function WelcomeBanner() {
 
     useEffect(() => {
         const hour = new Date().getHours();
-        if (hour < 12) setGreeting("Good morning");
-        else if (hour < 18) setGreeting("Good afternoon");
-        else setGreeting("Good evening");
+        let activeGreeting = "Good evening";
+        if (hour < 12) activeGreeting = "Good morning";
+        else if (hour < 18) activeGreeting = "Good afternoon";
+
+        const timer = setTimeout(() => {
+            setGreeting(activeGreeting);
+        }, 0);
+
+        return () => clearTimeout(timer);
     }, []);
 
     return (

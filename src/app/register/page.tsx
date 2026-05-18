@@ -83,7 +83,7 @@ export default function RegisterPage() {
             await db.saveUser({ id: userId, name, email, password, level, avatar: "" });
             localStorage.setItem("study_ai_user_id", userId);
             router.push("/dashboard");
-        } catch (error) {
+        } catch {
             setError("Something went wrong. Please try again.");
         } finally {
             setIsLoading(false);

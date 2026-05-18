@@ -171,6 +171,7 @@ Your role:
 
                             {/* Image preview */}
                             {!loadingDoc && fullMaterial?.type.startsWith("image/") && (
+                                // eslint-disable-next-line @next/next/no-img-element
                                 <img
                                     src={fullMaterial.data}
                                     alt={fullMaterial.name}

@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, useState, useEffect } from "react";
+import { CSSProperties, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { FileQuestion, Plus, Check, Trash2, Zap, FileText, File, FolderOpen, Brain } from "lucide-react";
 import { useReadinessScore } from "@/hooks/useReadinessScore";
@@ -10,16 +10,16 @@ import { db, Material, Task } from "@/lib/db";
 function ToDoCard({ userId, style }: { userId: string; style?: CSSProperties }) {
     const [todos, setTodos] = useState<Task[]>([]);
 
-    const loadTasks = async () => {
+    const loadTasks = useCallback(async () => {
         if (!userId) return;
         db.getTasksByUser(userId).then(setTodos).catch(console.error);
-    };
+    }, [userId]);
 
     useEffect(() => {
         loadTasks();
         window.addEventListener("tasks-updated", loadTasks);
         return () => window.removeEventListener("tasks-updated", loadTasks);
-    }, [userId]);
+    }, [userId, loadTasks]);
 
     const toggle = async (id: string) => {
         const updated = todos.map((t) => t.id === id ? { ...t, done: !t.done } : t);

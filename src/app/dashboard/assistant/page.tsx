@@ -47,7 +47,7 @@ export default function AssistantPage() {
                 timestamp: new Date()
             }]);
         }
-    }, [user, score, materialNames]);
+    }, [user, score, materialNames, label]);
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Bell, Clock, Plus, Trash2, Calendar, AlertCircle, CheckCircle2 } from "lucide-react";
 import { db, Task } from "@/lib/db";
 import { useUser } from "@/hooks/useUser";
@@ -12,11 +12,7 @@ export default function Reminders() {
     const [newReminder, setNewReminder] = useState("");
     const [showAddForm, setShowAddForm] = useState(false);
 
-    useEffect(() => {
-        if (user) loadReminders();
-    }, [user]);
-
-    const loadReminders = async () => {
+    const loadReminders = useCallback(async () => {
         if (!user) return;
         setIsLoading(true);
         try {
@@ -27,7 +23,11 @@ export default function Reminders() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [user]);
+
+    useEffect(() => {
+        if (user) loadReminders();
+    }, [user, loadReminders]);
 
     const handleAddReminder = async () => {
         if (!newReminder.trim() || !user) return;

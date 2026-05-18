@@ -296,7 +296,7 @@ export default function ResultsPage() {
                                         style={{ background: "rgba(5,150,105,0.1)", border: "1px solid rgba(5,150,105,0.2)" }}>
                                         <HelpCircle className="w-3.5 h-3.5" style={{ color: "#059669" }} />
                                     </div>
-                                    What's Next?
+                                    What&apos;s Next?
                                 </h3>
                                 <p className="text-xs leading-relaxed mb-4" style={{ color: "#64748b" }}>
                                     {verdictReady

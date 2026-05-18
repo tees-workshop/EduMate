@@ -1,23 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useFadeUp } from "@/hooks/useFadeUp";
-import { startDemoSession } from "@/lib/demo";
 
 export default function CTABanner() {
     const { ref, style } = useFadeUp(0);
-    const [demoLoading, setDemoLoading] = useState(false);
-    const router = useRouter();
-
-    const handleDemo = async (e: React.MouseEvent) => {
-        e.preventDefault();
-        setDemoLoading(true);
-        await startDemoSession();
-        router.push("/dashboard");
-    };
 
     return (
         <section className="py-20 lg:py-28 theme-text">

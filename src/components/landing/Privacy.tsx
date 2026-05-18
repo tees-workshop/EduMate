@@ -1,6 +1,6 @@
 "use client";
 
-import { Shield, Lock, Eye, Server, CheckCircle } from "lucide-react";
+import { Shield, Lock, Eye } from "lucide-react";
 import { useFadeUp } from "@/hooks/useFadeUp";
 
 const privacyItems = [
@@ -27,7 +27,7 @@ export default function Privacy() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                     {/* Left */}
-                    <div>
+                    <div ref={leftRef} style={leftStyle}>
                         <div className="inline-flex items-center gap-2 rounded-full px-4py-1.5 mb-6 border"
                            style={{
                                 background: "rgba(5,150,105,0.08)",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { PenTool, Save, Trash2, Plus, CheckCircle, FileText, ChevronLeft } from "lucide-react";
 import { db, Note } from "@/lib/db";
 import { useUser } from "@/hooks/useUser";
@@ -14,24 +14,24 @@ export default function Notepad() {
     const [isLoading, setIsLoading] = useState(true);
     const [showEditor, setShowEditor] = useState(false);
 
-    useEffect(() => {
-        if (user) loadNotes();
-    }, [user]);
-
-    const loadNotes = async () => {
+    const loadNotes = useCallback(async () => {
         if (!user) return;
         setIsLoading(true);
         try {
             const data = await db.getNotesByUser(user.id);
             const sorted = data.sort((a, b) => b.timestamp - a.timestamp);
             setNotes(sorted);
-            if (sorted.length > 0 && !activeNote) setActiveNote(sorted[0]);
+            setActiveNote(prev => prev || sorted[0] || null);
         } catch (e) {
             console.error("Failed to load notes", e);
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [user]);
+
+    useEffect(() => {
+        if (user) loadNotes();
+    }, [user, loadNotes]);
 
     const createNote = async () => {
         if (!user) return;
