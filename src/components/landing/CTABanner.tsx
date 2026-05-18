@@ -65,7 +65,7 @@ export default function CTABanner() {
                                     boxShadow: "0 8px 32px rgba(34,211,238,0.25)"
                                 }}
                             >
-                                Create Free Account
+                                Create Account
                                 <ArrowRight className="w-5 h-5" />
                             </Link>
                             {/* <button

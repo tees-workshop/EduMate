@@ -185,7 +185,7 @@ export default function StatsRow() {
                         color: "#080d14",
                         boxShadow: "0 4px 20px rgba(34,211,238,0.2)"
                     }}>
-                    <span>Start Today&apos;s Focus Session</span>
+                    <span>Start Focus Session</span>
                     <ArrowRight className="w-4 h-4" />
                 </Link>
             </div>
